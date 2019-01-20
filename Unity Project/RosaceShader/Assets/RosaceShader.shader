@@ -5,6 +5,7 @@
 		// to redefine under
 		_MainTex ("Texture", 2D) = "white" {} 
 		_ScriptTime("Time", Float) = 0
+		_NbPoint("NbPoint", int) = 128
 	}
 	SubShader
 	{
@@ -19,13 +20,13 @@
 			
 			#include "UnityCG.cginc"
 
-			#define NB_PT 500
-			#define NB_PTF 500.
+
 			#define PI 3.14159265359
 
 
 			sampler2D _MainTex;
 			float _ScriptTime;
+			int _NbPoint;
 
 
 			struct appdata
@@ -125,8 +126,8 @@
 
 			fixed4 frag(v2f f) : SV_Target{
 				fixed4 col = tex2D(_MainTex, f.uv);
-
-				//half2 stTex = ratioCorrectedST(_MainTex.xy);
+				//_NbPoint = 5;
+				
 
 
 				half2 center;
@@ -156,9 +157,9 @@
 				float mult = _ScriptTime;
 				half2 multPt;
 				float threshold = 0.001;
-				for (int i = 0;i<NB_PT;i++)
+				for (int i = 0;i<_NbPoint;i++)
 				{
-					float angle = float(i) / NB_PTF * 2.*PI;
+					float angle = float(i) / float(_NbPoint) * 2.*PI;
 					float multAngle = angle * mult;
 					pt = radBigCircle * half2(cos(angle), sin(angle));
 					multPt = radBigCircle * half2(cos(multAngle), sin(multAngle));
@@ -166,7 +167,7 @@
 					color.x = 1.005*lerp(droitePt(st, 0.001, pt, multPt), color.x, float(i) / float(i + 1));
 					color.y = 1.0015* lerp(droitePt(st, 0.01, pt, multPt), color.y, float(i) / float(i + 1));
 					color.z = color.y;
-					//color.z = 1.0015*lerp(droitePt(st, 0.05, pt, multPt), color.z, float(i) / float(i + 1));
+					//color.z = 1.0015*lerp(droitePt(st, 0.02, pt, multPt), color.z, float(i) / float(i + 1));
 					//color = max(val,color);
 				}
 
