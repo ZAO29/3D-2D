@@ -5,7 +5,7 @@ using UnityEngine;
 public class OndeShaderInterface : MonoBehaviour {
 
     [SerializeField] Material _mat;
-    int _nbSource = 10;
+    int _nbSource = 2;
 
     //ShaderPropertyID
     int _scriptTimeID;
@@ -20,8 +20,22 @@ public class OndeShaderInterface : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        UpdateNbSourceOnTouch(1, KeyCode.RightArrow);
-        UpdateNbSourceOnTouch(-1, KeyCode.LeftArrow);
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            if(pos.x > 0.5)
+            {
+                _nbSource++;
+            }else
+            {
+                _nbSource--;
+            }
+           
+        }
+         if(_nbSource <=0)
+        {
+            _nbSource = 1;
+        }
     }
     void UpdateNbSourceOnTouch(int addNumber, KeyCode key)
     {
