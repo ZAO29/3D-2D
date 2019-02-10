@@ -9,6 +9,7 @@
 #pragma surface surf Lambert vertex:vert
 		struct Input {
 		float2 uv_MainTex;
+		float3 worldPos;
 	};
 	float _Amount;
 	void vert(inout appdata_full v) {
@@ -16,7 +17,10 @@
 	}
 	sampler2D _MainTex;
 	void surf(Input IN, inout SurfaceOutput o) {
-		o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb;
+		//o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb;
+		float a  = max(cos(3.*_Time + 2.*IN.worldPos.y), 0.);
+		//a = 1.;
+		o.Albedo = float3(a, a, a);
 	}
 	ENDCG
 	}
