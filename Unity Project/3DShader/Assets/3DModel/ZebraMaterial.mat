@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ZebraMaterial
-  m_Shader: {fileID: 4800000, guid: c7c506ba6ae5c714f821079463187ae5, type: 3}
+  m_Shader: {fileID: 4800000, guid: d3e88448146b8a34083917d748659938, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
