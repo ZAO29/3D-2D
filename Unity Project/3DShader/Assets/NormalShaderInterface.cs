@@ -13,12 +13,13 @@ public class NormalShaderInterface : MonoBehaviour
         _Material = GetComponent<Renderer>().material;
         _Material.SetFloat("_Frequency", _Freq);
         _Material.SetFloat("_Amplitude", _Amplitude);
+
     }
 
     // Update is called once per frame
     void Update()
     {
         _Material.SetFloat("_Frequency", _Freq);
-        _Material.SetFloat("_Amplitude", _Amplitude);
+        _Material.SetFloat("_Amplitude", _Amplitude);     
     }
 }
