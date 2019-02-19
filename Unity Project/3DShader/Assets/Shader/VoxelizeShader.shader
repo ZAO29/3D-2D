@@ -52,7 +52,7 @@
 				o.color.xyz = float3(0., 0., 0.);
 				o.color.xyz += 1./3.*(1 + cos(10.1*_SpatialRes * v.vertex.xyz+_Time*_SpatialRes));
 				o.color.xyz += 2./3.*(1 + cos(5.1*_SpatialRes * v.vertex.xyz + _Time*_SpatialRes));
-				a
+				
 				o.color.xyz *= _SpatialRes;
 				o.color.xyz = floor(o.color.xyz);
 				o.color.xyz /= _SpatialRes;
