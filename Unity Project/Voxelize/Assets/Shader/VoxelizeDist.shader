@@ -1,4 +1,4 @@
-﻿Shader "Unlit/VoxelizeDistShader"
+﻿Shader "Custom/VoxelizeDist"
 {
 
 	Properties
@@ -34,8 +34,8 @@
 		v2f o;
 		float4 worldPos = UnityObjectToClipPos(vertex);
 		float3 PosCam = float3(_X, _Y, _Z);
-
-		float SpatialRes = length(PosCam - worldPos);
+		float PosWorld = worldPos.xyz / worldPos.w;
+		float SpatialRes = length(PosCam - PosWorld);
 		vertex *= SpatialRes;
 		vertex = floor(vertex);
 		vertex /= SpatialRes;
@@ -53,6 +53,11 @@
 	// range. To display it as color, bring the range into 0..1
 	// and put into red, green, blue components
 	c.rgb = i.worldNormal*0.5 + 0.5;
+	float3 PosCam = float3(_X, _Y, _Z);
+	float3 PosReal = i.pos.xyz / i.pos.w;
+	float SpatialRes = length(PosCam - PosReal);
+	float w = 0.7;
+	c.rgb = c.rgb * w  + ( 1+cos(SpatialRes%100)/2) * (1 -w);
 	return c;
 	}
 		ENDCG
