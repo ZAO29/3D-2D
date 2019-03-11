@@ -29,8 +29,9 @@ public class VoxelizeDistInterface : MonoBehaviour
         }
 
 
-        _Mat.SetFloat("_X", Camera.main.transform.position.x);
-        _Mat.SetFloat("_Y", Camera.main.transform.position.y);
-        _Mat.SetFloat("_Z", Camera.main.transform.position.z);
+        _Mat.SetVector("_Position", Camera.main.transform.position);
+
+
+
     }
 }
