@@ -1,0 +1,51 @@
+// Created by inigo quilez - iq/2015
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+
+
+
+
+
+vec3 compute( vec2 p)
+{
+     float x = 0.45;
+    float y = 0.65;
+    float osci = x+(y-x)*(cos(iTime)+1.)/2.;
+    float a = step(fract(p.x+osci),0.5)*osci;
+    
+    a = step(fract(a+p.y),0.5);
+    
+    return vec3(a);
+    
+}
+
+
+
+
+
+void mainImage( out vec4 c, vec2 p )
+{
+    c.w = length(p = p/iResolution.y - vec2(0.75,0.5));
+    //c = texture( iChannel0, vec2(atan(p.y,p.x),c.w*c.w));
+    //c = texture( iChannel0, p*length(p)*length(p));
+    p = p*sqrt(length(p));
+    
+    p*=5.;
+    
+   // c.xyz=vec3(step(fract(p.x),0.5)+step(fract(p.y+0.5),0.5))/2.;
+    float x = 0.45;
+    float y = 0.65;
+    float osci = x+(y-x)*(cos(iTime)+1.)/2.;
+    float a = step(fract(p.x+osci),0.5)*osci;
+    
+    a = step(fract(a+p.y),0.5);
+    float val = 0.+0.2*(cos(iTime)+1.)/2.;
+    c.xyz =compute(p);
+    c.xyz += compute(p+vec2(val,0.0));
+     c.xyz += compute(p+vec2(-val,0.0));
+     c.xyz += compute(p+vec2(0.0,val));
+     c.xyz += compute(p+vec2(0.0,-val));
+     c.xyz/=5.; 
+
+
+}
+

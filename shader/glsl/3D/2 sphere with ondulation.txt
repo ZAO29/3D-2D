@@ -1,0 +1,475 @@
+// Author: Bellot Nicolas	
+
+// Title: 2 sphere on checkerboard with reflection
+
+ 
+
+#ifdef GL_ES
+
+precision mediump float;
+
+#endif
+
+ 
+
+#define NB_SPHERE 2
+
+#define NB_ESSAI 100
+
+#define PI 3.1416
+
+uniform vec2 u_resolution;
+
+uniform vec2 u_mouse;
+
+uniform float u_time;
+
+ 
+
+ 
+
+ 
+
+float iSphere(in vec3 ro,in vec3 rd, vec4 sph)
+
+{
+
+    //sphere center0 radius r eq <xyz|xyz> = r^2
+
+    // here xyz = ro + t *rd;
+
+    // |ro|^2 + 2t<ro|rd> + t^2|rd|^2 = r^2
+
+    float r = sph.w;
+
+    vec3 roc = ro - sph.xyz;
+
+    float b = 2.*dot(roc,rd);
+
+    float c = dot(roc,roc)-r*r;
+
+    float h = b*b - 4.*c;
+
+    if( h < 0.)
+
+    {
+
+        return -1.;
+
+    }else
+
+    {
+
+        return (-b -sqrt(h))/2.0;
+
+    }
+
+}
+
+
+
+
+vec2 iSphere2(in vec3 ro,in vec3 rd, vec4 sph)
+{
+
+    //sphere center0 radius r eq <xyz|xyz> = r^2
+
+    // here xyz = ro + t *rd;
+
+    // |ro|^2 + 2t<ro|rd> + t^2|rd|^2 = r^2
+
+    float r = sph.w;
+
+    vec3 roc = ro - sph.xyz;
+
+    float b = 2.*dot(roc,rd);
+
+    float c = dot(roc,roc)-r*r;
+
+    float h = b*b - 4.*c;
+
+    if( h < 0.)
+
+    {
+
+        return vec2(-1.);
+
+    }else
+
+    {
+
+        return vec2((-b -sqrt(h))/2.0,(-b +sqrt(h))/2.0);
+
+    }
+
+}
+
+ 
+
+ 
+
+ 
+
+float iPlane(in vec3 ro,in vec3 rd)
+
+{
+
+    return -ro.y/rd.y;
+
+}
+
+ 
+
+ 
+
+ 
+
+vec3 nReflect(vec3 normal,vec3 rd)
+
+{
+
+    vec3 normal_v = normalize(normal);
+
+    float t1 = dot(normal_v,rd);
+
+    vec3 rd_tangent = rd - t1*normal_v;
+
+   
+
+    
+
+    //return vec3(0.);
+
+   
+
+    return -2.*t1*normal_v + rd;
+
+}
+
+ 
+
+vec3 nSphere(vec3 pos, vec4 sphere)
+
+{
+
+    return normalize(pos - sphere.xyz);
+
+}
+
+ 
+
+vec3 nPlane(vec3 pos)
+
+{
+
+    return vec3(0.,1.,0.);
+
+}
+
+ 
+vec3 colorPlane(in vec3 pos)
+{
+     float size = 3.;
+        float a = step(mod(pos.x,size),size/2.);
+        float b = step(mod(pos.z-a*size/2.,size),size/2.);
+        vec3 color = vec3(b);
+    return color;
+}
+ 
+
+vec4 sphere = vec4(2.+2.*sin(u_time),2.,-5.+2.*cos(u_time),2.);
+
+ 
+
+int intersect(in vec3 ro, in vec3 rd, out float resT, in vec4 a_spheres[NB_SPHERE], int id_avoid,out float val)
+
+{             
+
+ 
+
+    int id = -1;
+
+   float ampl = 0.1;
+
+    
+
+    
+
+    for (int i = 1;i < NB_SPHERE ; i++)
+
+    {
+		a_spheres[i].w*=(1.+ampl);
+            
+        vec2 tSph = iSphere2(ro,rd, a_spheres[i]);//intersect sphere
+		 a_spheres[i].w/=(1.+ampl);
+        
+        if (tSph.x >0.0 && tSph.x < resT && i != id_avoid)
+
+        {
+			
+           
+        	vec2 tSphmin = iSphere2(ro,rd, a_spheres[i]);
+            
+            vec2 tintervalle = tSph;
+            /*if(tSphmin.x > 0.)
+            {
+                tintervalle.y = tSphmin.x;
+                //id = i;
+            }*/
+            
+          
+            bool above =true;
+            vec3 r1 = ro + tintervalle.x * rd;
+            float delta = (tintervalle.y-tintervalle.x)/float(NB_ESSAI);
+            for (int j=0;j<NB_ESSAI;j++)
+			{
+                float t = float(j)*delta;
+            	vec3 timedir = (r1 + t*rd) - a_spheres[i].xyz;
+                vec3 sphereProj = timedir/length(timedir)*a_spheres[i].w;
+                 val = (1.+cos(5.*u_time+5.*dot(sphereProj,vec3(1.,1.,.0))))/2.;
+                float coeff = 1.+val*ampl;
+                	sphereProj *=  coeff;
+                if(dot(timedir,timedir) <= dot(sphereProj,sphereProj))
+                {
+                    resT = tintervalle.x+t;
+                    above = false;
+                    id = i;
+                }
+                
+                
+            }
+        
+            
+
+        }
+
+    }
+
+    int a = 1;
+
+    //vec4 alpha = a_spheres[a];
+
+    //
+
+    float tPla = iPlane(ro,rd);
+
+   
+
+    if ( tPla > 0.0 && tPla < resT && (id_avoid != NB_SPHERE))
+
+    {
+
+        id = NB_SPHERE;
+
+        resT = tPla;
+
+    }
+
+   
+
+    return id;
+
+}
+
+ 
+
+ 
+
+ 
+
+ 
+
+vec3 findColor(vec3 pos, int id ,vec4 a_spheres[NB_SPHERE],vec3 lightDir,vec3 colorSphereS[NB_SPHERE])
+
+{
+
+    vec3 color;
+
+   for (int i=0;i<NB_SPHERE;i++)
+
+    {
+
+                 // we hit something, we draw white
+
+            if (id == i)
+
+            {
+
+                    vec3 nor = nSphere(pos,a_spheres[i]);
+
+                    float lightComponent = clamp(dot(lightDir,nor),0.,1.);
+
+                    color = pos.xyz*lightComponent;
+
+               
+
+                                return color;
+
+            }
+
+    }
+    
+    
+    if (id == NB_SPHERE)
+    {
+        return colorPlane(pos);
+    }
+
+}
+
+ 
+
+void main() {
+
+   
+
+    vec4 sphereS[NB_SPHERE];
+
+    vec3 colorSphereS[NB_SPHERE];
+
+   
+
+ 
+
+                sphereS[0] = vec4(5.+2.*sin(u_time),2.,-5.+2.*cos(u_time),1.);
+
+    colorSphereS[0] = vec3(.1,1.,1.);
+
+   
+
+    //sphereS[1] = vec4(5.+2.*sin(u_time-PI),2.,-5.+2.*cos(u_time-PI),2.);
+    sphereS[1] = vec4(5.,3.,-5.,2.);
+
+    colorSphereS[1] = vec3(1.,.1,1.);
+
+   
+
+    vec2 uv = gl_FragCoord.xy/u_resolution.xy;
+
+   
+
+    //ray
+
+    vec3 ro = vec3(0.,1.,4.); //origin of the ray
+
+    vec3 rd = normalize( vec3(-1.0+2.*uv,-1.0)); // direction of the ray
+
+ 
+
+    vec3 color = vec3(0.);
+
+   
+
+    float t =30000000.;
+
+    int id_avoid = -1;
+	float val = 0.;
+    int id = intersect(ro,rd,t,sphereS,id_avoid,val);
+
+  
+
+    vec3 pos = ro + t*rd;
+
+   
+
+    vec3 lightDir = normalize(vec3(15.,1.,0.));
+
+  
+
+    if(id >= 0 &&  id < NB_SPHERE)
+    {
+
+                for (int i=0;i<NB_SPHERE;i++)
+
+                {
+
+                 // we hit something, we draw white
+
+            if (id == i)
+
+            {
+
+                vec3 nor = nSphere(pos,sphereS[i]);
+
+                                float lightComponent = clamp(dot(lightDir,nor),0.,1.);
+
+                                float ambient = 0.5 + 0.5 * nor.y;
+
+                                color =cos(25.*pos);//*lightComponent;
+                			    color = vec3(val);
+
+               
+
+                vec3 rd_reflection = nReflect(nor,rd);
+
+                float t1 = 100000.;
+
+                /*int id_ref = intersect(pos,rd_reflection,t1,sphereS,id);
+
+                vec3 pos_ref = pos + t1 * rd_reflection;
+
+                if(id_ref >= 0 &&  id_ref <= NB_SPHERE)
+                {
+                                   vec3 col = findColor(pos_ref,id_ref,sphereS,lightDir,colorSphereS);
+                   
+                    color += col/4.;
+                }*/
+
+            }
+
+               
+
+                }
+
+    }
+
+   
+
+    
+	//cas du plan
+    else if (id == NB_SPHERE)
+
+    {
+
+        color = vec3(0.,0.,1.);
+
+        vec3 nor = nPlane(pos);
+
+        float ambient = smoothstep(0.,2.*sphere.w,length(pos.xz-sphere.xz));
+
+        float lightComponent = clamp(dot(lightDir,nor),0.,1.);
+		
+       	color = colorPlane(pos);
+        
+        
+        //ombrage des spheres
+        float t_s = 0.5;
+        int id_shadow = intersect(pos,lightDir,t_s,sphereS,NB_SPHERE,val);
+        
+        if(id_shadow >= 0)
+        {
+            vec3 pos_s = pos+t*lightDir; 
+            for (int i=0;i<NB_SPHERE;i++)
+			 {
+                 if (i == id_shadow)
+                 {
+                     vec3 nor = nSphere(pos_s,sphereS[i]);
+                     color *= (1.-abs(dot(nor,lightDir)));
+                 }
+             }
+            color*=vec3(0.5);
+        }
+
+    }
+
+   
+
+    
+
+    //color = vec3(uv.x,uv.y,abs(sin(u_time)));
+
+ 
+
+    gl_FragColor = vec4(color,1.0);
+
+}
