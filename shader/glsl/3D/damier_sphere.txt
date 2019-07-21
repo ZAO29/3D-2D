@@ -26,8 +26,7 @@ uniform float u_time;
 float speed =sin(0.0001*u_time);
 
 
-float nb_white_stripe = 6.;
-float inv_stripe = 1./nb_white_stripe;
+
 
  
 struct sphereStruct
@@ -273,6 +272,15 @@ mat3 rotationMatrix(vec3 axis, float angle)
 vec3 colorInterp[6];
 
 
+float getDamierColor(float theta, float phi, float inv_stripe)
+{
+    float c = step(mod(theta,inv_stripe),inv_stripe/2.);
+	float b =  step(mod(phi-c*inv_stripe/2.,inv_stripe),inv_stripe/2.);
+    
+    return b;
+}
+
+#define NB_LEVEL 4
 
 vec3 getSphereColor(float theta,float phi)
 {
@@ -282,10 +290,32 @@ vec3 getSphereColor(float theta,float phi)
     colorInterp[3]=vec3(0.,1.,1.);
     colorInterp[4]=vec3(0.,0.,1.);
     colorInterp[5]=vec3(1.,1.,0.);
-   
+   	
     
-    float c = step(mod(theta,inv_stripe),inv_stripe/2.);
-	float b =  step(mod(phi-c*inv_stripe/2.,inv_stripe),inv_stripe/2.);
+    
+    float nb_white_stripe = 2.;
+float inv_stripe = 1./nb_white_stripe;
+    float b = 1.;
+    //float real_nb_level = abs(cos(u_time*0.5))*float(NB_LEVEL);
+     float real_nb_level = 4.;
+    for (int i=0; i < NB_LEVEL;i++)
+    {
+
+        if (i < int(floor(real_nb_level)))
+        {
+             b *= getDamierColor(theta,phi,1./float(nb_white_stripe))+1.*b/nb_white_stripe;
+        	 nb_white_stripe *=2.;
+    	}
+        
+        /*if(i < int(floor(real_nb_level+1.)))
+        {
+            float t = mod(real_nb_level,1.);
+             b = (1.-t)*b+ t*b*getDamierColor(theta,phi,1./float(nb_white_stripe))+1.*b/nb_white_stripe;
+            
+        }*/
+    }
+       
+     
 
     float nb_color = 6.;
     
@@ -334,7 +364,7 @@ vec3 getSphereColor(float theta,float phi)
     }
     
 
-    color *= b;
+    color = b*color;
     
     return color;
 }
@@ -375,7 +405,7 @@ vec3 getSphereColor(float theta,float phi)
 				
                 vec3 norD = nSphere(pos,sphereS[i].posRadius);
                 
-                mat3 rot =rotationMatrix(vec3(0.8,0.5,0.) ,PI/3.);
+                mat3 rot =rotationMatrix(vec3(cos(u_time),sin(u_time),0.) ,PI/2.);
                 
                 vec3 nor =rot*norD;
                 
@@ -384,7 +414,7 @@ vec3 getSphereColor(float theta,float phi)
                // float c = step(mod(theta,inv_stripe),inv_stripe/2.);
                // float b = step(mod(phi-c*inv_stripe/2.,inv_stripe),inv_stripe/2.);
                 
-                float ampl = 0.04*cos(0.5*u_time)*PI;
+                float ampl = 0.1*cos(0.5*u_time)*PI;
                 //int nb_pt = int(10.*ampl/(0.1*PI));
                 int nb_pt = 20;
                 vec3 b = vec3(0.);
