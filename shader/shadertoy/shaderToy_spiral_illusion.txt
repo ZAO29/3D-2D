@@ -1,0 +1,65 @@
+// Binary Sub-Division Pattern - written 2015 by Jakob Thomsen
+
+//void mainImage( out vec4 o, in vec2 U ) // original
+//{ o += step(.5, fract(exp2(ceil(U.y / 56.25)) * U.x / 1600.)); }
+
+// more chars but less problems ;-) thanks, Fabrice!
+
+
+
+vec4 computeVal(vec2 coordPol, float delai)
+{
+    float  seuil = (1.1 + cos(0.5*delai))*10.;
+    
+    vec4 o;
+    coordPol.x += delai+sqrt(floor(coordPol.y*seuil)/seuil);//*coordPol.y;
+    o += step(.5, fract(exp2(ceil(coordPol.y * (6.+5.*cos(delai)))) * coordPol.x / 2.));
+   	
+    return o;
+}
+
+
+
+void mainImage( out vec4 o, vec2 U )
+//void mainImage( inout vec4 o, vec2 U ) // ERROR: overloaded functions must have the same parameter qualifiers
+{
+    
+    
+    float maxDim = max(iResolution.x, iResolution.y);
+    
+    
+    
+    U /= maxDim;
+    U-=vec2(iResolution.x/maxDim*0.5,iResolution.y/maxDim*0.5);
+    vec2 coordPol = vec2(0.);
+    coordPol.x = atan(U.y,U.x);
+    coordPol.y = length(U);
+    /*coordPol.x += iTime+sqrt(floor(coordPol.y*seuil)/seuil);//*coordPol.y;
+    
+    //U.y+=coordPol.y;
+    //U.x+=coordPol.x;
+    
+    //float alpha = (1.+cos(iTime))/2.;
+    
+    U = mix(U,coordPol,1.);
+    
+    //o += step(.5, fract(exp2(ceil(U.y * 8.)) * U.x / 2.));
+    o += step(.5, fract(exp2(ceil(coordPol.y * (6.+5.*cos(iTime)))) * coordPol.x / 2.));
+    o += step(.5, fract(exp2(ceil(coordPol.y * (6.+5.*cos(iTime)))) * (coordPol.x-0.02) / 2.));
+     o += step(.5, fract(exp2(ceil(coordPol.y * (6.+5.*cos(iTime)))) * (coordPol.x-0.04) / 2.));
+    o/=3.;*/
+    float amp= (1.+cos(0.1112*iTime))/2.*0.5;
+    o += computeVal(coordPol,iTime);
+    o += computeVal(coordPol,iTime+amp);
+    o += computeVal(coordPol,iTime+2.*amp);
+    o += computeVal(coordPol,iTime+3.*amp);
+    o += computeVal(coordPol,iTime+4.*amp);
+
+   
+    o/=5.;
+    
+}
+
+
+
+
