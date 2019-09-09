@@ -1,12 +1,12 @@
-function   continuousSubdiv(tris,pts,nb_subdiv,nbIm)
+function   continuousSubdiv(tris,pts,nb_subdiv,nbIm,method)
 
 colorFace = zeros(size(tris,1),1);
 f=figure,
 for i=1:nb_subdiv
    
-   [trisB,ptsB,colorFaceB] = multisubdivLoopUnicPt(tris,pts,colorFace,'middle',i-1);
+   [trisB,ptsB,colorFaceB] = multisubdivLoopUnicPt(tris,pts,colorFace,method,i-1);
    
-   [newTrisM,newPtsM,newColorFaceM] = subdivLoop(trisB,ptsB,colorFaceB,'middle');
+   [newTrisM,newPtsM,newColorFaceM] = subdivLoop(trisB,ptsB,colorFaceB,method);
    [newTrisS,newPtsS,newColorFaceS] = subdivLoop(trisB,ptsB,colorFaceB,'simple');
    
    

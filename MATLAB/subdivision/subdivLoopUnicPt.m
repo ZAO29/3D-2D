@@ -28,8 +28,9 @@ for i=1:nbTri
        %% pts normaux
        idv = tris(i,id);
        idAlreadyPro = PtAlreadyProcess(idv,idv);
-       if(idAlreadyPro == 0)
+       
            idtri = mod(find(tris==idv)-1,nbTri)+1;
+       if(idAlreadyPro == 0)
            inter = tris(idtri,:);
            neighbour=unique(inter(inter~=idv));
            nbNeighbour = length(neighbour);

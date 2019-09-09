@@ -100,13 +100,13 @@ bmInit = bmesh.new()
 
 
 #
-initPyramid = False;
+initPyramid = True;
 
 if(initPyramid):
     vZ  = bmInit.verts.new((0.,0.,1.));
     v1  = bmInit.verts.new((1.,0.,0.));
-    v2  = bmInit.verts.new((cos(2.*math.pi/3.),sin(2.*math.pi/3.),0.));
-    v3  = bmInit.verts.new((cos(-2.*math.pi/3.),sin(-2.*math.pi/3.),0.));
+    v2  = bmInit.verts.new((math.cos(2.*math.pi/3.),math.sin(2.*math.pi/3.),0.));
+    v3  = bmInit.verts.new((math.cos(-2.*math.pi/3.),math.sin(-2.*math.pi/3.),0.));
 
     f1 = bmInit.faces.new((v1,v2,v3));
     f2 = bmInit.faces.new((v1,vZ,v2));
@@ -121,7 +121,7 @@ if(initPyramid):
 else:
     bmInit.from_mesh(me)
 
-n_subdiv = 4
+n_subdiv = 0
 beta = 0.0
 
 
@@ -257,7 +257,10 @@ for i in range(0,n_subdiv):
 
 
 # Finish up, write the bmesh back to the mesh
-bmNew.to_mesh(me)
+if (n_subdiv  == 0):
+    bmInit.to_mesh(me)
+else :
+    bmNew.to_mesh(me)
 
 
 #adding materials
@@ -280,4 +283,5 @@ for i in range(nbMaterial):
 
 
 bm.free()
-bmNew.free()  # free and prevent further access
+if (n_subdiv  != 0):
+    bmNew.free()  # free and prevent further access

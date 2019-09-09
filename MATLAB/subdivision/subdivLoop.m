@@ -8,11 +8,7 @@ newTris=[];
 newPts=[];
 newColorFace=[];
 
-if (method == "loop")
-    beta = 0.01;
-else
-    beta = 0.0;
-end
+
 
 
 idcolorFace = max(colorFace)+1;
@@ -27,7 +23,15 @@ for i=1:nbTri
        inter = tris(idtri,:);
        neighbour=unique(inter(inter~=idv));
        nbNeighbour = length(neighbour);
-       
+       if (method == "loop")
+            if (nbNeighbour > 3)
+                beta = 4/(8*nbNeighbour);
+            else
+                beta = 4/16;
+            end
+        else
+            beta = 0.0;
+        end
        newPt = (1 - nbNeighbour*beta)*pts(idv,:)+beta*sum(pts(neighbour,:));
        
        newPts = [newPts;newPt];
