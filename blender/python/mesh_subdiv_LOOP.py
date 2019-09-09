@@ -32,7 +32,7 @@ def computeNewPt(vert, b):
     
 
     
-    newco = Vector()
+    newco = mathutils.Vector()
     nb_voisin = len(listVoisin)
     
     if nb_voisin < 3 :
@@ -58,7 +58,7 @@ def computeNewEdgePt(vertx,verty):
                 selectedEdge = e
             
 
-    newco = Vector()
+    newco = mathutils.Vector()
     
 
     if len(selectedEdge.link_faces) < 2:       
@@ -121,7 +121,7 @@ if(initPyramid):
 else:
     bmInit.from_mesh(me)
 
-n_subdiv = 3
+n_subdiv = 4
 beta = 0.0
 
 
