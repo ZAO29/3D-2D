@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>Camera.h</itemPath>
+      <itemPath>CameraFree.h</itemPath>
+      <itemPath>CameraTrackBall.h</itemPath>
+      <itemPath>FBO.h</itemPath>
+      <itemPath>MyConstant.h</itemPath>
+      <itemPath>WindowEnv.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="imgui" displayName="imgui" projectFiles="true">
+      <logicalFolder name="docs" displayName="docs" projectFiles="true">
+        <itemPath>imgui/docs/CHANGELOG.txt</itemPath>
+        <itemPath>imgui/docs/README.md</itemPath>
+        <itemPath>imgui/docs/TODO.txt</itemPath>
+        <itemPath>imgui/docs/issue_template.md</itemPath>
+        <itemPath>imgui/docs/pull_request_template.md</itemPath>
+      </logicalFolder>
+      <itemPath>imgui/.editorconfig</itemPath>
+      <itemPath>imgui/.travis.yml</itemPath>
+      <itemPath>imgui/LICENSE.txt</itemPath>
+      <itemPath>imgui/imconfig.h</itemPath>
+      <itemPath>imgui/imgui.h</itemPath>
+      <itemPath>imgui/imgui_impl_glx.h</itemPath>
+      <itemPath>imgui/imgui_impl_opengl3.h</itemPath>
+      <itemPath>imgui/imgui_internal.h</itemPath>
+      <itemPath>imgui/imstb_rectpack.h</itemPath>
+      <itemPath>imgui/imstb_textedit.h</itemPath>
+      <itemPath>imgui/imstb_truetype.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Camera.cpp</itemPath>
+      <itemPath>CameraFree.cpp</itemPath>
+      <itemPath>CameraTrackBall.cpp</itemPath>
+      <itemPath>FBO.cpp</itemPath>
+      <itemPath>WindowEnv.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>imgui</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>/usr/include/glm/</pElem>
+            <pElem>imgui</pElem>
+          </incDir>
+          <commandLine>-D GLM_ENABLE_EXPERIMENTAL</commandLine>
+        </ccTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="Camera.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Camera.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CameraFree.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CameraFree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CameraTrackBall.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CameraTrackBall.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FBO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FBO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="WindowEnv.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="WindowEnv.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/.editorconfig" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/.travis.yml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/LICENSE.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/CHANGELOG.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/README.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/TODO.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/issue_template.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/pull_request_template.md"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="imgui/imconfig.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui_impl_glx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui_impl_opengl3.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui_internal.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imstb_rectpack.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imstb_textedit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imstb_truetype.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>/usr/include/glm/</pElem>
+            <pElem>imgui</pElem>
+          </incDir>
+          <commandLine>-D GLM_ENABLE_EXPERIMENTAL</commandLine>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="Camera.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Camera.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CameraFree.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CameraFree.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CameraTrackBall.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CameraTrackBall.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FBO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FBO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="WindowEnv.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="WindowEnv.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/.editorconfig" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/.travis.yml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/LICENSE.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/CHANGELOG.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/README.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/TODO.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/issue_template.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/docs/pull_request_template.md"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="imgui/imconfig.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui_impl_glx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui_impl_opengl3.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imgui_internal.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imstb_rectpack.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imstb_textedit.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="imgui/imstb_truetype.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
