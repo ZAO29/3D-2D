@@ -5,18 +5,10 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>Application.h</itemPath>
-      <itemPath>Camera.h</itemPath>
-      <itemPath>CameraFree.h</itemPath>
-      <itemPath>CameraTrackBall.h</itemPath>
-      <itemPath>FBO.h</itemPath>
       <itemPath>Material.h</itemPath>
       <itemPath>Mesh.h</itemPath>
       <itemPath>Model.h</itemPath>
-      <itemPath>MyConstant.h</itemPath>
       <itemPath>SFXBloom.h</itemPath>
-      <itemPath>Texture.h</itemPath>
-      <itemPath>UIHandler.h</itemPath>
-      <itemPath>WindowEnv.h</itemPath>
     </logicalFolder>
     <logicalFolder name="imgui" displayName="imgui" projectFiles="true">
       <logicalFolder name="docs" displayName="docs" projectFiles="true">
@@ -69,17 +61,10 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>Application.cpp</itemPath>
-      <itemPath>Camera.cpp</itemPath>
-      <itemPath>CameraFree.cpp</itemPath>
-      <itemPath>CameraTrackBall.cpp</itemPath>
-      <itemPath>FBO.cpp</itemPath>
       <itemPath>Material.cpp</itemPath>
       <itemPath>Mesh.cpp</itemPath>
       <itemPath>Model.cpp</itemPath>
       <itemPath>SFXBloom.cpp</itemPath>
-      <itemPath>Texture.cpp</itemPath>
-      <itemPath>UIHandler.cpp</itemPath>
-      <itemPath>WindowEnv.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -111,16 +96,29 @@
       <compileType>
         <ccTool>
           <incDir>
-            <pElem>../../Include/AlsimGL/glm/</pElem>
+            <pElem>/usr/include/glm/</pElem>
             <pElem>../../Include/AlsimGL/SOIL</pElem>
             <pElem>/usr/include/assimp</pElem>
             <pElem>imgui</pElem>
+            <pElem>..</pElem>
           </incDir>
-          <commandLine>-std=c++11 -fpermissive</commandLine>
+          <commandLine>-std=c++11 -D GLM_ENABLE_EXPERIMENTAL</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
             <linkerLibLibItem>assimp</linkerLibLibItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../ZGL"
+                            CT="3"
+                            CN="Debug"
+                            AC="false"
+                            BL="true"
+                            WD="../ZGL"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libzgl.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
           <commandLine>-std=c++11 -lX11 -lGLEW -lGL -lSOIL</commandLine>
         </linkerTool>
@@ -137,22 +135,6 @@
       </item>
       <item path="BlurShader.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Camera.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Camera.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="CameraFree.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="CameraFree.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="CameraTrackBall.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="CameraTrackBall.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="FBO.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="FBO.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="LightShader.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LightShader.h" ex="false" tool="3" flavor2="0">
@@ -168,8 +150,6 @@
       <item path="Model.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Model.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SFXBloom.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -188,18 +168,6 @@
       <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Shaders.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Texture.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Texture.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="UIHandler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="UIHandler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="WindowEnv.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="WindowEnv.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -266,12 +234,13 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <incDir>
-            <pElem>../../Include/AlsimGL/glm/</pElem>
+            <pElem>/usr/include/glm/</pElem>
             <pElem>../../Include/AlsimGL/SOIL</pElem>
             <pElem>/usr/include/assimp</pElem>
-            <pElem>/usr/include/glm</pElem>
+            <pElem>imgui</pElem>
+            <pElem>..</pElem>
           </incDir>
-          <commandLine>-std=c++11</commandLine>
+          <commandLine>-std=c++11 -D GLM_ENABLE_EXPERIMENTAL</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -282,6 +251,18 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibLibItem>assimp</linkerLibLibItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../ZGL"
+                            CT="3"
+                            CN="Release"
+                            AC="true"
+                            BL="true"
+                            WD="../ZGL"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libzgl.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
           <commandLine>-std=c++11 -lX11 -lGLEW -lGL -lSOIL</commandLine>
         </linkerTool>
@@ -298,22 +279,6 @@
       </item>
       <item path="BlurShader.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Camera.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Camera.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="CameraFree.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="CameraFree.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="CameraTrackBall.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="CameraTrackBall.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="FBO.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="FBO.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="LightShader.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LightShader.h" ex="false" tool="3" flavor2="0">
@@ -329,8 +294,6 @@
       <item path="Model.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Model.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SFXBloom.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -349,18 +312,6 @@
       <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Shaders.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Texture.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Texture.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="UIHandler.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="UIHandler.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="WindowEnv.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="WindowEnv.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -39,7 +39,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/CameraFree.o \
 	${OBJECTDIR}/CameraTrackBall.o \
 	${OBJECTDIR}/FBO.o \
-	${OBJECTDIR}/WindowEnv.o
+	${OBJECTDIR}/Texture.o \
+	${OBJECTDIR}/WindowEnv.o \
+	${OBJECTDIR}/ZGLApp.o
 
 
 # C Compiler Flags
@@ -88,10 +90,20 @@ ${OBJECTDIR}/FBO.o: FBO.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FBO.o FBO.cpp
 
+${OBJECTDIR}/Texture.o: Texture.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Texture.o Texture.cpp
+
 ${OBJECTDIR}/WindowEnv.o: WindowEnv.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/WindowEnv.o WindowEnv.cpp
+
+${OBJECTDIR}/ZGLApp.o: ZGLApp.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ZGLApp.o ZGLApp.cpp
 
 # Subprojects
 .build-subprojects:

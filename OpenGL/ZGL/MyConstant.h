@@ -40,6 +40,16 @@ enum eCameraType
 };
 
 
+enum eState
+{
+    NOT_INIT,
+    INITIALIZED,
+    RUNNING,
+    TOCLOSE,
+    CLOSE
+
+};
+
 
 
 

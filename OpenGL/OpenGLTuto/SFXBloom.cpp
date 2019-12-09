@@ -12,12 +12,12 @@
  */
 
 #include "SFXBloom.h"
-#include "MyConstant.h"
+#include "ZGL/MyConstant.h"
 
-#include "Texture.h"
+#include "ZGL/Texture.h"
 #include "BlurShader.h"
 #include "BlendingBloomShader.h"
-#include "FBO.h"
+#include "ZGL/FBO.h"
 
 SFXBloom::SFXBloom() {
 }

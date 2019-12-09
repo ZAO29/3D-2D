@@ -31,52 +31,23 @@
 
 #include "Application.h"
 #include "Shaders.h"
-#include "Texture.h"
+#include "ZGL/Texture.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_glx.h"
-#include "CameraFree.h"
+#include "ZGL/CameraFree.h"
 
 
 // a inclure en dernier
 #include <GL/glx.h>
 #include <iostream>
 
-void GLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* msg, void* data)
-{    
-   
-    std::string sType;
-    switch(type)
-    {
-    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-        sType = "DEPRECATED";
-        break;
-    case GL_DEBUG_TYPE_ERROR:
-        sType = "ERROR";
-        break;
-    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-        sType = "UNDEFINED";
-        break;
-    case GL_DEBUG_TYPE_PERFORMANCE:
-        sType = "PERFORMANCE";
-        break;
-    case GL_DEBUG_TYPE_PORTABILITY:
-        sType = "PORTABILITY";
-        break;
-    default:
-        return;
-        sType = "OTHER";
-        break;
-    }
-    std::cout << "GL_DEBUG "<<sType.c_str()<<" : "<<msg<<std::endl;
-}
 
-void GLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* msg, const void* data)
-{    
-    GLErrorCallback(source, type, id, severity, length, msg, data);
-}
 
-Application::Application():m_state(NOT_INIT),m_nbVertices(0),m_pWindowEnv(nullptr) {
+
+
+
+Application::Application():m_nbVertices(0){
 }
 
 
@@ -173,16 +144,7 @@ void Application::createIBO(std::vector<unsigned int> verticesId)
 
 bool Application::Init()
 {
-    m_pWindowEnv = WindowEnv::createWindowEnv(1280,720);
-    
-    m_pWindowEnv->init();
-    //Window win = m_WindowEnv->getWindow();
-    //bool init = ImGui_ImplGLX_Init(&win, m_WindowEnv->getDisplay() , false, 0);
-    //ImGui_ImplGLX_NewFrame();
-    
-    // MESSAGE ERREUR OPENGL
-    glDebugMessageCallback(GLErrorCallback,NULL);
-    
+    ZGLApp::Init();
     
     //MVP initialisation :
     
@@ -214,9 +176,7 @@ bool Application::Init()
      
     
      
-    m_CameraMap[TRACKBALLCAMERA]= new CameraTrackBall();
-    m_CameraMap[FREECAMERA]= new CameraFree();
-    m_pCam = m_CameraMap[FREECAMERA];
+
     
 
     
@@ -240,7 +200,7 @@ bool Application::Init()
     m_light.DiffuseIntensity = 0.5;
     m_light.DirectionOrPos = glm::normalize(glm::vec3(1.0,0.0,10.0));
     
-    m_state = Application::INITIALIZED;
+    
 
     glEnable(GL_DEPTH_TEST);
          
@@ -264,7 +224,7 @@ bool Application::Init()
      //std::string texFolder = "";
      
      //ICOSPHERE 
-     //std::string filename3DModel = "//home//nicolas//Documents//Model3D//scenegraph//icosphere.fbx";
+     //std::string filename3DModel = "//home//nicolas//Documents//Model3D//scen/home/nicolas/Documents/3D_modelgraph//icosphere.fbx";
      //std::string texFolder = "";
      
      
@@ -273,12 +233,11 @@ bool Application::Init()
      //std::string texFolder = "";
      
      // OLDMAN
-     std::string filename3DModel = "//home//nicolas//Documents//Model3D//OldMan//muro.fbx";
-     std::string texFolder = "";
+     std::string filename3DModel = "/home/nicolas/Documents/3D_model/muro.fbx";
+     std::string texFolder = "/home/nicolas/Documents/3D_model/";
      
      
     ///// IMGUI ////// 
-     UIHandler::Init(m_pWindowEnv);
     //std::string filenameGround = "//home//nicolas//Downloads//ogldev-source//Content//quad.obj";
      //std::string filenameGround = "//home//nicolas/Documents//Model3D//ground//damier.fbx";
     
@@ -297,24 +256,6 @@ bool Application::Init()
     m_groundModel.Translate(glm::vec3(0.,-3.,0.));
 }
  
-bool Application::Run()
-{
-
-    m_state = RUNNING;
-    processEvents();
-    
-    glClearColor( 0, 0., 0., 1 );
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
-    OpenGLRender();
-    if(m_ctrl.m_imguiCtrl)
-        m_UI.Render(*this);
- 
-    m_pWindowEnv->swapBuffer();
-    
-    return (m_state == RUNNING);
-}
-
 void Application::OpenGLRender()
 {
 
@@ -332,48 +273,7 @@ void Application::OpenGLRender()
     }
     
     m_pSFXBloom->Render(m_pFBO,m_pingpongFBOs);
-    
-    
-    /*
-    m_pFBO->BindForReading(GL_TEXTURE0,1);
-    
-
-    // BLURR MULTIPLE PASS
-    m_pBlurShader->Enable();
-    
-    bool horizontal = true;
-    for (unsigned int i=0;i< m_SFXBloom.m_nbPass*2;i++)
-    {
-        horizontal= !(horizontal);
-        m_pBlurShader->SetHorizontal(horizontal);
-        
-        m_pingpongFBOs[horizontal]->BindForWriting();
-        m_pingpongFBOs[horizontal]->RenderQuad();
-        m_pingpongFBOs[horizontal]->BindForReading(GL_TEXTURE0);
-        
-        
-    }
-    
-    //BLENDING 
-    glDisable(GL_DEPTH_TEST);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0); // rebind vers l'ecran
-    m_pBlendingShader->Enable();
-    m_pBlendingShader->SetBlurrTextureUnit(0);
-    m_pBlendingShader->SetRenderTextureUnit(1);
-    m_pFBO->BindForReading(GL_TEXTURE1,0); // rendu de la scene
-    if(m_SFXBloom.m_nbPass > 0)
-        m_pingpongFBOs[horizontal]->BindForReading(GL_TEXTURE0); // blurred light
-    else
-        m_pBlackTex->Bind(GL_TEXTURE0);
-    m_pFBO->RenderQuad();*/
-    
-    
-    
-    
-    
-    
-    
-
+   
 }
 
 
@@ -423,6 +323,187 @@ void Application::OpenGLWorldRender()
 }
 
 
+void Application::ImguiDraw()
+{
+        static float f = 0.0f;
+          unsigned int windowFlag = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
+
+        ImGui::Begin("Configure",NULL,windowFlag);                          // Create a window called "Hello, world!" and append into it.
+
+
+        ImGui::Checkbox("Use Normal map", &m_ctrl.m_useNormalMap);
+        ImGui::Checkbox("Rotate model", &m_ctrl.m_rotate);         
+        ImGui::Checkbox(" Debug Cube",&m_ctrl.m_debugCube);
+        
+        clock_t current = clock();
+        float elapsedTime = (current - m_timeCurrent) / float(CLOCKS_PER_SEC)*1000.0f;
+        
+        
+        ImGui::Text(" Render time (ms) : %f",elapsedTime);
+        m_timeCurrent = current;
+        
+        // exemple de texte
+        char  ctext[256]; 
+        strcpy(ctext, m_text.c_str());
+        if(ImGui::InputText(" input text", ctext, 256))
+        {
+            m_text = ctext;
+        }
+        
+        
+        if(ImGui::TreeNode(" Light"))
+        {
+            //ImGui::Begin("Light ",NULL,windowFlag);
+                ImGui::SliderFloat("Diffuse intensity", &m_light.DiffuseIntensity, 0.0f, 10.0f);
+                ImGui::SliderFloat("Ambient intensity", &m_light.AmbientIntensity, 0.0f, 10.0f);
+                ImGui::Text(" Specular ");
+                ImGui::SliderFloat("intensity", &m_specular.intensity, 0.0f, 10.0f);
+                ImGui::SliderFloat("power", &m_specular.power, 0.0f, 10.0f);
+                ImVec4 clear_color = ImVec4(m_light.Color.x, m_light.Color.y, m_light.Color.z, 1.00f);
+                
+            
+                // Edit 1 float using a slider from 0.0f to 1.0f
+                if(ImGui::ColorEdit3("Light color", (float*)&clear_color)) // Edit 3 floats representing a color
+                {
+                    m_light.Color = glm::vec3(clear_color.x,clear_color.y,clear_color.z);
+                }
+                
+                ImGui::Checkbox(" SUN ",&m_light.isDir);
+                
+                if(m_light.isDir )
+                {// DIRECTION
+                    float Hdeg = getHeadingDeg(m_light.DirectionOrPos);
+                    float Pdeg = getPitchDeg(m_light.DirectionOrPos);
+
+
+
+                    //ImGui::SliderFloat("Heading (deg)", &Hdeg, 0.0f, 360.0f)
+                    ImGui::Text(" Direction ");
+
+                    bool HorPchanged = ImGui::SliderFloat("H (deg)", &Hdeg, 0.0f, 360.0f);
+                         HorPchanged = ImGui::SliderFloat("P (deg)", &Pdeg, -90.0f, 90.0f) || HorPchanged;
+
+                    if(HorPchanged)  
+                    {
+                        setPitchAndHeadingDeg(m_light.DirectionOrPos,Hdeg,Pdeg);
+                    }
+
+                    ImGui::Text(" direction : %f | %f | %f" , m_light.DirectionOrPos.x, m_light.DirectionOrPos.y, m_light.DirectionOrPos.z);
+                }else
+                {  // POSITIONNAL LIGHT
+                   ImGui::Text(" Position "); 
+                   ImGui::SliderFloat("X ", &m_light.DirectionOrPos.x, -100.0f, 100.0f);
+                   ImGui::SliderFloat("Y ", &m_light.DirectionOrPos.y, -100.0f, 100.0f);
+                   ImGui::SliderFloat("Z ", &m_light.DirectionOrPos.z, -100.0f, 100.0f);
+                }
+            ImGui::TreePop();    
+        }
+        
+        
+        if(ImGui::TreeNode(" Camera "))
+        {
+            float norm = m_pCam->getScaleEye();         
+            if(ImGui::SliderFloat(" distance ",&norm,0.1f,10.0f))
+                m_pCam->setScaleEye(norm);
+            
+            
+            
+            /* gestion changement du type de camera */
+            bool isFreeCamera = (m_pCam == m_CameraMap[FREECAMERA]);
+            bool isTrackBallCamera = (m_pCam == m_CameraMap[TRACKBALLCAMERA]);
+            bool newIsFreeCamera = isFreeCamera;
+            bool newIsTrackBallCamera = isTrackBallCamera;
+            
+            ImGui::Checkbox(" TRACKBALL ",&newIsTrackBallCamera);
+            ImGui::Checkbox(" FREE ",&newIsFreeCamera);
+            
+            bool becomeTrackBallCam = (newIsTrackBallCamera && !isTrackBallCamera);
+            
+            bool cameraTypeChanged = (newIsFreeCamera && !isFreeCamera) || becomeTrackBallCam;
+                                     ;
+            // la camera a changée de type
+            if(cameraTypeChanged)
+            {
+               eCameraType newCamType =  FREECAMERA;
+               
+               if(becomeTrackBallCam)
+                   newCamType = TRACKBALLCAMERA;
+               
+               
+                Camera* m_pOldCam = m_pCam;
+                m_pCam = m_CameraMap[newCamType];
+                
+                m_pCam->setEyePos(m_pOldCam->getEyePos());
+                m_pCam->setDirection(m_pOldCam->getDirection());
+                m_pCam->setUp(m_pOldCam->getUp());
+                m_pCam->setRight(m_pOldCam->getRight());
+            }
+            
+            CameraProjection();                         
+                                     
+            ImGui::TreePop();    
+        }
+        
+        if(ImGui::TreeNode(" Bloom SFX "))
+        {
+            ImGui::Checkbox(" Enable ",&m_ctrl.m_EnableBloomSFX);
+            ImGui::SliderFloat("BrightNess threshold", &m_pSFXBloom->m_config.m_tresholdBrightNess, 0.0f, 10.0f);
+            int nbPass = m_pSFXBloom->m_config.m_nbPass;
+            if(ImGui::SliderInt("number of Blur Pass", &nbPass, 0, 100))
+                m_pSFXBloom->m_config.m_nbPass = nbPass;
+            ImGui::TreePop();
+        }
+        
+        
+        
+        ImGui::End();
+}
+
+
+
+void Application::CameraProjection()
+{
+    if(ImGui::TreeNode(" Projection "))
+    {    
+            bool isOrtho = (m_pCam->m_projectionType == Camera::ORTHO);
+            bool isPerspective = (m_pCam->m_projectionType == Camera::PERSPECTIVE);
+            bool newIsOrtho = isOrtho;
+            bool newIsPerspective = isPerspective;
+            
+            
+            
+            ImGui::Checkbox(" ORTHO ",&newIsOrtho);
+            ImGui::Checkbox(" PERSPECTIVE ",&newIsPerspective);
+            
+            
+            if(newIsOrtho && !isOrtho)
+                m_pCam->m_projectionType = Camera::ORTHO;
+            if(newIsPerspective && !isPerspective)
+                m_pCam->m_projectionType = Camera::PERSPECTIVE;
+           
+            
+            
+            
+            if(isOrtho)
+            {
+                ImGui::SliderFloat("left", &m_pCam->m_projOrtho.m_left,-500.0f, 0.0f);
+                ImGui::SliderFloat("right", &m_pCam->m_projOrtho.m_right, 0.0f, 500.0f);
+                ImGui::SliderFloat("bottom", &m_pCam->m_projOrtho.m_bottom,-500.0f, 0.0f);
+                ImGui::SliderFloat("top", &m_pCam->m_projOrtho.m_top,0.0f, 500.0f);
+                ImGui::SliderFloat("near plane", &m_pCam->m_projOrtho.m_nearPlane, 0.0f, 100.0f);
+                ImGui::SliderFloat("far plane", &m_pCam->m_projOrtho.m_farPlane, 100.0f, 10000.0f);
+            }else
+            {
+                ImGui::SliderFloat("verticalFOV", &m_pCam->m_projPerspective.m_degVerticalFOV,0.0f, 90.0f);
+                ImGui::SliderFloat("ratio width/height", &m_pCam->m_projPerspective.m_ratio, 0.0f, 500.0f);
+                ImGui::SliderFloat("near Plane", &m_pCam->m_projOrtho.m_bottom,-500.0f, 0.0f);
+                ImGui::SliderFloat("far Plane", &m_pCam->m_projOrtho.m_top,-500.0f, 0.0f);
+            }
+                 
+            ImGui::TreePop();
+    }
+}
+
 
 void Application::Destroy()
 {
@@ -468,214 +549,4 @@ void Application::Destroy()
     
     
     
-}
-
-void Application::processEvents()
-{
-    while (XPending(m_pWindowEnv->getDisplay()) > 0) 
-    {
-        int32_t code;
-
-        XEvent event;
-        XNextEvent(m_pWindowEnv->getDisplay(), &event); 
-            
-        if (!m_ctrl.m_imguiCtrl)
-        {
-            switch (m_event2Process)
-            {
-                case eEVENTCAMERA:
-                    m_pCam->OnEvent(event);
-                    break;
-                case eEVENTLIGHT:
-                    OnLightEvent(event);
-                    break;
-                case eEVENTMODEL:
-                    OnModelEvent(event);
-            }
-        }else
-        {
-            UIEvents(event);
-        }
-        
-        
-        
-        switch (event.type) 
-        {
-            case Expose:
-                break;
-
-            case ConfigureNotify:
-                m_pWindowEnv->setWindowSize(event.xconfigure.width, event.xconfigure.height);
-                break;
-
-            case MotionNotify:    
-                break;
-
-            case ButtonPress:
-                break;
-
-            case KeyPress:
-                code = XLookupKeysym(&event.xkey, 0);
-                switch (code) 
-                {
-
-                    case XK_c:
-                        if(m_event2Process != eEVENTCAMERA)
-                        {
-                            m_event2Process = eEVENTCAMERA;
-                            std::cout<<"CONTROL CAM"<<std::endl;
-                        }
-                        
-                        
-                        break;
-                    case XK_l:
-                        if(m_event2Process != eEVENTLIGHT)
-                        {
-                            m_event2Process = eEVENTLIGHT;
-                            std::cout<<"CONTROL LIGHT"<<std::endl;
-                            
-                        }
-                        
-                        break; 
-                    case XK_m :
-                        if(m_event2Process != eEVENTMODEL)
-                        {
-                            m_event2Process = eEVENTMODEL;
-                            std::cout<<"CONTROL MODEL"<<std::endl;
-                            
-                        }
-                        break;
-                        
-                    case XK_Escape:
-                        m_state = TOCLOSE;
-                        std::cout<<" Escape : "<< code <<std::endl;
-                        return;
-
-                    case XK_F1:
-                        m_ctrl.m_imguiCtrl = !(m_ctrl.m_imguiCtrl);
-                        break;
-                }
-               
-                break;
-            
-
-            case KeyRelease:                
-                break;
-
-        case ClientMessage:
-            break;
-        }
-
-
-    }
-}
-
-void Application::UIEvents(XEvent event)
-{
-   ImGui_ImplGlx_OnEvent(&event);
-}
-
-
-
-
-void Application::OnModelEvent(XEvent event)
-{
-        if(event.type != KeyPress)
-        return;
-
-    int32_t keycode = XLookupKeysym(&event.xkey, 0);
-    
-    float threshold = 10e-5;
-
-    switch (keycode) 
-    {
-
-        case XK_Up:
-            
-            m_model.Scale(1.1f);
-            //m_eye += m_speed*m_up;
-            //m_deltaDegP += m_speed;
-            break;
-        case XK_Down:
-            m_model.Scale(float(1.f/1.1f));
-           
-            break;
-        case XK_Right:
-            if(m_specular.intensity < threshold)
-            {
-                m_specular.intensity = threshold;
-            }
-            
-            m_specular.intensity*=1.1;
-            std::cout<<"specular intensity "<< m_specular.intensity <<std::endl;
-            break;
-        case XK_Left:
-            m_specular.intensity/=1.1;
-            std::cout<<"specular intensity "<< m_specular.intensity <<std::endl;
-            if(m_specular.intensity < threshold)
-            {
-                m_specular.intensity = 0.;
-            }
-            break;
-        case XK_w:
-            m_specular.power*=1.1;
-            
-            std::cout<<"specular power "<< m_specular.power <<std::endl;
-            break;
-        case XK_x:
-            m_specular.power/=1.1;
-            std::cout<<"specular power "<< m_specular.power <<std::endl;
-            break;
-        case XK_n:
-            m_ctrl.m_useNormalMap=true;
-            std::cout<<"normalMap "<< m_ctrl.m_useNormalMap <<std::endl;
-            break; 
-        case XK_b:
-            m_ctrl.m_useNormalMap=false;
-            std::cout<<"normalMap "<< m_ctrl.m_useNormalMap <<std::endl;
-            break; 
-        
-    }
-}
-
-
-void Application::OnLightEvent(XEvent event)
-{
-    if(event.type != KeyPress)
-        return;
-
-    int32_t keycode = XLookupKeysym(&event.xkey, 0);
-    
-    
-
-    switch (keycode) 
-    {
-
-        case XK_Up:
-            
-            m_light.AmbientIntensity*=1.1;
-            std::cout<< "Ambient Intensity" << m_light.AmbientIntensity << std::endl;
-            //m_eye += m_speed*m_up;
-            //m_deltaDegP += m_speed;
-            break;
-        case XK_Down:
-            m_light.AmbientIntensity/=1.1;
-            std::cout<< "Ambient Intensity" << m_light.AmbientIntensity << std::endl;
-           
-            break;
-            
-        case XK_Right:
-            
-            m_light.DiffuseIntensity*=1.1;
-            std::cout<< "Diffuse Intensity" << m_light.DiffuseIntensity << std::endl;
-            //m_eye += m_speed*m_up;
-            //m_deltaDegP += m_speed;
-            break;
-        case XK_Left:
-            m_light.DiffuseIntensity/=1.1;
-            std::cout<< "Diffuse Intensity" << m_light.DiffuseIntensity << std::endl;
-           
-            break;
-
-    }
 }

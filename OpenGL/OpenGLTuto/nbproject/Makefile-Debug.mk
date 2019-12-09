@@ -38,19 +38,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/Application.o \
 	${OBJECTDIR}/BlendingBloomShader.o \
 	${OBJECTDIR}/BlurShader.o \
-	${OBJECTDIR}/Camera.o \
-	${OBJECTDIR}/CameraFree.o \
-	${OBJECTDIR}/CameraTrackBall.o \
-	${OBJECTDIR}/FBO.o \
 	${OBJECTDIR}/LightShader.o \
 	${OBJECTDIR}/Material.o \
 	${OBJECTDIR}/Mesh.o \
 	${OBJECTDIR}/Model.o \
 	${OBJECTDIR}/SFXBloom.o \
 	${OBJECTDIR}/Shaders.o \
-	${OBJECTDIR}/Texture.o \
-	${OBJECTDIR}/UIHandler.o \
-	${OBJECTDIR}/WindowEnv.o \
 	${OBJECTDIR}/imgui.o \
 	${OBJECTDIR}/imgui_demo.o \
 	${OBJECTDIR}/imgui_draw.o \
@@ -64,8 +57,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-std=c++11 -fpermissive
-CXXFLAGS=-std=c++11 -fpermissive
+CCFLAGS=-std=c++11 -D GLM_ENABLE_EXPERIMENTAL
+CXXFLAGS=-std=c++11 -D GLM_ENABLE_EXPERIMENTAL
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -74,11 +67,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lassimp
+LDLIBSOPTIONS=-lassimp ../ZGL/dist/Debug/GNU-Linux/libzgl.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengltuto
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengltuto: ../ZGL/dist/Debug/GNU-Linux/libzgl.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengltuto: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -87,120 +82,86 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opengltuto: ${OBJECTFILES}
 ${OBJECTDIR}/Application.o: Application.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Application.o Application.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Application.o Application.cpp
 
 ${OBJECTDIR}/BlendingBloomShader.o: BlendingBloomShader.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BlendingBloomShader.o BlendingBloomShader.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BlendingBloomShader.o BlendingBloomShader.cpp
 
 ${OBJECTDIR}/BlurShader.o: BlurShader.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BlurShader.o BlurShader.cpp
-
-${OBJECTDIR}/Camera.o: Camera.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Camera.o Camera.cpp
-
-${OBJECTDIR}/CameraFree.o: CameraFree.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CameraFree.o CameraFree.cpp
-
-${OBJECTDIR}/CameraTrackBall.o: CameraTrackBall.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CameraTrackBall.o CameraTrackBall.cpp
-
-${OBJECTDIR}/FBO.o: FBO.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FBO.o FBO.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BlurShader.o BlurShader.cpp
 
 ${OBJECTDIR}/LightShader.o: LightShader.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LightShader.o LightShader.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LightShader.o LightShader.cpp
 
 ${OBJECTDIR}/Material.o: Material.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Material.o Material.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Material.o Material.cpp
 
 ${OBJECTDIR}/Mesh.o: Mesh.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Mesh.o Mesh.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Mesh.o Mesh.cpp
 
 ${OBJECTDIR}/Model.o: Model.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Model.o Model.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Model.o Model.cpp
 
 ${OBJECTDIR}/SFXBloom.o: SFXBloom.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SFXBloom.o SFXBloom.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SFXBloom.o SFXBloom.cpp
 
 ${OBJECTDIR}/Shaders.o: Shaders.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Shaders.o Shaders.cpp
-
-${OBJECTDIR}/Texture.o: Texture.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Texture.o Texture.cpp
-
-${OBJECTDIR}/UIHandler.o: UIHandler.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/UIHandler.o UIHandler.cpp
-
-${OBJECTDIR}/WindowEnv.o: WindowEnv.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/WindowEnv.o WindowEnv.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Shaders.o Shaders.cpp
 
 ${OBJECTDIR}/imgui.o: imgui.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui.o imgui.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui.o imgui.cpp
 
 ${OBJECTDIR}/imgui_demo.o: imgui_demo.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_demo.o imgui_demo.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_demo.o imgui_demo.cpp
 
 ${OBJECTDIR}/imgui_draw.o: imgui_draw.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_draw.o imgui_draw.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_draw.o imgui_draw.cpp
 
 ${OBJECTDIR}/imgui_impl_glx.o: imgui_impl_glx.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_impl_glx.o imgui_impl_glx.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_impl_glx.o imgui_impl_glx.cpp
 
 ${OBJECTDIR}/imgui_impl_opengl3.o: imgui_impl_opengl3.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_impl_opengl3.o imgui_impl_opengl3.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_impl_opengl3.o imgui_impl_opengl3.cpp
 
 ${OBJECTDIR}/imgui_widgets.o: imgui_widgets.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_widgets.o imgui_widgets.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_widgets.o imgui_widgets.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../Include/AlsimGL/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
+	cd ../ZGL && ${MAKE}  -f Makefile CONF=Debug
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -208,6 +169,7 @@ ${OBJECTDIR}/main.o: main.cpp
 
 # Subprojects
 .clean-subprojects:
+	cd ../ZGL && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

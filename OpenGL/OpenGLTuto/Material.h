@@ -15,7 +15,7 @@
 #define MATERIAL_H
 
 
-#include "Texture.h"
+#include "ZGL/Texture.h"
 
 class Material {
 public:

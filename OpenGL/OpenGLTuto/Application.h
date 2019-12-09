@@ -18,30 +18,29 @@
 
 #include "Mesh.h"
 
-//#include "WindowEnv.h"
-#include "CameraTrackBall.h"
+
 
 #include "LightShader.h"
-#include "FBO.h"
+#include "ZGL/FBO.h"
 
-#include "Texture.h"
+#include "ZGL/Texture.h"
 #include "Model.h"
 
 
 #include "glm.hpp"
-#include "UIHandler.h"
+
 
 
 #include <ctime>
 
 #include "SFXBloom.h"
-#include "WindowEnv.h"
+
+#include <ZGL/ZGLApp.h>
 
 
 
 struct Ctrl
 {
-    bool m_imguiCtrl = false;
     bool m_useNormalMap = true;
     bool m_rotate = true;
     bool m_debugCube = true;
@@ -58,26 +57,11 @@ struct ModelMesh
 
 
 
-class Application {
+class Application  : public ZGLApp {
     
     friend class UIHandler;
     
-    enum eState
-    {
-        NOT_INIT,
-        INITIALIZED,
-        RUNNING,
-        TOCLOSE,
-        CLOSE
-        
-    };
-    
-    enum eEvent2Process
-    {
-        eEVENTCAMERA,
-        eEVENTLIGHT,
-        eEVENTMODEL
-    };
+
    
     
 public:
@@ -85,9 +69,8 @@ public:
     //Application(const Application& orig);
     virtual ~Application();
     
-    bool Init();
+    virtual bool Init() override;
     
-    bool Run();
     
     
     
@@ -95,20 +78,11 @@ public:
     
     
 private:
-    
-    void processEvents();
-    
-    void UIEvents(XEvent event);
-    
-    void OnLightEvent(XEvent event);
-    
-    void OnModelEvent(XEvent event);
-    
-    //WindowEnv* m_pWindowEnv;
+     
     GLuint m_VBO;
     GLuint m_IBO;
     GLuint m_tex;
-    eState m_state;
+    
     
     
     glm::mat4 m_MVP;
@@ -135,10 +109,6 @@ private:
     
     Light m_light;
     Specular m_specular;
-    std::map<eCameraType,Camera*> m_CameraMap;
-    Camera* m_pCam;
-    
-    WindowEnv* m_pWindowEnv;
     
     
 
@@ -146,9 +116,9 @@ private:
     Ctrl m_ctrl;
     SFXBloom* m_pSFXBloom;
     
-    UIHandler m_UI;        
+       
     
-    eEvent2Process m_event2Process = eEVENTCAMERA;
+
     
     void createVBO(std::vector<unsigned int> verticesId);
     
@@ -160,10 +130,16 @@ private:
     
     
    
-    void OpenGLRender();
+    virtual void OpenGLRender() override;
+    virtual void ImguiDraw() override;
+    
     void OpenGLWorldRender();
     
     
+    std::string m_text = " texte a editer";
+    clock_t m_timeCurrent;
+    
+    void CameraProjection();
 
     
     

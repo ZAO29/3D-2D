@@ -9,7 +9,9 @@
       <itemPath>CameraTrackBall.h</itemPath>
       <itemPath>FBO.h</itemPath>
       <itemPath>MyConstant.h</itemPath>
+      <itemPath>Texture.h</itemPath>
       <itemPath>WindowEnv.h</itemPath>
+      <itemPath>ZGLApp.h</itemPath>
     </logicalFolder>
     <logicalFolder name="imgui" displayName="imgui" projectFiles="true">
       <logicalFolder name="docs" displayName="docs" projectFiles="true">
@@ -42,7 +44,9 @@
       <itemPath>CameraFree.cpp</itemPath>
       <itemPath>CameraTrackBall.cpp</itemPath>
       <itemPath>FBO.cpp</itemPath>
+      <itemPath>Texture.cpp</itemPath>
       <itemPath>WindowEnv.cpp</itemPath>
+      <itemPath>ZGLApp.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -96,9 +100,17 @@
       </item>
       <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Texture.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Texture.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="WindowEnv.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="WindowEnv.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ZGLApp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ZGLApp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui/.editorconfig" ex="false" tool="3" flavor2="0">
       </item>
@@ -181,9 +193,17 @@
       </item>
       <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Texture.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Texture.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="WindowEnv.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="WindowEnv.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ZGLApp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ZGLApp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui/.editorconfig" ex="false" tool="3" flavor2="0">
       </item>
