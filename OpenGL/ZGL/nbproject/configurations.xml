@@ -9,6 +9,7 @@
       <itemPath>CameraTrackBall.h</itemPath>
       <itemPath>FBO.h</itemPath>
       <itemPath>MyConstant.h</itemPath>
+      <itemPath>Shaders.h</itemPath>
       <itemPath>Texture.h</itemPath>
       <itemPath>WindowEnv.h</itemPath>
       <itemPath>ZGLApp.h</itemPath>
@@ -44,6 +45,7 @@
       <itemPath>CameraFree.cpp</itemPath>
       <itemPath>CameraTrackBall.cpp</itemPath>
       <itemPath>FBO.cpp</itemPath>
+      <itemPath>Shaders.cpp</itemPath>
       <itemPath>Texture.cpp</itemPath>
       <itemPath>WindowEnv.cpp</itemPath>
       <itemPath>ZGLApp.cpp</itemPath>
@@ -99,6 +101,10 @@
       <item path="FBO.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Shaders.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Texture.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -192,6 +198,10 @@
       <item path="FBO.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Shaders.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Texture.cpp" ex="false" tool="1" flavor2="0">
       </item>

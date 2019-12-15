@@ -92,7 +92,7 @@ bool ZGLApp::Init()
     
     m_CameraMap[TRACKBALLCAMERA]= new CameraTrackBall();
     m_CameraMap[FREECAMERA]= new CameraFree();
-    m_pCam = m_CameraMap[FREECAMERA];
+    m_pCam = m_CameraMap[TRACKBALLCAMERA];
     
     InitImgui();
     m_state = INITIALIZED;

@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/CameraFree.o \
 	${OBJECTDIR}/CameraTrackBall.o \
 	${OBJECTDIR}/FBO.o \
+	${OBJECTDIR}/Shaders.o \
 	${OBJECTDIR}/Texture.o \
 	${OBJECTDIR}/WindowEnv.o \
 	${OBJECTDIR}/ZGLApp.o
@@ -89,6 +90,11 @@ ${OBJECTDIR}/FBO.o: FBO.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FBO.o FBO.cpp
+
+${OBJECTDIR}/Shaders.o: Shaders.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Shaders.o Shaders.cpp
 
 ${OBJECTDIR}/Texture.o: Texture.cpp
 	${MKDIR} -p ${OBJECTDIR}

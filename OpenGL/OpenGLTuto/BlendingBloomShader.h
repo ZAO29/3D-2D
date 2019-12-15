@@ -14,7 +14,7 @@
 #ifndef BLENDINGBLOOMSHADER_H
 #define BLENDINGBLOOMSHADER_H
 
-#include "Shaders.h"
+#include "ZGL/Shaders.h"
 
 class BlendingBloomShader : public Shader {
 public:

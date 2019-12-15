@@ -13,7 +13,7 @@
 
 #ifndef POSTFX1SHADER_H
 #define POSTFX1SHADER_H
-#include "Shaders.h"
+#include "ZGL/Shaders.h"
 
 class BlurShader : public Shader {
 public:

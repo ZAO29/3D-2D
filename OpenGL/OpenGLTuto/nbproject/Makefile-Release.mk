@@ -43,7 +43,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/Mesh.o \
 	${OBJECTDIR}/Model.o \
 	${OBJECTDIR}/SFXBloom.o \
-	${OBJECTDIR}/Shaders.o \
 	${OBJECTDIR}/imgui.o \
 	${OBJECTDIR}/imgui_demo.o \
 	${OBJECTDIR}/imgui_draw.o \
@@ -118,11 +117,6 @@ ${OBJECTDIR}/SFXBloom.o: SFXBloom.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SFXBloom.o SFXBloom.cpp
-
-${OBJECTDIR}/Shaders.o: Shaders.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Shaders.o Shaders.cpp
 
 ${OBJECTDIR}/imgui.o: imgui.cpp
 	${MKDIR} -p ${OBJECTDIR}

@@ -9,10 +9,12 @@
         <group name="ALNG"/>
         <group>
             <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/Mesh.cpp</file>
+            <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/Shader/glsl/BlendingTexture.fs</file>
             <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/Mesh.h</file>
             <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/SFXBloom.cpp</file>
             <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/Application.h</file>
             <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/Material.h</file>
+            <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/imgui_impl_glx.cpp</file>
             <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/Application.cpp</file>
             <file>file:/home/nicolas/Documents/Perso/3D-2D/OpenGL/OpenGLTuto/main.cpp</file>
         </group>

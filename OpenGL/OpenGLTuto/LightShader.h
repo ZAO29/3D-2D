@@ -14,7 +14,7 @@
 #ifndef LIGHTSHADER_H
 #define LIGHTSHADER_H
 
-#include "Shaders.h"
+#include "ZGL/Shaders.h"
 
 
 struct Light

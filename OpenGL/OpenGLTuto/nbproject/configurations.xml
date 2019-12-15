@@ -54,8 +54,6 @@
       <itemPath>BlurShader.h</itemPath>
       <itemPath>LightShader.cpp</itemPath>
       <itemPath>LightShader.h</itemPath>
-      <itemPath>Shaders.cpp</itemPath>
-      <itemPath>Shaders.h</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -164,10 +162,6 @@
       <item path="Shader/glsl/shader.fs" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Shader/glsl/shader.vs" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Shaders.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -308,10 +302,6 @@
       <item path="Shader/glsl/shader.fs" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Shader/glsl/shader.vs" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Shaders.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui.cpp" ex="false" tool="1" flavor2="0">
       </item>
