@@ -26,10 +26,16 @@
       <itemPath>imgui/.travis.yml</itemPath>
       <itemPath>imgui/LICENSE.txt</itemPath>
       <itemPath>imgui/imconfig.h</itemPath>
+      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui.cpp</itemPath>
       <itemPath>imgui/imgui.h</itemPath>
+      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_demo.cpp</itemPath>
+      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_draw.cpp</itemPath>
+      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_glx.cpp</itemPath>
       <itemPath>imgui/imgui_impl_glx.h</itemPath>
+      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_opengl3.cpp</itemPath>
       <itemPath>imgui/imgui_impl_opengl3.h</itemPath>
       <itemPath>imgui/imgui_internal.h</itemPath>
+      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_widgets.cpp</itemPath>
       <itemPath>imgui/imstb_rectpack.h</itemPath>
       <itemPath>imgui/imstb_textedit.h</itemPath>
       <itemPath>imgui/imstb_truetype.h</itemPath>
@@ -84,6 +90,36 @@
         <archiverTool>
         </archiverTool>
       </compileType>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_demo.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_draw.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_glx.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_opengl3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_widgets.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="Camera.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Camera.h" ex="false" tool="3" flavor2="0">
@@ -181,6 +217,36 @@
         <archiverTool>
         </archiverTool>
       </compileType>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_demo.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_draw.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_glx.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_opengl3.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_widgets.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="Camera.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Camera.h" ex="false" tool="3" flavor2="0">

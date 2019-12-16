@@ -43,12 +43,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/Mesh.o \
 	${OBJECTDIR}/Model.o \
 	${OBJECTDIR}/SFXBloom.o \
-	${OBJECTDIR}/imgui.o \
-	${OBJECTDIR}/imgui_demo.o \
-	${OBJECTDIR}/imgui_draw.o \
-	${OBJECTDIR}/imgui_impl_glx.o \
-	${OBJECTDIR}/imgui_impl_opengl3.o \
-	${OBJECTDIR}/imgui_widgets.o \
 	${OBJECTDIR}/main.o
 
 
@@ -117,36 +111,6 @@ ${OBJECTDIR}/SFXBloom.o: SFXBloom.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SFXBloom.o SFXBloom.cpp
-
-${OBJECTDIR}/imgui.o: imgui.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui.o imgui.cpp
-
-${OBJECTDIR}/imgui_demo.o: imgui_demo.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_demo.o imgui_demo.cpp
-
-${OBJECTDIR}/imgui_draw.o: imgui_draw.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_draw.o imgui_draw.cpp
-
-${OBJECTDIR}/imgui_impl_glx.o: imgui_impl_glx.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_impl_glx.o imgui_impl_glx.cpp
-
-${OBJECTDIR}/imgui_impl_opengl3.o: imgui_impl_opengl3.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_impl_opengl3.o imgui_impl_opengl3.cpp
-
-${OBJECTDIR}/imgui_widgets.o: imgui_widgets.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm/ -I../../Include/AlsimGL/SOIL -I/usr/include/assimp -Iimgui -I.. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/imgui_widgets.o imgui_widgets.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}

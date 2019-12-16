@@ -35,6 +35,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/_ext/5e9e42a5/imgui.o \
+	${OBJECTDIR}/_ext/5e9e42a5/imgui_demo.o \
+	${OBJECTDIR}/_ext/5e9e42a5/imgui_draw.o \
+	${OBJECTDIR}/_ext/5e9e42a5/imgui_impl_glx.o \
+	${OBJECTDIR}/_ext/5e9e42a5/imgui_impl_opengl3.o \
+	${OBJECTDIR}/_ext/5e9e42a5/imgui_widgets.o \
 	${OBJECTDIR}/Camera.o \
 	${OBJECTDIR}/CameraFree.o \
 	${OBJECTDIR}/CameraTrackBall.o \
@@ -70,6 +76,36 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libzgl.a: ${OBJECTFILES}
 	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libzgl.a
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libzgl.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libzgl.a
+
+${OBJECTDIR}/_ext/5e9e42a5/imgui.o: ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/5e9e42a5
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5e9e42a5/imgui.o ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui.cpp
+
+${OBJECTDIR}/_ext/5e9e42a5/imgui_demo.o: ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_demo.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/5e9e42a5
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5e9e42a5/imgui_demo.o ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_demo.cpp
+
+${OBJECTDIR}/_ext/5e9e42a5/imgui_draw.o: ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_draw.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/5e9e42a5
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5e9e42a5/imgui_draw.o ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_draw.cpp
+
+${OBJECTDIR}/_ext/5e9e42a5/imgui_impl_glx.o: ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_glx.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/5e9e42a5
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5e9e42a5/imgui_impl_glx.o ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_glx.cpp
+
+${OBJECTDIR}/_ext/5e9e42a5/imgui_impl_opengl3.o: ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_opengl3.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/5e9e42a5
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5e9e42a5/imgui_impl_opengl3.o ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_impl_opengl3.cpp
+
+${OBJECTDIR}/_ext/5e9e42a5/imgui_widgets.o: ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_widgets.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/5e9e42a5
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/5e9e42a5/imgui_widgets.o ../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui_widgets.cpp
 
 ${OBJECTDIR}/Camera.o: Camera.cpp
 	${MKDIR} -p ${OBJECTDIR}

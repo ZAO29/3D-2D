@@ -267,8 +267,13 @@ glm::mat4 Camera::getProjectionView(){
              
             std::cout<<__FILEFUNC__<<" reinitialisation "<<std::endl;
 
-   
-
+    case XK_f:
+        m_eye*=1.1;
+        break;
+    case XK_g:
+        m_eye/=1.1;
+        break;
+                
 
        
           
