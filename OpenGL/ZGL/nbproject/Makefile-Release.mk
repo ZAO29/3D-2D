@@ -45,10 +45,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/CameraFree.o \
 	${OBJECTDIR}/CameraTrackBall.o \
 	${OBJECTDIR}/FBO.o \
+	${OBJECTDIR}/QuadShader.o \
 	${OBJECTDIR}/Shaders.o \
 	${OBJECTDIR}/Texture.o \
 	${OBJECTDIR}/WindowEnv.o \
-	${OBJECTDIR}/ZGLApp.o
+	${OBJECTDIR}/ZGLApp.o \
+	${OBJECTDIR}/ZVBO.o
 
 
 # C Compiler Flags
@@ -127,6 +129,11 @@ ${OBJECTDIR}/FBO.o: FBO.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FBO.o FBO.cpp
 
+${OBJECTDIR}/QuadShader.o: QuadShader.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/QuadShader.o QuadShader.cpp
+
 ${OBJECTDIR}/Shaders.o: Shaders.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -146,6 +153,11 @@ ${OBJECTDIR}/ZGLApp.o: ZGLApp.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ZGLApp.o ZGLApp.cpp
+
+${OBJECTDIR}/ZVBO.o: ZVBO.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I/usr/include/glm/ -Iimgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ZVBO.o ZVBO.cpp
 
 # Subprojects
 .build-subprojects:

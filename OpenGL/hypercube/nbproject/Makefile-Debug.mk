@@ -23,7 +23,7 @@ AS=as
 # Macros
 CND_PLATFORM=GNU-Linux
 CND_DLIB_EXT=so
-CND_CONF=Release
+CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -35,8 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/App.o \
 	${OBJECTDIR}/BasicShader.o \
+	${OBJECTDIR}/HyperApp.o \
+	${OBJECTDIR}/ZVertexIdBO.o \
 	${OBJECTDIR}/main.o
 
 
@@ -54,33 +55,41 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=../ZGL/dist/Debug/GNU-Linux/libzgl.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fractalcube
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hypercube
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fractalcube: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hypercube: ../ZGL/dist/Debug/GNU-Linux/libzgl.a
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hypercube: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fractalcube ${OBJECTFILES} ${LDLIBSOPTIONS}
-
-${OBJECTDIR}/App.o: App.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/App.o App.cpp
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hypercube ${OBJECTFILES} ${LDLIBSOPTIONS} -std=c++11 -lX11 -lGLEW -lGL -lSOIL
 
 ${OBJECTDIR}/BasicShader.o: BasicShader.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BasicShader.o BasicShader.cpp
+	$(COMPILE.cc) -g -I.. -I/usr/include/glm -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BasicShader.o BasicShader.cpp
+
+${OBJECTDIR}/HyperApp.o: HyperApp.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I.. -I/usr/include/glm -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/HyperApp.o HyperApp.cpp
+
+${OBJECTDIR}/ZVertexIdBO.o: ZVertexIdBO.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I.. -I/usr/include/glm -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ZVertexIdBO.o ZVertexIdBO.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I.. -I/usr/include/glm -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
+	cd ../ZGL && ${MAKE}  -f Makefile CONF=Debug
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -88,6 +97,7 @@ ${OBJECTDIR}/main.o: main.cpp
 
 # Subprojects
 .clean-subprojects:
+	cd ../ZGL && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

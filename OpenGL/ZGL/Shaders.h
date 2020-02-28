@@ -33,10 +33,10 @@ public:
     virtual ~Shader();
     
     
+    static void setShaderPath(std::string path){s_path = path;}
     
     
-    
-    virtual bool Init();
+    virtual bool Init(std::string name, bool  bgeometry);
 
     void Enable();
     
@@ -46,7 +46,7 @@ public:
     
 protected :
     
-
+    static std::string s_path;
     
     bool LoadShader(const char * file_path);
     

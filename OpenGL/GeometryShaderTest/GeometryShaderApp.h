@@ -5,23 +5,23 @@
  */
 
 /* 
- * File:   Application.h
+ * File:   GeometryShaderApp.h
  * Author: nicolas
  *
- * Created on September 18, 2019, 3:08 PM
+ * Created on February 27, 2020, 8:47 PM
  */
 
-#ifndef APP_H
-#define APP_H
+#ifndef GEOMETRYSHADERAPP_H
+#define GEOMETRYSHADERAPP_H
+
 
 #include <ZGL/ZGLApp.h>
 
-#include "BasicShader.h"
-#include <ZGL/QuadShader.h>
 #include "ZGL/FBO.h"
 
 #include "ZGL/Texture.h"
 #include  "ZGL/ZVBO.h"
+#include  "ZGL/Shaders.h"
 
 
 
@@ -32,14 +32,7 @@
 
 
 
-struct Ctrl
-{
-    bool m_useNormalMap = true;
-    bool m_rotate = true;
-    bool m_debugCube = true;
-    bool m_EnableBloomSFX = false;
-    
-};
+
 
 
 
@@ -54,9 +47,7 @@ class App : public ZGLApp {
    
     
 public:
-    //Application();
-    //Application(const Application& orig);
-    //virtual ~App();
+
     
     virtual bool Init() override;
     
@@ -72,18 +63,12 @@ public:
     
     
 private:
-     
-
-
-  
-    std::vector<FBO*> m_pingpongFBOs;
-    
-    
+         
     ZVBO m_quadVBO;
-    ZVBO m_cubeVBO;
-    BasicShader* m_pShader;
-    QuadShader* m_pQuadShader;
-    Texture* m_pTexBlack;
+    Shader m_shader;
+
+
+
     
     
        
@@ -97,5 +82,5 @@ private:
 
 };
 
-#endif /* APP_H */
+#endif /* GEOMETRYSHADERAPP_H */
 

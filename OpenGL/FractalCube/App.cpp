@@ -138,11 +138,11 @@ bool App::Init()
     m_pTexBlack = new Texture(0.,0.,0.);
     
     m_pShader =  new BasicShader();
-    
+    Shader::setShaderPath("glsl");
     m_pShader->Init();
     
     m_pQuadShader = new QuadShader();
-    
+    Shader::setShaderPath("../ZGL/glsl");
     m_pQuadShader->Init();
     
     return true;

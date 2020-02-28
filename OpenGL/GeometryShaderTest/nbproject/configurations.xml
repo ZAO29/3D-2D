@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <logicalFolder name="glsl" displayName="glsl" projectFiles="true">
-      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.fs</itemPath>
-      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.vs</itemPath>
-    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>App.h</itemPath>
-      <itemPath>BasicShader.h</itemPath>
+      <itemPath>GeometryShaderApp.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -18,8 +13,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>App.cpp</itemPath>
-      <itemPath>BasicShader.cpp</itemPath>
+      <itemPath>GeometryShaderApp.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -33,11 +27,10 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>shader.fs</itemPath>
+    <itemPath>shader.gs</itemPath>
+    <itemPath>shader.vs</itemPath>
   </logicalFolder>
-  <sourceRootList>
-    <Elem>imgui</Elem>
-    <Elem>glsl</Elem>
-  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -73,25 +66,17 @@
           <commandLine>-std=c++11 -lX11 -lGLEW -lGL -lSOIL</commandLine>
         </linkerTool>
       </compileType>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.fs"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="GeometryShaderApp.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.vs"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="App.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="App.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="BasicShader.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="BasicShader.h" ex="false" tool="3" flavor2="0">
+      <item path="GeometryShaderApp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="shader.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="shader.gs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="shader.vs" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -106,6 +91,12 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>/usr/include/glm</pElem>
+            <pElem>../</pElem>
+            <pElem>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui</pElem>
+          </incDir>
+          <commandLine>-D GLM_ENABLE_EXPERIMENTAL</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -113,26 +104,35 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../ZGL"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../ZGL"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libzgl.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+          <commandLine>-std=c++11 -lX11 -lGLEW -lGL -lSOIL</commandLine>
+        </linkerTool>
       </compileType>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.fs"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="GeometryShaderApp.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.vs"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="App.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="App.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="BasicShader.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="BasicShader.h" ex="false" tool="3" flavor2="0">
+      <item path="GeometryShaderApp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="shader.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="shader.gs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="shader.vs" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

@@ -5,7 +5,20 @@
  */
 
 /* 
- * File:   Application.h
+ * File:   HyperApp.h
+ * Author: nicolas
+ *
+ * Created on December 17, 2019, 8:25 PM
+ */
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* 
+ * File:   HyperApplication.h
  * Author: nicolas
  *
  * Created on September 18, 2019, 3:08 PM
@@ -16,12 +29,16 @@
 
 #include <ZGL/ZGLApp.h>
 
-#include "BasicShader.h"
+
 #include <ZGL/QuadShader.h>
 #include "ZGL/FBO.h"
 
 #include "ZGL/Texture.h"
-#include  "ZGL/ZVBO.h"
+#include "ZGL/ZVBO.h"
+#include "ZVertexIdBO.h"
+
+#include "BasicShader.h"
+
 
 
 
@@ -46,7 +63,7 @@ struct Ctrl
 
 
 
-class App : public ZGLApp {
+class HyperApp : public ZGLApp {
     
 
     
@@ -54,16 +71,14 @@ class App : public ZGLApp {
    
     
 public:
-    //Application();
-    //Application(const Application& orig);
-    //virtual ~App();
+
     
     virtual bool Init() override;
     
     virtual void OpenGLRender() override;
-    virtual void ImguiDraw() override;
+    virtual void ImguiDraw()override{};
     
-    virtual void Destroy();
+    virtual void Destroy(){};
     
     void OpenGLWorldRender();
     
@@ -76,13 +91,13 @@ private:
 
 
   
-    std::vector<FBO*> m_pingpongFBOs;
     
+    FBO  m_FBO;
     
     ZVBO m_quadVBO;
-    ZVBO m_cubeVBO;
-    BasicShader* m_pShader;
+    ZVertex4BO m_hypercubeVBO;
     QuadShader* m_pQuadShader;
+    BasicShader* m_pHyperCubeShader;
     Texture* m_pTexBlack;
     
     
@@ -98,4 +113,6 @@ private:
 };
 
 #endif /* APP_H */
+
+
 

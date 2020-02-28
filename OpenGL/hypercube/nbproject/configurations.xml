@@ -2,14 +2,15 @@
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="glsl" displayName="glsl" projectFiles="true">
-      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.fs</itemPath>
-      <itemPath>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.vs</itemPath>
+      <itemPath>glsl/shader.fs</itemPath>
+      <itemPath>glsl/shader.vs</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>App.h</itemPath>
       <itemPath>BasicShader.h</itemPath>
+      <itemPath>HyperApp.h</itemPath>
+      <itemPath>ZVertexIdBO.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -18,8 +19,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>App.cpp</itemPath>
       <itemPath>BasicShader.cpp</itemPath>
+      <itemPath>HyperApp.cpp</itemPath>
+      <itemPath>ZVertexIdBO.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -35,7 +37,6 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>imgui</Elem>
     <Elem>glsl</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
@@ -49,11 +50,9 @@
       <compileType>
         <ccTool>
           <incDir>
+            <pElem>..</pElem>
             <pElem>/usr/include/glm</pElem>
-            <pElem>../</pElem>
-            <pElem>../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui</pElem>
           </incDir>
-          <commandLine>-D GLM_ENABLE_EXPERIMENTAL</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
@@ -73,23 +72,21 @@
           <commandLine>-std=c++11 -lX11 -lGLEW -lGL -lSOIL</commandLine>
         </linkerTool>
       </compileType>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.fs"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.vs"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="App.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="App.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="BasicShader.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="BasicShader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="HyperApp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="HyperApp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ZVertexIdBO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ZVertexIdBO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/shader.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/shader.vs" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -114,23 +111,21 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.fs"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/FractalCube/glsl/shader.vs"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="App.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="App.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="BasicShader.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="BasicShader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="HyperApp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="HyperApp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ZVertexIdBO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ZVertexIdBO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/shader.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/shader.vs" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

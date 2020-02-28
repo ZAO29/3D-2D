@@ -23,7 +23,7 @@ AS=as
 # Macros
 CND_PLATFORM=GNU-Linux
 CND_DLIB_EXT=so
-CND_CONF=Release
+CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -35,8 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/App.o \
-	${OBJECTDIR}/BasicShader.o \
+	${OBJECTDIR}/GeometryShaderApp.o \
 	${OBJECTDIR}/main.o
 
 
@@ -44,8 +43,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-D GLM_ENABLE_EXPERIMENTAL
+CXXFLAGS=-D GLM_ENABLE_EXPERIMENTAL
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -54,33 +53,31 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=../ZGL/dist/Debug/GNU-Linux/libzgl.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fractalcube
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/geometryshadertest
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fractalcube: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/geometryshadertest: ../ZGL/dist/Debug/GNU-Linux/libzgl.a
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/geometryshadertest: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fractalcube ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/geometryshadertest ${OBJECTFILES} ${LDLIBSOPTIONS} -std=c++11 -lX11 -lGLEW -lGL -lSOIL
 
-${OBJECTDIR}/App.o: App.cpp
+${OBJECTDIR}/GeometryShaderApp.o: GeometryShaderApp.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/App.o App.cpp
-
-${OBJECTDIR}/BasicShader.o: BasicShader.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BasicShader.o BasicShader.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm -I../ -I../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/GeometryShaderApp.o GeometryShaderApp.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I/usr/include/glm -I../ -I../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
+	cd ../ZGL && ${MAKE}  -f Makefile CONF=Debug
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -88,6 +85,7 @@ ${OBJECTDIR}/main.o: main.cpp
 
 # Subprojects
 .clean-subprojects:
+	cd ../ZGL && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

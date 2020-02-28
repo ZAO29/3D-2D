@@ -23,7 +23,7 @@
 
 
 
-
+ std::string Shader::s_path = "glsl/";
 
 
 Shader::Shader() : m_shaderProg(0){
@@ -47,7 +47,7 @@ Shader::~Shader() {
     }
 }
 
-bool Shader::Init()
+bool Shader::Init(std::string name, bool  bgeometry)
 {
    m_shaderProg = glCreateProgram(); 
    
@@ -55,8 +55,29 @@ bool Shader::Init()
         fprintf(stderr, "Error creating shader program\n");
         return false;
     }
+ 
+    if (!LoadShader(std::string(s_path+"/"+name+".vs").c_str())) {
+        return false;
+    }
 
-    return true;
+    if (bgeometry)
+    {
+        if(!LoadShader(std::string(s_path+"/"+name+".gs").c_str()))
+            return false;
+    }
+   
+    if (!LoadShader(std::string(s_path+"/"+name+".fs").c_str())) {
+        return false;
+    }
+    
+    
+        
+    
+    if (!Finalize()) {
+        return false;
+    }
+   
+   return true;
 }
 
 
@@ -87,6 +108,11 @@ bool Shader::LoadShader(const char * shader_file_path)
     {
         shaderType = GL_FRAGMENT_SHADER;
         shaderTypeStr = " FRAGMENT ";
+    }
+    if(ext == "gs")
+    {
+        shaderType = GL_GEOMETRY_SHADER;
+        shaderTypeStr = " GEOMETRY ";
     }
     
     // Crée les shaders 

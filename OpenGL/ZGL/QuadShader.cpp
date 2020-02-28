@@ -25,24 +25,7 @@ QuadShader::~QuadShader()
 {
 }
 
- bool QuadShader::Init()
- {
-     if (!Shader::Init()) {
-        return false;
-    }
-
-    if (!LoadShader("glsl//quadShader.vs")) {
-        return false;
-    }
-
-    if (!LoadShader("glsl//quadShader.fs")) {
-        return false;
-    }
-
-    if (!Finalize()) {
-        return false;
-    }
-     
-     return true;
-     
+bool QuadShader::Init()
+{
+    return Shader::Init("quadShader",false);
 }

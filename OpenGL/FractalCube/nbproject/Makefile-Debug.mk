@@ -37,8 +37,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/App.o \
 	${OBJECTDIR}/BasicShader.o \
-	${OBJECTDIR}/QuadShader.o \
-	${OBJECTDIR}/ZVBO.o \
 	${OBJECTDIR}/main.o
 
 
@@ -77,16 +75,6 @@ ${OBJECTDIR}/BasicShader.o: BasicShader.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/include/glm -I../ -I../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BasicShader.o BasicShader.cpp
-
-${OBJECTDIR}/QuadShader.o: QuadShader.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm -I../ -I../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/QuadShader.o QuadShader.cpp
-
-${OBJECTDIR}/ZVBO.o: ZVBO.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/include/glm -I../ -I../../../../../../nicolas/Documents/Perso/3D-2D/OpenGL/ZGL/imgui -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ZVBO.o ZVBO.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}

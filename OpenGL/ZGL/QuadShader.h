@@ -14,15 +14,15 @@
 #ifndef QUADSHADER_H
 #define QUADSHADER_H
 
-#include <ZGL/Shaders.h>
-
+#include "Shaders.h"
+#include <string>
 class QuadShader : public Shader{
 public:
     QuadShader();
     QuadShader(const QuadShader& orig);
     virtual ~QuadShader();
     
-    bool Init() override;
+    bool Init();
 private:
 
 };

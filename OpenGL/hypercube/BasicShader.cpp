@@ -32,7 +32,20 @@ BasicShader::~BasicShader()
 
 bool BasicShader::Init()
 {
-    Shader::Init("shader",false);
+    if (!Shader::Init()) {
+        return false;
+    }
+
+    if (!LoadShader("glsl//shader.vs")) {
+        return false;
+    }
+
+    if (!LoadShader("glsl//shader.fs")) {
+        return false;
+    }
+
+    
+     
      
     SetUniformID(m_MVP_ID,"gMVP");
 

@@ -22,7 +22,7 @@ public:
     BasicShader(const BasicShader& orig);
     virtual ~BasicShader();
     
-    virtual bool Init();
+    virtual bool Init() override;
     
     void SetMVP(glm::mat4 const & MVP);
     

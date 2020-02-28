@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="glsl" displayName="glsl" projectFiles="true">
+      <itemPath>glsl/quadShader.fs</itemPath>
+      <itemPath>glsl/quadShader.vs</itemPath>
+    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
@@ -67,9 +71,14 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>QuadShader.cpp</itemPath>
+    <itemPath>QuadShader.h</itemPath>
+    <itemPath>ZVBO.cpp</itemPath>
+    <itemPath>ZVBO.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>imgui</Elem>
+    <Elem>glsl</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -138,6 +147,10 @@
       </item>
       <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="QuadShader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="QuadShader.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Shaders.h" ex="false" tool="3" flavor2="0">
@@ -153,6 +166,14 @@
       <item path="ZGLApp.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ZGLApp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ZVBO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ZVBO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/quadShader.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/quadShader.vs" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui/.editorconfig" ex="false" tool="3" flavor2="0">
       </item>
@@ -265,6 +286,10 @@
       </item>
       <item path="MyConstant.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="QuadShader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="QuadShader.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Shaders.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Shaders.h" ex="false" tool="3" flavor2="0">
@@ -280,6 +305,14 @@
       <item path="ZGLApp.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ZGLApp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ZVBO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ZVBO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/quadShader.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glsl/quadShader.vs" ex="false" tool="3" flavor2="0">
       </item>
       <item path="imgui/.editorconfig" ex="false" tool="3" flavor2="0">
       </item>
