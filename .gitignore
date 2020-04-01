@@ -38,3 +38,8 @@ sysinfo.txt
 #output MATLAB
 MATLAB/subdivision/output/*
 /OpenGL/ZGL/dist/
+
+#Visual studio
+/Vulkan/VulkanTest/VulkanTest/x64/*
+
+/Vulkan/VulkanTest/x64/*
