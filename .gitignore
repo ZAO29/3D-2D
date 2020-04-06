@@ -40,6 +40,36 @@ MATLAB/subdivision/output/*
 /OpenGL/ZGL/dist/
 
 #Visual studio
-/Vulkan/VulkanTest/VulkanTest/x64/*
 
-/Vulkan/VulkanTest/x64/*
+
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/vc141.idb
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanApp.obj
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.Build.CppClean.log
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.log
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.obj
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.tlog/CL.command.1.tlog
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.tlog/CL.read.1.tlog
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.tlog/CL.write.1.tlog
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.tlog/link.command.1.tlog
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.tlog/link.read.1.tlog
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.tlog/link.write.1.tlog
+/Vulkan/VulkanTest/VulkanTest/x64/Debug/VulkanTest.tlog/VulkanTest.lastbuildstate
+/Vulkan/VulkanTest/x64/Debug/VulkanTest.exe
+/Vulkan/VulkanTest/x64/Debug/VulkanTest.ilk
+
+
+/OpenGL/VisualStudio/OpenGLHelloWorld/Debug/OpenGLHelloWorld.exe
+/OpenGL/VisualStudio/OpenGLHelloWorld/Debug/OpenGLHelloWorld.ilk
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.log
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.pch
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/CL.command.1.tlog
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/CL.read.1.tlog
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/CL.write.1.tlog
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/link.command.1.tlog
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/link.read.1.tlog
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/link.write.1.tlog
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/OpenGLHelloWorld.lastbuildstate
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/stdafx.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/vc141.idb
+
