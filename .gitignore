@@ -73,3 +73,5 @@ MATLAB/subdivision/output/*
 /OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/stdafx.obj
 /OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/vc141.idb
 
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/Shaders.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/WindowEnv.obj
