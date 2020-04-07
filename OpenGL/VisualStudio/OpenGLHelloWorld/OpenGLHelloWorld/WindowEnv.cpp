@@ -59,6 +59,16 @@ void WindowEnv::init(int32_t width, int32_t height)
 	initGlew();
 }
 
+void WindowEnv::PollEvent()
+{
+	glfwPollEvents();
+}
+
+bool WindowEnv::IsRunning()
+{
+	return !(glfwWindowShouldClose(m_pwindow));
+}
+
 void WindowEnv::swapBuffer()
 {
 	glfwSwapBuffers(m_pwindow);

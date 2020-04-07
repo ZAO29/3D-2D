@@ -12,6 +12,10 @@ public:
 
 	void init(int32_t width, int32_t height);
 
+	void PollEvent();
+
+	bool IsRunning();
+
 	void swapBuffer();
 
 	void destroy();

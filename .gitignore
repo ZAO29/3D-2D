@@ -75,3 +75,12 @@ MATLAB/subdivision/output/*
 
 /OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/Shaders.obj
 /OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/WindowEnv.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/Debug/OpenGLHelloWorld.exp
+/OpenGL/VisualStudio/OpenGLHelloWorld/Debug/OpenGLHelloWorld.lib
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/Camera.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/CameraFree.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/CameraTrackBall.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.Build.CppClean.log
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/OpenGLHelloWorld.write.1u.tlog
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/OpenGLHelloWorld.tlog/unsuccessfulbuild
+/OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/ZGLApp.obj
