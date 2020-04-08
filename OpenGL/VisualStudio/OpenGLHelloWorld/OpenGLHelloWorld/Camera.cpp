@@ -22,7 +22,7 @@
 
 #include "WindowEnv.h"
 
-
+#include <GLFW/glfw3.h>
 
 #include <gtx/transform.hpp>
 #include <gtx/rotate_vector.hpp>
@@ -120,6 +120,14 @@ void setPitchAndHeadingDeg(glm::vec3 & dir, float const  Hdeg, float const  Pdeg
 
 
 Camera::~Camera() {
+}
+
+void Camera::KeyCallback(int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_E && action == GLFW_PRESS)
+	{
+		std::cout << __FUNCTION__ << "KEY E pressed" << std::endl;
+	}
 }
 
 /*

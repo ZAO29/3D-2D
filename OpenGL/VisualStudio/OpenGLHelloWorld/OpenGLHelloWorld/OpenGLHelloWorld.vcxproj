@@ -177,6 +177,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowEnv.h" />
     <ClInclude Include="ZGLApp.h" />
+    <ClInclude Include="ZGLDrawable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -192,6 +193,7 @@
     </ClCompile>
     <ClCompile Include="WindowEnv.cpp" />
     <ClCompile Include="ZGLApp.cpp" />
+    <ClCompile Include="ZGLDrawable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />

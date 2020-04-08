@@ -20,6 +20,7 @@
 #include "Camera.h"
 #include "WindowEnv.h"
 #include "Shaders.h"
+#include "ZGLDrawable.h"
 
 
 
@@ -35,6 +36,9 @@ public:
     void Run();
 	void Destroy();
 
+	void KeyCallback(int key, int scancode, int action, int mods);
+	
+
  
 private :
        
@@ -46,9 +50,10 @@ protected :
     
     WindowEnv* m_pWindowEnv;
 	Shader m_shader;
+	ZGLVAODrawable m_VAOdrawable;
+	
 
-	unsigned int m_VAO;
-	unsigned int m_VBO;
+	
 
 };
 

@@ -96,7 +96,7 @@ public:
         m_up = a_up;
     }
     
-    
+	virtual void KeyCallback(int key, int scancode, int action, int mods);
     
     virtual glm::mat4 getView() =0;
     

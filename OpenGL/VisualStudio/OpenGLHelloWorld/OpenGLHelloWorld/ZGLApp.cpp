@@ -81,8 +81,7 @@ void ZGLApp::Run()
 
 void ZGLApp::Destroy()
 {
-	glDeleteVertexArrays(1, &m_VAO);
-	glDeleteBuffers(1, &m_VBO);
+	m_VAOdrawable.Destroy();
 
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	m_pWindowEnv->destroy();
@@ -124,20 +123,20 @@ bool ZGLApp::Init()
 		0.0f,  0.5f, 0.0f  // Top
 	};
 
-	glGenVertexArrays(1, &m_VAO);
-	glGenBuffers(1, &m_VBO);
-	// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-	glBindVertexArray(m_VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	ZGLStride stride1;
+	stride1.m_offset = 3 * sizeof(GLfloat),
+	stride1.m_type = GL_FLOAT;
+	stride1.m_size = 3;
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid *)0);
-	glEnableVertexAttribArray(0);
+	ZGLVAODrawableParam paramDrawable;
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+	paramDrawable.m_stride = 3 * sizeof(GLfloat);
+	paramDrawable.m_nbVertex = 3;
+	paramDrawable.m_pVertices = (void *) &vertices[0];
+	paramDrawable.m_strides = { stride1 };
 
-	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
+	m_VAOdrawable.Init(paramDrawable);
 
 
 
@@ -155,9 +154,9 @@ bool ZGLApp::Init()
 void ZGLApp::OpenGLRender()
 {
 	m_shader.Enable();
-	glBindVertexArray(m_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);
+
+	m_VAOdrawable.Render(GL_TRIANGLES);
+	
 }
 
 
