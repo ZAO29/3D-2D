@@ -8,6 +8,25 @@
 #include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
+#include "ZGLApp.h"
+
+
+void error_callback(int error, const char* description)
+{
+	std::cout <<"ERROR : "<<description<<std::endl;
+}
+
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	//if (key == GLFW_KEY_E && action == GLFW_PRESS)
+		//activate_airship();
+
+	ZGLApp* pApp = reinterpret_cast<ZGLApp*>(glfwGetWindowUserPointer(window));
+
+	if(pApp != nullptr)
+		pApp->KeyCallback(key, scancode, action, mods);
+}
 
 WindowEnv::WindowEnv()
 {
@@ -18,7 +37,7 @@ WindowEnv::~WindowEnv()
 {
 }
 
-void WindowEnv::init(int32_t width, int32_t height)
+void WindowEnv::init(int32_t width, int32_t height, void * pApp)
 {
 
 	if (nullptr != m_pwindow)
@@ -34,17 +53,23 @@ void WindowEnv::init(int32_t width, int32_t height)
 	glfwInit();
 
 	// Set all the required options for GLFW
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // allow debugging
+	
 	// Create a GLFWwindow object that we can use for GLFW's functions
 	m_pwindow = glfwCreateWindow(width, height, "LearnOpenGL", nullptr, nullptr);
 
-
+	/*------  CALLBACK  ------*/
+	glfwSetErrorCallback(error_callback);
+	glfwSetKeyCallback(m_pwindow,key_callback);
+	
+	// set the App as to pointer in order to have access to app data
+	// in the different callback
+	glfwSetWindowUserPointer(m_pwindow, pApp);
 
 	if (nullptr == m_pwindow)
 	{

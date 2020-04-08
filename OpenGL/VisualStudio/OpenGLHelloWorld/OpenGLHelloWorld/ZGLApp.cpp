@@ -88,6 +88,14 @@ void ZGLApp::Destroy()
 	m_pWindowEnv->destroy();
 }
 
+void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
+{
+	if (m_pCam != nullptr)
+	{
+		m_pCam->KeyCallback(key,scancode,action,mods);
+	}
+}
+
 
 bool ZGLApp::Init()
 {
@@ -95,7 +103,7 @@ bool ZGLApp::Init()
     
 	m_pWindowEnv = new WindowEnv();
 
-    m_pWindowEnv->init(1280,720);
+    m_pWindowEnv->init(1280,720,(void *) this);
 
     
     // MESSAGE ERREUR OPENGL
