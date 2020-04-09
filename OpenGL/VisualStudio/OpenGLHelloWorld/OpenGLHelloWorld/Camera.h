@@ -41,8 +41,8 @@ struct confProjPerspective
 {
     float m_degVerticalFOV = 45; // degree
     float m_ratio = 4.0f/ 3.0f; // width / height
-    float m_nearPlane = 1.0f;
-    float m_farPlane = 1000.0f;
+    float m_nearPlane = 0.1f;
+    float m_farPlane = 100.0f;
     
 };
 
@@ -127,7 +127,7 @@ public:
     
     glm::mat4 getProjectionView();
     
-    bool m_angleCtrl = false;
+    bool m_angleCtrl = true;
     
     eProjectionType m_projectionType = PERSPECTIVE;
     confProjPerspective m_projPerspective;

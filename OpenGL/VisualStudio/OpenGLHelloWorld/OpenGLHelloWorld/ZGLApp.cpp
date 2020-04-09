@@ -13,6 +13,8 @@
 
 #include "stdafx.h"
 
+#include <gtc/type_ptr.hpp>
+
 #include "ZGLApp.h"
 #include "CameraFree.h"
 #include "CameraTrackBall.h"
@@ -20,6 +22,7 @@
 
 
 #define SHADER_SIZE "usize"
+#define SHADER_MVP "uMVP"
 
 struct VertexData
 {
@@ -139,20 +142,60 @@ bool ZGLApp::Init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
+	//DEPTH
+	glEnable(GL_DEPTH_TEST);
+
 	MapUniform mapUniform;
 
 	mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
+	mapUniform[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
 
 	m_shader.Init("shader", false, mapUniform);
 
+	float a = 1.0f;
 
+
+
+	glm::mat3 permutation(0.);
+	permutation[1][0] = 1.;
+    permutation[2][1] = 1;
+	permutation[0][2] = 1;
 	// Set up vertex data (and buffer(s)) and attribute pointers
-	std::vector<VertexData> vertices =
+	std::vector<VertexData> verticesInit =
 	{
-		VertexData(glm::vec3(-0.5f, -0.5f, 0.0f),glm::vec3(1.0, 0.0,0.0), 0.0), // Left
-		VertexData(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0, 1.0, 0.0), 1.0),// Right
-		VertexData(glm::vec3(0.0f,  0.5f, 0.0f), glm::vec3(0.0, 0.0, 1.0), 0.5)// Top
+		VertexData(glm::vec3(a, a, a),glm::vec3(1.0, 0.0,0.0), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, a), glm::vec3(1.0, 0.0, 0.0), 1.0),// Right
+		VertexData(glm::vec3(a, -a, a), glm::vec3(1.0, 0.0, 0.0), 0.5),// Top
+		VertexData(glm::vec3(a, a, a),glm::vec3(0.0, 1.0,0.0), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, a), glm::vec3(0.0, 1.0, 0.0), 1.0),// Right
+		VertexData(glm::vec3(-a, a, a), glm::vec3(0.0, 1.0, 0.0), 0.5),// Top
+
+		VertexData(glm::vec3(a, a, -a),glm::vec3(0.0, 0.0,1.0), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, -a), glm::vec3(0.0, 0.0, 1.0), 1.0),// Right
+		VertexData(glm::vec3(a, -a, -a), glm::vec3(0.0, 0.0, 1.0), 0.5),// Top
+		VertexData(glm::vec3(a, a, -a),glm::vec3(1.0, 1.0,1.0), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, -a), glm::vec3(1.0, 1.0, 1.0), 1.0),// Right
+		VertexData(glm::vec3(-a, a, -a), glm::vec3(1.0, 1.0, 1.0), 0.5)// Top
+		
 	};
+
+	std::vector<VertexData> vertices(verticesInit);
+
+	for (int i = 0; i < 2; i++)
+	{
+		auto vInit = verticesInit;
+
+		for (auto& vert : vInit)
+		{
+			vert.m_pos = permutation * vert.m_pos;
+		}
+
+		std::move(vInit.begin(), vInit.end(), std::back_inserter(vertices));
+
+		permutation = glm::transpose(permutation);
+	}
+
+
 
 
 	// pos
@@ -205,7 +248,13 @@ void ZGLApp::OpenGLRender()
 	std::chrono::duration<float> elapsed_seconds = clock - m_begin;
 	float t = cos(elapsed_seconds.count());
 
+
+	glm::mat4 MVP;
+
+	MVP = m_pCam->getProjectionView() * m_pCam->getView();
+
 	m_shader.updateUniform(SHADER_SIZE, (void *)&t);
+	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
 	m_VAOdrawable.Render(GL_TRIANGLES);
 	
 }

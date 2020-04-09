@@ -211,7 +211,8 @@ bool Shader::SetUniformID(unsigned int& ID,std::string shader_var)
     if(ID == 0xFFFFFFFF)
     {
         std::cout<<__FUNCTION__<< " Invalid location for "<<shader_var<<std::endl;
-        return false;
+		throw std::runtime_error("error setting uniform ID");
+		return false;
     }
     
     return true;
@@ -222,7 +223,7 @@ void Shader::initUniforms(MapUniform uniforms)
 {
 	m_uniforms = uniforms;
 
-	for (auto& uniform : uniforms)
+	for (auto& uniform : m_uniforms)
 	{
 		SetUniformID(uniform.second.m_ID, uniform.first);
 	}

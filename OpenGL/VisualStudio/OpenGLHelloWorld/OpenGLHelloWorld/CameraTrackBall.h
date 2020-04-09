@@ -26,7 +26,6 @@ public:
     virtual glm::mat4 getView() override;
     
     
-    
 private:
     
     

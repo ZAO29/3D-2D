@@ -18,6 +18,7 @@
 #include <iostream>
 
 
+#define __FILEFUNC__ __FILE__<<__FUNCTION__
 
 
 #include "WindowEnv.h"
@@ -124,9 +125,95 @@ Camera::~Camera() {
 
 void Camera::KeyCallback(int key, int scancode, int action, int mods)
 {
+	if (action != GLFW_PRESS)
+		return;
+
 	if (key == GLFW_KEY_E && action == GLFW_PRESS)
 	{
 		std::cout << __FUNCTION__ << "KEY E pressed" << std::endl;
+	}
+
+	switch (key)
+	{
+
+	case GLFW_KEY_UP:
+		if (m_angleCtrl)
+			m_deltaDegP += m_speed;
+		else
+			m_eye += m_speed * m_direction;
+
+		break;
+
+	case GLFW_KEY_DOWN:
+		if (m_angleCtrl)
+			m_deltaDegP -= m_speed;
+		else
+			m_eye -= m_speed * m_direction;
+
+		break;
+
+	case GLFW_KEY_LEFT:
+		if (m_angleCtrl)
+			m_deltaDegH += m_speed;
+		else
+			m_eye += m_speed * m_right;
+
+		break;
+
+	case GLFW_KEY_RIGHT:
+		if (m_angleCtrl)
+			m_deltaDegH -= m_speed;
+		else
+			m_eye -= m_speed * m_right;
+
+		break;
+
+	case GLFW_KEY_U:
+		m_eye += m_speed * m_up;
+		break;
+
+	case GLFW_KEY_D:
+		m_eye -= m_speed * m_up;
+		break;
+
+	case GLFW_KEY_A:
+		if (!m_angleCtrl)
+		{
+			m_angleCtrl = true;
+			std::cout << __FILEFUNC__ << " angle ctrl" << std::endl;
+		}
+		break;
+
+	case GLFW_KEY_T:
+		if (m_angleCtrl)
+		{
+			m_angleCtrl = false;
+			std::cout << __FILEFUNC__ << " translate ctrl" << std::endl;
+		}
+		break;
+
+	case GLFW_KEY_R:
+
+		m_eye = glm::vec3(0, 0, 5); // degree
+		m_direction = glm::vec3(0, 0, -1); // width / height
+		m_right = glm::vec3(1., 0., 0.);
+		m_up = glm::vec3(0., 1., 0.);
+
+		std::cout << __FILEFUNC__ << " reinitialisation " << std::endl;
+
+	case GLFW_KEY_F:
+		m_eye *= 1.1;
+		break;
+	case GLFW_KEY_G:
+		m_eye /= 1.1;
+		break;
+
+
+
+
+		break;
+
+
 	}
 }
 
