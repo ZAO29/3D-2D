@@ -24,6 +24,8 @@ void ZGLVAODrawable::Init(ZGLVAODrawableParam param)
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, param.m_stride * param.m_nbVertex, param.m_pVertices, GL_STATIC_DRAW);
+
+
 	m_strides = param.m_strides;
 	m_nbVertex = param.m_nbVertex;
 	m_stride = param.m_stride;
@@ -40,7 +42,7 @@ void ZGLVAODrawable::Render(int method)
 	for (auto& stride : m_strides)
 	{
 		glEnableVertexAttribArray(i);
-		glVertexAttribPointer(i, stride.m_size, stride.m_type, GL_FALSE,m_stride, (void*) offsetCumul);
+		glVertexAttribPointer(i, stride.m_size, stride.m_type, GL_FALSE,m_stride, (const GLvoid*) offsetCumul);
 
 		i++;
 		offsetCumul += stride.m_offset;
@@ -54,8 +56,6 @@ void ZGLVAODrawable::Render(int method)
 	{
 		glDisableVertexAttribArray(j);
 	}
-
-
 }
 
 void ZGLVAODrawable::Destroy()

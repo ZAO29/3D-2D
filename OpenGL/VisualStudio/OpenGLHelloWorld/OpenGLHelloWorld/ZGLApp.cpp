@@ -17,6 +17,22 @@
 #include "CameraFree.h"
 #include "CameraTrackBall.h"
 
+struct VertexData
+{
+
+	VertexData(glm::vec3 pos, glm::vec3 color, float alpha) :
+		m_pos(pos), 
+		m_color(color),
+		m_alpha(alpha)
+			{}
+	//VertexData(float x, float y, float z) :m_pos(x,y,z) {}
+
+	glm::vec3 m_pos;
+	glm::vec3 m_color;
+	float m_alpha;
+};
+
+
 //(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 void GLAPIENTRY GLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {    
@@ -68,7 +84,7 @@ void ZGLApp::Run()
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		m_pWindowEnv->PollEvent();
 
-		glClearColor(1., 0., 0., 1);
+		glClearColor(0., 0., 0., 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		OpenGLRender();
@@ -96,6 +112,9 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 }
 
 
+
+
+
 bool ZGLApp::Init()
 {
     //m_pWindowEnv = WindowEnv::createWindowEnv(1280,720);
@@ -110,31 +129,46 @@ bool ZGLApp::Init()
 	GLDEBUGPROC foncteur = GLErrorCallback;
     glDebugMessageCallback(foncteur,NULL);
     
-    
+    // BLENDING
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_shader.Init("shader", false);
 
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
-	GLfloat vertices[] =
+	std::vector<VertexData> vertices =
 	{
-		-0.5f, -0.5f, 0.0f, // Left
-		0.5f, -0.5f, 0.0f, // Right
-		0.0f,  0.5f, 0.0f  // Top
+		VertexData(glm::vec3(-0.5f, -0.5f, 0.0f),glm::vec3(1.0, 0.0,0.0), 0.0), // Left
+		VertexData(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0, 1.0, 0.0), 1.0),// Right
+		VertexData(glm::vec3(0.0f,  0.5f, 0.0f), glm::vec3(0.0, 0.0, 1.0), 0.5)// Top
 	};
 
 
+	// pos
 	ZGLStride stride1;
-	stride1.m_offset = 3 * sizeof(GLfloat),
+	stride1.m_offset = sizeof(glm::vec3),
 	stride1.m_type = GL_FLOAT;
 	stride1.m_size = 3;
 
+	// color
+	ZGLStride stride2;
+	stride2.m_offset = sizeof(glm::vec3),
+	stride2.m_type = GL_FLOAT;
+	stride2.m_size = 3;
+
+	//alpha
+	ZGLStride stride3;
+	stride3.m_offset = sizeof(float),
+	stride3.m_type = GL_FLOAT;
+	stride3.m_size = 1;
+
 	ZGLVAODrawableParam paramDrawable;
 
-	paramDrawable.m_stride = 3 * sizeof(GLfloat);
-	paramDrawable.m_nbVertex = 3;
+	paramDrawable.m_stride = sizeof(VertexData);
+	paramDrawable.m_nbVertex = vertices.size();
 	paramDrawable.m_pVertices = (void *) &vertices[0];
-	paramDrawable.m_strides = { stride1 };
+	paramDrawable.m_strides = { stride1, stride2, stride3};
 
 	m_VAOdrawable.Init(paramDrawable);
 
