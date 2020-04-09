@@ -17,6 +17,10 @@
 #include "CameraFree.h"
 #include "CameraTrackBall.h"
 
+
+
+#define SHADER_SIZE "usize"
+
 struct VertexData
 {
 
@@ -117,6 +121,7 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 
 bool ZGLApp::Init()
 {
+	m_begin = std::chrono::system_clock::now();
     //m_pWindowEnv = WindowEnv::createWindowEnv(1280,720);
     
 	m_pWindowEnv = new WindowEnv();
@@ -133,7 +138,12 @@ bool ZGLApp::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	m_shader.Init("shader", false);
+
+	MapUniform mapUniform;
+
+	mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
+
+	m_shader.Init("shader", false, mapUniform);
 
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
@@ -189,6 +199,13 @@ void ZGLApp::OpenGLRender()
 {
 	m_shader.Enable();
 
+	std::chrono::time_point<std::chrono::system_clock> clock;
+	clock = std::chrono::system_clock::now();
+
+	std::chrono::duration<float> elapsed_seconds = clock - m_begin;
+	float t = cos(elapsed_seconds.count());
+
+	m_shader.updateUniform(SHADER_SIZE, (void *)&t);
 	m_VAOdrawable.Render(GL_TRIANGLES);
 	
 }

@@ -8,9 +8,10 @@ layout (location = 1) in vec3 color;
 layout (location = 2) in float alpha;
 
 
-
+uniform float usize;
 
 void main() {
-    gl_Position = vec4(position.x, position.y, position.z, 1.0);
+     
+    gl_Position = vec4(usize * position, 1.0);
 	fragColor = vec4(color,alpha);
 }

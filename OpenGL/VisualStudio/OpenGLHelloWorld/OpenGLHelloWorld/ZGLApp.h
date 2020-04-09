@@ -14,6 +14,9 @@
 #ifndef ZGLAPP_H
 #define ZGLAPP_H
 
+
+#include <chrono>
+
 #include "GL/glew.h"
 
 #include <map>
@@ -51,6 +54,8 @@ protected :
     WindowEnv* m_pWindowEnv;
 	Shader m_shader;
 	ZGLVAODrawable m_VAOdrawable;
+
+	std::chrono::time_point<std::chrono::system_clock> m_begin;
 	
 
 	

@@ -52,7 +52,7 @@ Shader::~Shader() {
     }
 }
 
-bool Shader::Init(std::string name, bool  bgeometry)
+bool Shader::Init(std::string name, bool  bgeometry, MapUniform uniforms)
 {
    m_shaderProg = glCreateProgram(); 
    
@@ -82,6 +82,9 @@ bool Shader::Init(std::string name, bool  bgeometry)
         return false;
     }
    
+
+	initUniforms(uniforms);
+
    return true;
 }
 
@@ -215,10 +218,54 @@ bool Shader::SetUniformID(unsigned int& ID,std::string shader_var)
     
 }
 
+void Shader::initUniforms(MapUniform uniforms)
+{
+	m_uniforms = uniforms;
+
+	for (auto& uniform : uniforms)
+	{
+		SetUniformID(uniform.second.m_ID, uniform.first);
+	}
+}
+
+void Shader::updateUniform(std::string name, const void * pdata)
+{
+	if (m_uniforms.find(name) != m_uniforms.end())
+	{
+		m_uniforms[name].update(pdata);
+	}
+	else
+	{
+		throw std::runtime_error(" impossible to update uniform with this name, not present in the map");
+	}
+}
+
 
 void Shader::Enable()
 {
     glUseProgram(m_shaderProg);
 }
 
+void UniformVar::update(const void * pdata)
+{
+	const GLfloat * pdataf;
+	switch (m_type)
+	{
+		case eZGLtypeUniform::ZGL_UNDEFINED:
+			throw std::runtime_error("undefined type of uniform variable");
+			break;
 
+		case  eZGLtypeUniform::ZGL_FVEC1:
+			pdataf = reinterpret_cast<const GLfloat*>(pdata);
+			glUniform1fv(m_ID, 1, pdataf);
+			break;
+
+		case eZGLtypeUniform::ZGL_FMAT4 :
+			pdataf = reinterpret_cast<const GLfloat*>(pdata);
+			glUniformMatrix4fv(m_ID, 1, GL_FALSE, pdataf);
+			break;
+		
+		default :
+			throw std::runtime_error("unhandle type of uniform variable");
+	}
+}
