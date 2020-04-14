@@ -22,6 +22,9 @@
 #include "GLFW/glfw3.h"
 #include "Listener.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #define SHADER_SIZE "usize"
 #define SHADER_MVP "uMVP"
@@ -97,7 +100,8 @@ void ZGLApp::Run()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		OpenGLRender();
-
+		if (m_bImguiRender)
+			ImguiRender();
 
 		m_pWindowEnv->swapBuffer();
 
@@ -127,11 +131,95 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 	{
 		std::cout <<__FUNCTION__<< "key is released : " << Listener::sgetStringKey(key) << std::endl;
 	}
+
+
+	if (action == GLFW_PRESS)
+	{
+		if (key == GLFW_KEY_F1)
+		{
+			m_bImguiRender = !m_bImguiRender;
+			std::cout << " imgui render " << m_bImguiRender << std::endl;
+		}
+	}
 	
 	//m_pCam->KeyCallback(key,scancode,action,mods);
 	//Listener::sUpdateSingleListener(key, scancode, action, mods);
 	
 
+
+}
+
+void ZGLApp::ImguiDraw()
+{
+	static float f = 0.0f;
+	static int counter = 0;
+
+	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+	ImGui::Text("This is some useful text.");
+}
+
+void ZGLApp::InitImgui()
+{
+	const char* glsl_version = "#version 450";
+
+	// Initialize OpenGL loader
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+	bool err = gl3wInit() != 0;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+	bool err = glewInit() != GLEW_OK;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+	bool err = gladLoadGL() == 0;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
+	bool err = false;
+	glbinding::Binding::initialize();
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
+	bool err = false;
+	glbinding::initialize([](const char* name) { return (glbinding::ProcAddress)glfwGetProcAddress(name); });
+#else
+	bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
+#endif
+	if (err)
+	{
+		throw std::runtime_error("IMGUI : Failed to initialize OpenGL loader!\n");
+		
+	}
+
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsClassic();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL(m_pWindowEnv->get(), true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+}
+
+void ZGLApp::ImguiRender()
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	ImguiDraw();
+		
+
+		ImGui::End();
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void ZGLApp::ImguiDestroy()
+{
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 }
 
@@ -159,6 +247,9 @@ bool ZGLApp::Init()
 	GLDEBUGPROC foncteur = GLErrorCallback;
     glDebugMessageCallback(foncteur,NULL);
     
+
+	InitImgui();
+
     // BLENDING
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

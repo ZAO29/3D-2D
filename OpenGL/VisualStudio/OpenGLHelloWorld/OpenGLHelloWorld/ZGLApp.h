@@ -41,10 +41,12 @@ public:
 
 	void KeyCallback(int key, int scancode, int action, int mods);
 	
-
+	virtual void ImguiDraw();
  
 private :
-       
+	void InitImgui();
+	void ImguiRender();
+	void ImguiDestroy();
     
 protected :     
         
@@ -59,7 +61,7 @@ protected :
 	
 	std::map<int, int> m_qwertyToAzerty;
 	
-
+	bool m_bImguiRender = false;
 };
 
 #endif /* ZGLAPP_H */

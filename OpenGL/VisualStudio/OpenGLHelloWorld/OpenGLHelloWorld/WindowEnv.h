@@ -22,6 +22,7 @@ public:
 
 	void getScreenSize();
 
+
 	GLFWwindow * get() { return m_pwindow; };
 
 private:
