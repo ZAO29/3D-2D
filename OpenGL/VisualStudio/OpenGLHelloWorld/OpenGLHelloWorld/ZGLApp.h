@@ -57,7 +57,7 @@ protected :
 
 	std::chrono::time_point<std::chrono::system_clock> m_begin;
 	
-
+	std::map<int, int> m_qwertyToAzerty;
 	
 
 };

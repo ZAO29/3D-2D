@@ -28,7 +28,7 @@
 #include <gtx/transform.hpp>
 #include <gtx/rotate_vector.hpp>
 
-
+#include "Listener.h"
 
 
 
@@ -123,98 +123,95 @@ void setPitchAndHeadingDeg(glm::vec3 & dir, float const  Hdeg, float const  Pdeg
 Camera::~Camera() {
 }
 
-void Camera::KeyCallback(int key, int scancode, int action, int mods)
+void Camera::updateKeyControl()
 {
-	if (action != GLFW_PRESS)
-		return;
-
-	if (key == GLFW_KEY_E && action == GLFW_PRESS)
-	{
-		std::cout << __FUNCTION__ << "KEY E pressed" << std::endl;
-	}
-
-	switch (key)
-	{
-
-	case GLFW_KEY_UP:
-		if (m_angleCtrl)
-			m_deltaDegP += m_speed;
-		else
-			m_eye += m_speed * m_direction;
-
-		break;
-
-	case GLFW_KEY_DOWN:
-		if (m_angleCtrl)
-			m_deltaDegP -= m_speed;
-		else
-			m_eye -= m_speed * m_direction;
-
-		break;
-
-	case GLFW_KEY_LEFT:
-		if (m_angleCtrl)
-			m_deltaDegH += m_speed;
-		else
-			m_eye += m_speed * m_right;
-
-		break;
-
-	case GLFW_KEY_RIGHT:
-		if (m_angleCtrl)
-			m_deltaDegH -= m_speed;
-		else
-			m_eye -= m_speed * m_right;
-
-		break;
-
-	case GLFW_KEY_U:
-		m_eye += m_speed * m_up;
-		break;
-
-	case GLFW_KEY_D:
-		m_eye -= m_speed * m_up;
-		break;
-
-	case GLFW_KEY_A:
-		if (!m_angleCtrl)
+		if (Listener::sgetKeyState(GLFW_KEY_UP))
 		{
-			m_angleCtrl = true;
-			std::cout << __FILEFUNC__ << " angle ctrl" << std::endl;
-		}
-		break;
+			if (m_angleCtrl)
+				m_deltaDegP += m_speed;
+			else
+				m_eye += m_speed * m_direction;
 
-	case GLFW_KEY_T:
-		if (m_angleCtrl)
+		}
+
+		if (Listener::sgetKeyState(GLFW_KEY_DOWN))
 		{
-			m_angleCtrl = false;
-			std::cout << __FILEFUNC__ << " translate ctrl" << std::endl;
+			if (m_angleCtrl)
+				m_deltaDegP -= m_speed;
+			else
+				m_eye -= m_speed * m_direction;
 		}
-		break;
+		
 
-	case GLFW_KEY_R:
+		if (Listener::sgetKeyState(GLFW_KEY_LEFT))
+		{
+			if (m_angleCtrl)
+			{
+				//std::cout << __FILE__ << __FUNCTION__ << " rotate " << std::endl;
+				m_deltaDegH += m_speed;
+			}
+			else
+				m_eye += m_speed * m_right;
 
-		m_eye = glm::vec3(0, 0, 5); // degree
-		m_direction = glm::vec3(0, 0, -1); // width / height
-		m_right = glm::vec3(1., 0., 0.);
-		m_up = glm::vec3(0., 1., 0.);
+		}
 
-		std::cout << __FILEFUNC__ << " reinitialisation " << std::endl;
+		if (Listener::sgetKeyState(GLFW_KEY_RIGHT))
+		{
+			if (m_angleCtrl)
+				m_deltaDegH -= m_speed;
+			else
+				m_eye -= m_speed * m_right;
+		}
+		
 
-	case GLFW_KEY_F:
-		m_eye *= 1.1;
-		break;
-	case GLFW_KEY_G:
-		m_eye /= 1.1;
-		break;
+		if (Listener::sgetKeyState(GLFW_KEY_U))
+		{
+			m_eye += m_speed * m_up;
+		}
+
+		if (Listener::sgetKeyState(GLFW_KEY_D))
+		{
+			m_eye -= m_speed * m_up;
+		}
+
+		if (Listener::sgetKeyState(GLFW_KEY_A))
+		{
+			if (!m_angleCtrl)
+			{
+				m_angleCtrl = true;
+				std::cout << __FILEFUNC__ << " angle ctrl" << std::endl;
+			}
+		}
+
+		if (Listener::sgetKeyState(GLFW_KEY_T))
+		{
+			if (m_angleCtrl)
+			{
+				m_angleCtrl = false;
+				std::cout << __FILEFUNC__ << " translate ctrl" << std::endl;
+			}
+		}
+
+		if (Listener::sgetKeyState(GLFW_KEY_R))
+		{
+			m_eye = glm::vec3(0, 0, 5); // degree
+			m_direction = glm::vec3(0, 0, -1); // width / height
+			m_right = glm::vec3(1., 0., 0.);
+			m_up = glm::vec3(0., 1., 0.);
+
+			std::cout << __FILEFUNC__ << " reinitialisation " << std::endl;
+		}
+		if (Listener::sgetKeyState(GLFW_KEY_F))
+		{
+			m_eye *= 1.1;
+		}
+		if (Listener::sgetKeyState(GLFW_KEY_G))
+		{
+			m_eye /= 1.1;
+		}
 
 
-
-
-		break;
-
-
-	}
+	
 }
 
 /*
@@ -290,17 +287,19 @@ glm::mat4 Camera::getProjectionView(){
  }
  
  
- /*
- void Camera::OnKeyPressed(XEvent event)
+ 
+/*void Camera::KeyCallback(int key, int scancode, int action, int mods)
 {
-    int32_t keycode = XLookupKeysym(&event.xkey, 0);
-    unsigned int windowFlag = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings;
+    
+	if (action != GLFW_PRESS)
+		return;
+   
 
 
-    switch (keycode) 
+    switch (key) 
     {
 
-        case XK_Up:
+        case GLFW_KEY_UP:
             if(m_angleCtrl) 
                 m_deltaDegP += m_speed;
             else
@@ -308,7 +307,7 @@ glm::mat4 Camera::getProjectionView(){
             
             break;
             
-        case XK_Down:
+        case GLFW_KEY_DOWN:
             if(m_angleCtrl) 
                 m_deltaDegP -= m_speed;
             else
@@ -316,7 +315,7 @@ glm::mat4 Camera::getProjectionView(){
             
             break;
             
-        case XK_Left:
+        case GLFW_KEY_LEFT:
             if(m_angleCtrl)
                 m_deltaDegH += m_speed;
             else
@@ -324,7 +323,7 @@ glm::mat4 Camera::getProjectionView(){
              
             break;
             
-        case XK_Right:
+        case GLFW_KEY_RIGHT:
             if(m_angleCtrl)
                 m_deltaDegH -= m_speed;
             else
@@ -332,15 +331,15 @@ glm::mat4 Camera::getProjectionView(){
              
             break;
             
-        case XK_u:
+        case GLFW_KEY_U:
             m_eye += m_speed*m_up;
             break;    
             
-        case XK_d:
+        case GLFW_KEY_D:
             m_eye -= m_speed*m_up;
             break;
             
-        case XK_a:
+        case GLFW_KEY_A:
             if(!m_angleCtrl)
             {
                 m_angleCtrl = true;
@@ -348,7 +347,7 @@ glm::mat4 Camera::getProjectionView(){
             }
             break;
             
-        case XK_t:
+        case GLFW_KEY_T:
            if(m_angleCtrl)
             {
                 m_angleCtrl = false;
@@ -356,7 +355,7 @@ glm::mat4 Camera::getProjectionView(){
             }
             break; 
             
-        case XK_r:
+        case GLFW_KEY_R:
             
             m_eye = glm::vec3(0,0,5); // degree
             m_direction = glm::vec3(0,0,-1); // width / height
@@ -365,10 +364,10 @@ glm::mat4 Camera::getProjectionView(){
              
             std::cout<<__FILEFUNC__<<" reinitialisation "<<std::endl;
 
-    case XK_f:
+    case GLFW_KEY_F:
         m_eye*=1.1;
         break;
-    case XK_g:
+    case GLFW_KEY_G:
         m_eye/=1.1;
         break;
                 

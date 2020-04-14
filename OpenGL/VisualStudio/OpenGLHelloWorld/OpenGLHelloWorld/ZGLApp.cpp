@@ -19,6 +19,8 @@
 #include "CameraFree.h"
 #include "CameraTrackBall.h"
 
+#include "GLFW/glfw3.h"
+#include "Listener.h"
 
 
 #define SHADER_SIZE "usize"
@@ -90,7 +92,7 @@ void ZGLApp::Run()
 	{
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		m_pWindowEnv->PollEvent();
-
+		m_pCam->updateKeyControl();
 		glClearColor(0., 0., 0., 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -112,10 +114,25 @@ void ZGLApp::Destroy()
 
 void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 {
-	if (m_pCam != nullptr)
+
+	Listener* s_plistener = Listener::getSingleListener();
+	Listener::sUpdateSingleListener(key, scancode, action, mods);
+
+	key = Listener::sgetRealValue(key);
+	if (action == GLFW_PRESS)
 	{
-		m_pCam->KeyCallback(key,scancode,action,mods);
+		std::cout <<__FUNCTION__<< "key is pressed : " << Listener::sgetStringKey(key) << std::endl;
 	}
+	if (action == GLFW_RELEASE)
+	{
+		std::cout <<__FUNCTION__<< "key is released : " << Listener::sgetStringKey(key) << std::endl;
+	}
+	
+	//m_pCam->KeyCallback(key,scancode,action,mods);
+	//Listener::sUpdateSingleListener(key, scancode, action, mods);
+	
+
+
 }
 
 
@@ -131,6 +148,11 @@ bool ZGLApp::Init()
 
     m_pWindowEnv->init(1280,720,(void *) this);
 
+	m_qwertyToAzerty[GLFW_KEY_Q] = GLFW_KEY_A;
+	m_qwertyToAzerty[GLFW_KEY_A] = GLFW_KEY_Q;
+	m_qwertyToAzerty[GLFW_KEY_Z] = GLFW_KEY_W;
+	m_qwertyToAzerty[GLFW_KEY_W] = GLFW_KEY_Z;
+    m_qwertyToAzerty[GLFW_KEY_COMMA] = GLFW_KEY_M;
     
     // MESSAGE ERREUR OPENGL
 	glEnable(GL_DEBUG_OUTPUT);

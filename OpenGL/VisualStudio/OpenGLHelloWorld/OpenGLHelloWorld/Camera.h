@@ -85,7 +85,7 @@ public:
     };
     
     
-    Camera():m_speed(0.1f){};
+    Camera(){};
     
     Camera(const Camera& orig){std::cout<<__FUNCTION__<<" NOT IMPLEMENTED"<<std::endl;}
     
@@ -96,8 +96,10 @@ public:
         m_up = a_up;
     }
     
-	virtual void KeyCallback(int key, int scancode, int action, int mods);
+	virtual void updateKeyControl();
     
+	
+
     virtual glm::mat4 getView() =0;
     
     
@@ -141,7 +143,7 @@ protected :
     glm::vec3  m_right = glm::vec3(1.,0.,0.);
     glm::vec3  m_up = glm::vec3(0.,10.,0.);
     
-    float m_speed;
+    float m_speed = 0.01f;
     
     
 
