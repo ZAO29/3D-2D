@@ -89,9 +89,6 @@
     <ClCompile Include="..\OpenGLHelloWorld\Shaders.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\OpenGLHelloWorld\MyApp.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\OpenGLHelloWorld\Listener.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>

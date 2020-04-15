@@ -8,23 +8,13 @@
 
 #include <gtc/type_ptr.hpp>
 
+#include "Constant.h"
+
+
 #define SHADER_SIZE "usize"
 #define SHADER_MVP "uMVP"
 
-struct VertexData
-{
 
-	VertexData(glm::vec3 pos, glm::vec3 color, float alpha) :
-		m_pos(pos),
-		m_color(color),
-		m_alpha(alpha)
-	{}
-	//VertexData(float x, float y, float z) :m_pos(x,y,z) {}
-
-	glm::vec3 m_pos;
-	glm::vec3 m_color;
-	float m_alpha;
-};
 
 
 
@@ -136,6 +126,11 @@ bool MyApp::Init()
 	m_CameraMap[TRACKBALLCAMERA] = new CameraTrackBall(m_pWindowEnv->get());
 	m_CameraMap[FREECAMERA] = new CameraFree(m_pWindowEnv->get());
 	m_pCam = m_CameraMap[TRACKBALLCAMERA];
+	float coeff = 0.25;
+	std::vector<glm::vec3> ctrlPt = { coeff * glm::vec3(0,0,-50), coeff * glm::vec3(0,50,-50), coeff * glm::vec3(50,0,50),coeff * glm::vec3(0,0,50) };
+	m_bezierCurve.Init(ctrlPt, 100);
+
+
 
 	return true;
 }
@@ -156,6 +151,8 @@ void MyApp::OpenGLRender()
 	m_shader.updateUniform(SHADER_SIZE, (void *)&m_elapsedTime);
 	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
 	m_VAOdrawable.Render(GL_TRIANGLES);
+	glLineWidth(1.0f);
+	m_bezierCurve.draw(GL_LINE_STRIP);
 }
 
 void MyApp::Destroy()

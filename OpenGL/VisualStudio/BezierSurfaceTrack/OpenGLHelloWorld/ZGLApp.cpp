@@ -57,6 +57,8 @@ void GLAPIENTRY GLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum se
         break;
     }
     std::cout << "GL_DEBUG "<<sType.c_str()<<" : "<<message<<std::endl;
+	throw std::runtime_error("OPENGL ERROR");
+
 }
 
 

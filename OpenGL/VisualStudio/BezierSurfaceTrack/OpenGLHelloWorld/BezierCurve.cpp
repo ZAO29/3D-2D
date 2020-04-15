@@ -2,11 +2,15 @@
 #include "BezierCurve.h"
 
 
-BezierCurve::BezierCurve()
+template<>
+double MyBeta<double>(double i, double j)
 {
+	return std::beta(i, j);
 }
 
 
-BezierCurve::~BezierCurve()
+template<>
+float MyBeta<float>(float i, float j)
 {
+	return std::betaf(i, j);
 }

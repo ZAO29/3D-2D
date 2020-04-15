@@ -186,7 +186,6 @@
     <ClCompile Include="..\OpenGLHelloWorld\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\imgui_widgets.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\Listener.cpp" />
-    <ClCompile Include="..\OpenGLHelloWorld\MyApp.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\Shaders.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\WindowEnv.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\ZGLApp.cpp" />
