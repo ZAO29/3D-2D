@@ -181,6 +181,7 @@
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="Listener.h" />
+    <ClInclude Include="MyApp.h" />
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="Listener.cpp" />
+    <ClCompile Include="MyApp.cpp" />
     <ClCompile Include="OpenGLHelloWorld.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="stdafx.cpp">

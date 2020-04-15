@@ -22,13 +22,9 @@
 #include <map>
 #include "Camera.h"
 #include "WindowEnv.h"
-#include "Shaders.h"
-#include "ZGLDrawable.h"
 
-struct ctrl
-{
-	int m_selectedCam;
-};
+
+
 
 class ZGLApp {
 public:
@@ -40,7 +36,7 @@ public:
 	virtual void OpenGLRender();
     virtual bool Init();
     void Run();
-	void Destroy();
+	virtual void Destroy();
 
 	void KeyCallback(int key, int scancode, int action, int mods);
 	
@@ -53,21 +49,17 @@ private :
     
 protected :     
         
-    std::map<eCameraType,Camera*> m_CameraMap;
-    Camera* m_pCam;
+    
     
     WindowEnv* m_pWindowEnv;
-	Shader m_shader;
-	ZGLVAODrawable m_VAOdrawable;
+	
 
 	std::chrono::time_point<std::chrono::system_clock> m_time;
 	float m_elapsedTime;
 	
-	std::map<int, int> m_qwertyToAzerty;
-	
 	bool m_bImguiRender = false;
 
-	ctrl m_ctrl;
+	
 };
 
 #endif /* ZGLAPP_H */
