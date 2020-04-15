@@ -14,12 +14,18 @@
 #include "stdafx.h"
 
 #include "CameraFree.h"
+#include "Listener.h"
 
 
 
 
 
-CameraFree::CameraFree() {
+CameraFree::CameraFree(GLFWwindow* pwin):Camera(pwin)
+{
+	m_eye = glm::vec3(20, 0., 0.);
+	m_direction = glm::vec3(1., 0., 0.);
+	m_right = glm::vec3(0., 1., 0.);
+	m_up = glm::vec3(0., 0., 1.);
 }
 
 
@@ -38,18 +44,16 @@ glm::mat4 CameraFree::getView()
      m_deltaDegP = 0.;
      m_deltaDegH = 0.;
      
-     if(m_bmousePressed == 1)
-     {
-         m_eye += m_speed * m_direction;
-     }
      
-     if(m_bmousePressed == 3)
-     {
-         m_eye -= m_speed * m_direction;
-     }
      
      
      return glm::lookAt(m_eye,m_eye+m_direction,m_up);
      
+}
+
+void CameraFree::Update(float elapsedTime)
+{
+	Camera::Update(elapsedTime);
+
 }
 

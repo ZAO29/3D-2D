@@ -23,12 +23,16 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
+
+#include <GLFW/glfw3.h>
+
 #include <iostream>
 
 #define PI 3.141592653f
 
 #define DEG2RAD (2*PI/360.0f)
 #define RAD2DEG 1.0f/DEG2RAD
+
 
 
 enum eCameraType
@@ -85,7 +89,7 @@ public:
     };
     
     
-    Camera(){};
+    Camera(GLFWwindow * pWindow):m_pwindow(pWindow){};
     
     Camera(const Camera& orig){std::cout<<__FUNCTION__<<" NOT IMPLEMENTED"<<std::endl;}
     
@@ -96,7 +100,7 @@ public:
         m_up = a_up;
     }
     
-	virtual void updateKeyControl();
+	virtual void Update(float elapsedTime);
     
 	
 
@@ -110,6 +114,8 @@ public:
     
     
     void controlDeltaPitch();
+
+
     
     glm::vec3 getEyePos(){return m_eye;}
     void  setEyePos(glm::vec3 const eyepos){ m_eye = eyepos;}
@@ -139,17 +145,19 @@ protected :
     
    
     glm::vec3  m_eye = glm::vec3(0,20,-20); // degree
-    glm::vec3  m_direction = glm::vec3(0,-0.5,-1); // width / height
+    glm::vec3  m_direction = glm::vec3(0,-20,20); // width / height
     glm::vec3  m_right = glm::vec3(1.,0.,0.);
     glm::vec3  m_up = glm::vec3(0.,10.,0.);
     
     float m_speed = 0.01f;
+
+	
     
     
 
     
     
-    unsigned int m_bmousePressed = 0;
+    
     
     glm::vec2 m_mousePos;
     
@@ -158,7 +166,7 @@ protected :
     
     
     
-
+	GLFWwindow * m_pwindow = nullptr;
 };
 
 #endif /* CAMERA_H */

@@ -18,11 +18,13 @@
 
 class CameraFree : public Camera {
 public:
-    CameraFree();
+    CameraFree(GLFWwindow* pwin);
 
     virtual ~CameraFree();
     
     virtual glm::mat4 getView() override;
+
+	virtual void Update(float elapsedTime) override;
     
 private:
 

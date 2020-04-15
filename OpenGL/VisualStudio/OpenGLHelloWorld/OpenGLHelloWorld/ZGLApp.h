@@ -25,7 +25,10 @@
 #include "Shaders.h"
 #include "ZGLDrawable.h"
 
-
+struct ctrl
+{
+	int m_selectedCam;
+};
 
 class ZGLApp {
 public:
@@ -57,11 +60,14 @@ protected :
 	Shader m_shader;
 	ZGLVAODrawable m_VAOdrawable;
 
-	std::chrono::time_point<std::chrono::system_clock> m_begin;
+	std::chrono::time_point<std::chrono::system_clock> m_time;
+	float m_elapsedTime;
 	
 	std::map<int, int> m_qwertyToAzerty;
 	
 	bool m_bImguiRender = false;
+
+	ctrl m_ctrl;
 };
 
 #endif /* ZGLAPP_H */

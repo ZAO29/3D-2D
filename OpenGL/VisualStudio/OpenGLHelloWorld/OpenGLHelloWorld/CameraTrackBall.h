@@ -19,7 +19,7 @@
 
 class CameraTrackBall : public Camera {
 public:
-    CameraTrackBall();
+    CameraTrackBall(GLFWwindow* pwin);
 
     virtual ~CameraTrackBall();
     

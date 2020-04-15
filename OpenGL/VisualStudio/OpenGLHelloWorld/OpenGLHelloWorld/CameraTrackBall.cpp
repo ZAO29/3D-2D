@@ -21,7 +21,7 @@
 
 
 
-CameraTrackBall::CameraTrackBall() : Camera() {
+CameraTrackBall::CameraTrackBall(GLFWwindow* pwin) : Camera(pwin) {
 }
 
 
@@ -48,7 +48,7 @@ glm::mat4 CameraTrackBall::getView()
      m_deltaDegP = 0.;
      m_deltaDegH = 0.;
      m_direction = -glm::normalize(m_eye);
-    return glm::lookAt(m_eye,glm::vec3(0,0,0),m_up);
+    return glm::lookAt(m_eye,m_direction,m_up);
 }
 
 

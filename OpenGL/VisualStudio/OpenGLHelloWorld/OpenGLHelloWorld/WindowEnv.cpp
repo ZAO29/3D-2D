@@ -9,6 +9,7 @@
 
 #include <GLFW/glfw3.h>
 #include "ZGLApp.h"
+#include "Listener.h"
 
 
 void error_callback(int error, const char* description)
@@ -28,6 +29,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if(pApp != nullptr)
 		pApp->KeyCallback(key, scancode, action, mods);
 }
+
+
+void mousebutton_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	Listener::sUpdateSingleListenerMouseButton(button, action, mods);
+	
+}
+
 
 WindowEnv::WindowEnv()
 {
@@ -67,6 +76,7 @@ void WindowEnv::init(int32_t width, int32_t height, void * pApp)
 	/*------  CALLBACK  ------*/
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(m_pwindow,key_callback);
+	glfwSetMouseButtonCallback(m_pwindow, mousebutton_callback);
 	
 	// set the App as to pointer in order to have access to app data
 	// in the different callback

@@ -123,23 +123,23 @@ void setPitchAndHeadingDeg(glm::vec3 & dir, float const  Hdeg, float const  Pdeg
 Camera::~Camera() {
 }
 
-void Camera::updateKeyControl()
+void Camera::Update(float elapsedTime)
 {
 		if (Listener::sgetKeyState(GLFW_KEY_UP))
 		{
 			if (m_angleCtrl)
-				m_deltaDegP += m_speed;
+				m_deltaDegP += elapsedTime *m_speed;
 			else
-				m_eye += m_speed * m_direction;
+				m_eye += elapsedTime * m_speed * m_direction;
 
 		}
 
 		if (Listener::sgetKeyState(GLFW_KEY_DOWN))
 		{
 			if (m_angleCtrl)
-				m_deltaDegP -= m_speed;
+				m_deltaDegP -= elapsedTime * m_speed;
 			else
-				m_eye -= m_speed * m_direction;
+				m_eye -= elapsedTime * m_speed * m_direction;
 		}
 		
 
@@ -148,30 +148,30 @@ void Camera::updateKeyControl()
 			if (m_angleCtrl)
 			{
 				//std::cout << __FILE__ << __FUNCTION__ << " rotate " << std::endl;
-				m_deltaDegH += m_speed;
+				m_deltaDegH += elapsedTime * m_speed;
 			}
 			else
-				m_eye += m_speed * m_right;
+				m_eye += elapsedTime * m_speed * m_right;
 
 		}
 
 		if (Listener::sgetKeyState(GLFW_KEY_RIGHT))
 		{
 			if (m_angleCtrl)
-				m_deltaDegH -= m_speed;
+				m_deltaDegH -= elapsedTime * m_speed;
 			else
-				m_eye -= m_speed * m_right;
+				m_eye -= elapsedTime * m_speed * m_right;
 		}
 		
 
 		if (Listener::sgetKeyState(GLFW_KEY_U))
 		{
-			m_eye += m_speed * m_up;
+			m_eye += elapsedTime * m_speed * m_up;
 		}
 
 		if (Listener::sgetKeyState(GLFW_KEY_D))
 		{
-			m_eye -= m_speed * m_up;
+			m_eye -= elapsedTime * m_speed * m_up;
 		}
 
 		if (Listener::sgetKeyState(GLFW_KEY_A))
@@ -210,7 +210,34 @@ void Camera::updateKeyControl()
 			m_eye /= 1.1;
 		}
 
+		bool buttonPressed = Listener::sgetMouseButtonState(GLFW_MOUSE_BUTTON_LEFT) ||
+			Listener::sgetMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT);
 
+		if (Listener::sgetMouseButtonState(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			m_eye += m_speed * m_direction * elapsedTime;
+		}
+
+		if (Listener::sgetMouseButtonState(GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			m_eye -= m_speed * m_direction * elapsedTime;
+		}
+
+		double xpos, ypos;
+		glfwGetCursorPos(m_pwindow, &xpos, &ypos);
+
+		if (buttonPressed)
+		{
+
+			int width, height;
+			glfwGetWindowSize(m_pwindow, &width, &height);
+
+			m_deltaDegP = (ypos - m_mousePos.y) / float(height)*m_projPerspective.m_degVerticalFOV*0.05;
+			m_deltaDegH = (xpos - m_mousePos.x) / float(width)*m_projPerspective.m_degVerticalFOV*m_projPerspective.m_ratio*0.05;
+		}
+
+		m_mousePos.x = xpos;
+		m_mousePos.y = ypos;
 	
 }
 

@@ -95,13 +95,25 @@ void ZGLApp::Run()
 	{
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		m_pWindowEnv->PollEvent();
-		m_pCam->updateKeyControl();
+
+		std::chrono::time_point<std::chrono::system_clock> clock;
+		clock = std::chrono::system_clock::now();
+		std::chrono::duration<float> elapsed_seconds = clock - m_time;
+		m_time = clock;
+		m_elapsedTime = cos(elapsed_seconds.count());
+		
+
 		glClearColor(0., 0., 0., 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+
 
 		OpenGLRender();
 		if (m_bImguiRender)
 			ImguiRender();
+		else
+			m_pCam->Update(m_elapsedTime);
 
 		m_pWindowEnv->swapBuffer();
 
@@ -120,7 +132,7 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 {
 
 	Listener* s_plistener = Listener::getSingleListener();
-	Listener::sUpdateSingleListener(key, scancode, action, mods);
+	Listener::sUpdateSingleListenerKey(key, scancode, action, mods);
 
 	key = Listener::sgetRealValue(key);
 	if (action == GLFW_PRESS)
@@ -154,9 +166,23 @@ void ZGLApp::ImguiDraw()
 	static float f = 0.0f;
 	static int counter = 0;
 
-	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::Begin("MyAPP");                          // Create a window called "Hello, world!" and append into it.
 
 	ImGui::Text("This is some useful text.");
+	
+	const char * items[] = { "TRACKBALL","FREE" };
+	if (ImGui::Combo(" CAMERA ", &m_ctrl.m_selectedCam, items, IM_ARRAYSIZE(items)))
+	{
+		if (m_CameraMap[static_cast<eCameraType>(m_ctrl.m_selectedCam)] != nullptr)
+		{
+			Camera* pformerCam = m_pCam;
+			m_pCam = m_CameraMap[static_cast<eCameraType>(m_ctrl.m_selectedCam)];
+
+			m_pCam->Init(pformerCam->getEyePos(), pformerCam->getDirection(), pformerCam->getUp());
+		}
+		
+	}
+	ImGui::End();
 }
 
 void ZGLApp::InitImgui()
@@ -210,7 +236,7 @@ void ZGLApp::ImguiRender()
 	ImguiDraw();
 		
 
-		ImGui::End();
+		
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -229,7 +255,7 @@ void ZGLApp::ImguiDestroy()
 
 bool ZGLApp::Init()
 {
-	m_begin = std::chrono::system_clock::now();
+	m_time = std::chrono::system_clock::now();
     //m_pWindowEnv = WindowEnv::createWindowEnv(1280,720);
     
 	m_pWindowEnv = new WindowEnv();
@@ -340,8 +366,8 @@ bool ZGLApp::Init()
 
 
 
-    m_CameraMap[TRACKBALLCAMERA]= new CameraTrackBall();
-    m_CameraMap[FREECAMERA]= new CameraFree();
+    m_CameraMap[TRACKBALLCAMERA]= new CameraTrackBall(m_pWindowEnv->get());
+    m_CameraMap[FREECAMERA]= new CameraFree(m_pWindowEnv->get());
     m_pCam = m_CameraMap[TRACKBALLCAMERA];
     
     return true;
@@ -355,18 +381,14 @@ void ZGLApp::OpenGLRender()
 {
 	m_shader.Enable();
 
-	std::chrono::time_point<std::chrono::system_clock> clock;
-	clock = std::chrono::system_clock::now();
-
-	std::chrono::duration<float> elapsed_seconds = clock - m_begin;
-	float t = cos(elapsed_seconds.count());
+	
 
 
 	glm::mat4 MVP;
 
 	MVP = m_pCam->getProjectionView() * m_pCam->getView();
 
-	m_shader.updateUniform(SHADER_SIZE, (void *)&t);
+	m_shader.updateUniform(SHADER_SIZE, (void *)&m_elapsedTime);
 	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
 	m_VAOdrawable.Render(GL_TRIANGLES);
 	

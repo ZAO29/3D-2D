@@ -43,13 +43,13 @@ Listener * Listener::getSingleListener()
 	return s_pSingleton;
 }
 
-void Listener::sUpdateSingleListener(int key, int scancode, int action, int mods)
+void Listener::sUpdateSingleListenerKey(int key, int scancode, int action, int mods)
 {
-	getSingleListener()->mUpdateSingleListener(key, scancode, action, mods);
+	getSingleListener()->mUpdateSingleListenerKey(key, scancode, action, mods);
 }
 
 
-void Listener::mUpdateSingleListener(int key, int scancode, int action, int mods)
+void Listener::mUpdateSingleListenerKey(int key, int scancode, int action, int mods)
 {
 	if (m_qwertyToAzerty.find(key) != m_qwertyToAzerty.end())
 	{
@@ -65,6 +65,14 @@ void Listener::mUpdateSingleListener(int key, int scancode, int action, int mods
 		m_keyStates[key] = false;
 		std::cout << "key is pressed : " << getStringKey(key) << std::endl;
 	}
+}
+
+void Listener::mUpdateSingleListenerMouseButton(int button, int action, int mods)
+{
+	bool ispressed = (action == GLFW_PRESS);
+	m_mouseButtonState[button] = ispressed;
+
+
 }
 
 std::string Listener::getStringKey(int key)
