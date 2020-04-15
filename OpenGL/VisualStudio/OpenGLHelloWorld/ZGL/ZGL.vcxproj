@@ -160,6 +160,14 @@
     <ClInclude Include="..\OpenGLHelloWorld\Camera.h" />
     <ClInclude Include="..\OpenGLHelloWorld\CameraFree.h" />
     <ClInclude Include="..\OpenGLHelloWorld\CameraTrackBall.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imconfig.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imgui.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imgui_impl_glfw.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imgui_internal.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imstb_rectpack.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imstb_textedit.h" />
+    <ClInclude Include="..\OpenGLHelloWorld\imstb_truetype.h" />
     <ClInclude Include="..\OpenGLHelloWorld\Listener.h" />
     <ClInclude Include="..\OpenGLHelloWorld\Shaders.h" />
     <ClInclude Include="..\OpenGLHelloWorld\WindowEnv.h" />
@@ -172,6 +180,11 @@
     <ClCompile Include="..\OpenGLHelloWorld\Camera.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\CameraFree.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\CameraTrackBall.cpp" />
+    <ClCompile Include="..\OpenGLHelloWorld\imgui.cpp" />
+    <ClCompile Include="..\OpenGLHelloWorld\imgui_draw.cpp" />
+    <ClCompile Include="..\OpenGLHelloWorld\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\OpenGLHelloWorld\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\OpenGLHelloWorld\imgui_widgets.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\Listener.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\MyApp.cpp" />
     <ClCompile Include="..\OpenGLHelloWorld\Shaders.cpp" />

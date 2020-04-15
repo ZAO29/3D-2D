@@ -126,3 +126,8 @@ MATLAB/subdivision/output/*
 /OpenGL/VisualStudio/OpenGLHelloWorld/ZGL/Debug/ZGL.tlog/ZGL.lastbuildstate
 /OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/MyApp.obj
 /OpenGL/VisualStudio/OpenGLHelloWorld/OpenGLHelloWorld/Debug/BezierSurfaceTrack.Build.CppClean.log
+/OpenGL/VisualStudio/OpenGLHelloWorld/ZGL/Debug/imgui.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/ZGL/Debug/imgui_draw.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/ZGL/Debug/imgui_impl_glfw.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/ZGL/Debug/imgui_impl_opengl3.obj
+/OpenGL/VisualStudio/OpenGLHelloWorld/ZGL/Debug/imgui_widgets.obj
