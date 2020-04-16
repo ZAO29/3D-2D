@@ -140,13 +140,13 @@ bool MyApp::Init()
 	}
 	float coeff1 = 3.0;
 	ctrlPtGrid[0][0] = coeff1 * glm::vec3(-1., -1., -1.);
-	ctrlPtGrid[0][1] = coeff1 * glm::vec3(-1., -1., 1.);
-	ctrlPtGrid[0][2] = coeff1 * glm::vec3(1., -1., 1.);
+	ctrlPtGrid[0][1] = coeff1 * glm::vec3(-1., -1., -5);
+	ctrlPtGrid[0][2] = coeff1 * glm::vec3(1., -1., 4.);
 	ctrlPtGrid[0][3] = coeff1 * glm::vec3(1., -1., -1.);
 
 	ctrlPtGrid[1][0] = coeff1 * glm::vec3(-1., 0., -0.);
-	ctrlPtGrid[1][1] = coeff1 * glm::vec3(-1., 0., 0.);
-	ctrlPtGrid[1][2] = coeff1 * glm::vec3(1., 0., 0.);
+	ctrlPtGrid[1][1] = coeff1 * glm::vec3(0., 0., 0.);
+	ctrlPtGrid[1][2] = coeff1 * glm::vec3(0., 0., 0.);
 	ctrlPtGrid[1][3] = coeff1 * glm::vec3(1., 0., 0.);
 
 	ctrlPtGrid[2][0] = coeff1 * glm::vec3(-1., 1., -1.);
@@ -155,7 +155,7 @@ bool MyApp::Init()
 	ctrlPtGrid[2][3] = coeff1 * glm::vec3(1., 1., -1.);
 
 
-	m_bezierSurface.Init(ctrlPtGrid, 100, 50);
+	m_bezierSurface.Init(ctrlPtGrid, 100, 500);
 
 	return true;
 }
@@ -178,7 +178,7 @@ void MyApp::OpenGLRender()
 	m_VAOdrawable.Render(GL_TRIANGLES);
 	glLineWidth(1.0f);
 	m_bezierCurve.draw(GL_LINE_STRIP);
-	m_bezierSurface.draw(GL_LINE_STRIP);
+	m_bezierSurface.draw(GL_TRIANGLE_STRIP);
 }
 
 void MyApp::Destroy()

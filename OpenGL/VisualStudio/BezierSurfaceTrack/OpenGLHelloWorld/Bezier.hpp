@@ -1,7 +1,28 @@
+#include "Bezier.h"
 
 template<class Vec>
 BezierCurve<Vec>::~BezierCurve()
 {
+}
+
+
+template<class Vec>
+template<typename Precision>
+inline BezierCurve<Vec> BezierCurve<Vec>::Derivate()
+{
+	unsigned int n = m_ctrlPts.size() - 1;
+	std::vector<Vec> derivateCtrlPts(n);
+	int i = 0;
+	for (auto& derivateCtrlPt : derivateCtrlPts)
+	{
+		derivateCtrlPt = Precision(n) * (m_ctrlPts[i + 1] - m_ctrlPts[i]);
+		i++;
+	}
+
+	BezierCurve<Vec> bez;
+	bez.setCtrlPt(derivateCtrlPts);
+
+	return bez;
 }
 
 template<class Vec>
@@ -67,6 +88,39 @@ inline void BezierSurface<Vec>::setCtrlPt(std::vector<std::vector<Vec> > ctrlPts
 		BezierCurve.setCtrlPt(ctrlPts[i]);
 		i++;
 	}
+}
+
+
+template<class Vec>
+inline void BezierSurface<Vec>::setCtrlPt(std::vector<BezierCurve<Vec>> v)
+{
+	m_ctrlPts.resize(v.size());
+	unsigned int i = 0;
+	for (auto& BezierCurve : m_ctrlPts)
+	{
+		BezierCurve.setCtrlPt(v[i].getCtrlPt());
+		i++;
+	}
+}
+
+
+template<class Vec>
+template<typename Precision>
+inline BezierSurface<Vec> BezierSurface<Vec>::derivateU()
+{
+	std::vector<BezierCurve<Vec>> ctrlPtGrid(m_ctrlPts.size());
+	int i = 0;
+	for (auto& ctrlPts : ctrlPtGrid)
+	{
+		ctrlPts = m_ctrlPts[i].Derivate<Precision>();
+		i++;
+	}
+
+	BezierSurface derivateUsurf;
+	derivateUsurf.setCtrlPt(ctrlPtGrid);
+
+	return derivateUsurf;
+
 }
 
 template<class Vec>

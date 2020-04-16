@@ -15,6 +15,7 @@ public:
 
 
 	void setCtrlPt(std::vector<Vec> ctrlPts) { m_ctrlPts = ctrlPts; }
+	std::vector<Vec> getCtrlPt() { return m_ctrlPts; }
 
 	template<typename Precision>
 	Vec Eval(Precision t);
@@ -22,9 +23,13 @@ public:
 	template<typename Precision>
 	std::vector<Vec> Sample(int nbPt);
 
+	template<typename Precision>
+	BezierCurve<Vec> Derivate();
+
+private:
 	std::vector<Vec> m_ctrlPts;
 
-	
+
 };
 
 template <typename Precision>
@@ -46,9 +51,14 @@ public:
 
 	void setCtrlPt(std::vector<std::vector<Vec> > ctrlPts);
 
+	void setCtrlPt(std::vector<BezierCurve<Vec>> v);
 
 	template<typename Precision>
 	Vec Eval(Precision u, Precision v);
+
+	template<typename Precision>
+	BezierSurface<Vec> derivateU();
+
 
 	template<typename Precision>
 	BezierCurve<Vec> Eval(Precision u);

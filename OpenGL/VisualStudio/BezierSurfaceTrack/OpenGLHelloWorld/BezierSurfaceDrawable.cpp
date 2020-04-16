@@ -20,10 +20,14 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 	std::vector<std::vector<glm::vec3>> samples;
 	samples = m_bezierSurface.Sample<float>(nbPtu, nbPtv);
 
+	BezierSurface<glm::vec3> derivateSurf = m_bezierSurface.derivateU<float>();
+
+	std::vector<std::vector<glm::vec3>> derivateSamples = derivateSurf.Sample<float>(nbPtu, nbPtv);
+
 	int nc = samples.size();
 	int nl = samples[0].size();
 
-	std::vector<glm::vec3> triangleStripSamples;
+	std::vector<VertexData> triangleStripSamples;
 
 	bool left2Right = true;
 	for (int i = 0; i < (nl - 1); i++)
@@ -34,16 +38,16 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 		{
 			for (int j = 0; j < nc; j++)
 			{
-				triangleStripSamples.push_back(samples[j][i]);
-				triangleStripSamples.push_back(samples[j][i+1]);
+				triangleStripSamples.push_back(VertexData(samples[j][i],glm::normalize(derivateSamples[j][i]),1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i+1],glm::normalize(derivateSamples[j][i+1]), 1.0));
 			}
 		}
 		else
 		{
 			for (int j = nc-1; j >= 0; j--)
 			{
-				triangleStripSamples.push_back(samples[j][i]);
-				triangleStripSamples.push_back(samples[j][i+1]);
+				triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
 			}
 		}
 		left2Right = !left2Right;
@@ -53,7 +57,9 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 
 	int i = 0;
 	std::vector<VertexData> vertices;
-	vertices.resize(triangleStripSamples.size());
+	
+	vertices = triangleStripSamples;
+	/*vertices.resize(triangleStripSamples.size());
 
 
 	glm::vec3 colors[3];
@@ -65,7 +71,7 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 	{
 		vert = VertexData(triangleStripSamples[i], colors[i%3], 1.0);
 		i++;
-	}
+	}*/
 
 
 	// pos
