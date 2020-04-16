@@ -37,4 +37,30 @@ Precision BinomialCoeff(int i, int m);
 template <class Precision>
 Precision evalBernStein(Precision t, int i, int m);
 
-#include "BezierCurve.hpp"
+template <class Vec>
+class BezierSurface
+{
+public:
+	BezierSurface(){}
+	~BezierSurface() {}
+
+	void setCtrlPt(std::vector<std::vector<Vec> > ctrlPts);
+
+
+	template<typename Precision>
+	Vec Eval(Precision u, Precision v);
+
+	template<typename Precision>
+	BezierCurve<Vec> Eval(Precision u);
+
+	template<typename Precision>
+	std::vector< std::vector<Vec> > Sample(int nbPtu, int nbPtv);
+
+	std::vector<BezierCurve<Vec> > m_ctrlPts;
+};
+
+
+
+#include "Bezier.hpp"
+
+

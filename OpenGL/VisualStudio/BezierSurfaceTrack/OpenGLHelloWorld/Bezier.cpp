@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "BezierCurve.h"
+#include "Bezier.h"
 
 
 template<>

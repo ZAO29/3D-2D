@@ -3,6 +3,7 @@
 #include "Shaders.h"
 #include "ZGLDrawable.h"
 #include "BezierCurveDrawable.h"
+#include "BezierSurfaceDrawable.h"
 
 struct ctrl
 {
@@ -32,6 +33,7 @@ protected :
 	std::map<eCameraType, Camera*> m_CameraMap;
 	Camera* m_pCam;
 	BezierCurveDrawable m_bezierCurve;
+	BezierSurfaceDrawable m_bezierSurface;
 	ctrl m_ctrl;
 };
 

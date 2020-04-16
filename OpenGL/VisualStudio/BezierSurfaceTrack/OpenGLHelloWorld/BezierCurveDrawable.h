@@ -1,6 +1,6 @@
 #pragma once
 #include "glm.hpp"
-#include "BezierCurve.h"
+#include "Bezier.h"
 #include "ZGLDrawable.h"
 
 class BezierCurveDrawable
