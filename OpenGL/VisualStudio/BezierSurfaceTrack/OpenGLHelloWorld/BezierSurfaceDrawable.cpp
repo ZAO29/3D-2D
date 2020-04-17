@@ -15,7 +15,18 @@ BezierSurfaceDrawable::~BezierSurfaceDrawable()
 
 void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, int nbPtu, int nbPtv)
 {
-	m_bezierSurface.setCtrlPt(ctrlPts);
+	BezierSurface<glm::vec3> bezierSurface;
+	bezierSurface.setCtrlPt(ctrlPts);
+
+	Init(bezierSurface, nbPtu, nbPtv);
+
+
+}
+
+void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbPtu, int nbPtv)
+{
+	m_bezierSurface = bezierSurface;
+
 
 	std::vector<std::vector<glm::vec3>> samples;
 	samples = m_bezierSurface.Sample<float>(nbPtu, nbPtv);
@@ -35,32 +46,32 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 	for (int i = 0; i < (nl - 1); i++)
 	{
 
-		
+
 		if (left2Right)
 		{
 			for (int j = 0; j < nc; j++)
 			{
-				/*triangleStripSamples.push_back(VertexData(samples[j][i],glm::normalize(derivateSamples[j][i]),1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i+1],glm::normalize(derivateSamples[j][i+1]), 1.0));*/
-				
-				glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
-				glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i+1]));
-				
-				triangleStripSamples.push_back(VertexData(samples[j][i],v, 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
+
+				//glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
+				//glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i+1]));
+
+				//triangleStripSamples.push_back(VertexData(samples[j][i],v, 1.0));
+				//triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
 			}
 		}
 		else
 		{
-			for (int j = nc-1; j >= 0; j--)
+			for (int j = nc - 1; j >= 0; j--)
 			{
-				glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
-				glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i + 1]));
-				
-				/*triangleStripSamples.push_back(VertexData(samples[j][i],glm::normalize(derivateSamples[j][i]),1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i+1],glm::normalize(derivateSamples[j][i+1]), 1.0));*/
-				triangleStripSamples.push_back(VertexData(samples[j][i], v, 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
+				//glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
+				//glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i + 1]));
+
+				triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
+				//triangleStripSamples.push_back(VertexData(samples[j][i], v, 1.0));
+				//triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
 
 
 			}
@@ -72,7 +83,7 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 
 	int i = 0;
 	std::vector<VertexData> vertices;
-	
+
 	vertices = triangleStripSamples;
 	/*vertices.resize(triangleStripSamples.size());
 
@@ -84,8 +95,8 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 
 	for (auto & vert : vertices)
 	{
-		vert = VertexData(triangleStripSamples[i], colors[i%3], 1.0);
-		i++;
+	vert = VertexData(triangleStripSamples[i], colors[i%3], 1.0);
+	i++;
 	}*/
 
 
@@ -118,8 +129,6 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 	paramDrawable.m_strides = { stride1, stride2, stride3 };
 
 	m_drawable.Init(paramDrawable);
-
-
 }
 
 void BezierSurfaceDrawable::draw(int method)

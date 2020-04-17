@@ -132,7 +132,7 @@ bool MyApp::Init()
 
 
 	std::vector<std::vector<glm::vec3>> ctrlPtGrid;
-	ctrlPtGrid.resize(3);
+	ctrlPtGrid.resize(4);
 	
 	for (auto & ctrlPtLine : ctrlPtGrid)
 	{
@@ -140,19 +140,27 @@ bool MyApp::Init()
 	}
 	float coeff1 = 3.0;
 	ctrlPtGrid[0][0] = coeff1 * glm::vec3(-1., -1., -1.);
-	ctrlPtGrid[0][1] = coeff1 * glm::vec3(-1., -1., -5);
-	ctrlPtGrid[0][2] = coeff1 * glm::vec3(1., -1., 4.);
+	ctrlPtGrid[0][1] = coeff1 * glm::vec3(-0.5, -1., -1);
+	ctrlPtGrid[0][2] = coeff1 * glm::vec3(0.5, -1., -1.);
 	ctrlPtGrid[0][3] = coeff1 * glm::vec3(1., -1., -1.);
 
-	ctrlPtGrid[1][0] = coeff1 * glm::vec3(-1., 0., -0.);
-	ctrlPtGrid[1][1] = coeff1 * glm::vec3(0., 0., 0.);
-	ctrlPtGrid[1][2] = coeff1 * glm::vec3(0., 0., 0.);
-	ctrlPtGrid[1][3] = coeff1 * glm::vec3(1., 0., 0.);
+	ctrlPtGrid[1][0] = coeff1 * glm::vec3(-1., 0., -1.);
+	ctrlPtGrid[1][1] = coeff1 * glm::vec3(-0.5, 0., -1.);
+	ctrlPtGrid[1][2] = coeff1 * glm::vec3(0.5, 0., -1.);
+	ctrlPtGrid[1][3] = coeff1 * glm::vec3(1., 0., -1.);
 
-	ctrlPtGrid[2][0] = coeff1 * glm::vec3(-1., 1., -1.);
-	ctrlPtGrid[2][1] = coeff1 * glm::vec3(-1., 1., -2.);
-	ctrlPtGrid[2][2] = coeff1 * glm::vec3(1., 1., -2.);
-	ctrlPtGrid[2][3] = coeff1 * glm::vec3(1., 1., -1.);
+	ctrlPtGrid[2][0] = coeff1 * glm::vec3(-1., 1., 1.);
+	ctrlPtGrid[2][1] = coeff1 * glm::vec3(-0.5, 1., 1.);
+	ctrlPtGrid[2][2] = coeff1 * glm::vec3(0.5, 1., 1.);
+	ctrlPtGrid[2][3] = coeff1 * glm::vec3(1., 1., 1.);
+
+	ctrlPtGrid[3][0] = coeff1 * glm::vec3(-1., 2., 1.);
+	ctrlPtGrid[3][1] = coeff1 * glm::vec3(-0.5, 2., 1.);
+	ctrlPtGrid[3][2] = coeff1 * glm::vec3(0.5, 2., 1.);
+	ctrlPtGrid[3][3] = coeff1 * glm::vec3(1., 2., 1.);
+
+
+
 
 
 	/*ctrlPtGrid[0][0] = coeff1 * glm::vec3(-1., -1., -1.);
@@ -173,6 +181,32 @@ bool MyApp::Init()
 
 	m_bezierSurface.Init(ctrlPtGrid, 100, 500);
 
+
+	
+
+	PieceWiseBezierCurve<glm::vec2> track;
+	std::vector<BezierCurve<glm::vec2>> trackCtrPt(2);
+	float s = 5.0;
+	trackCtrPt[0].setCtrlPt({ glm::vec2(-s,-s),glm::vec2(-s,0),glm::vec2(-s,0),glm::vec2(0,0) });
+	trackCtrPt[1].setCtrlPt({ glm::vec2(0,0),glm::vec2(s,0),glm::vec2(s,0),glm::vec2(s,s) });
+	track.Init(trackCtrPt);
+
+
+	PieceWiseBezierCurve<glm::vec2> section;
+	std::vector<BezierCurve<glm::vec2>> sectionCtrPt(3);
+	float d = 1.0;
+	sectionCtrPt[0].setCtrlPt({ glm::vec2(-d,-d),glm::vec2(-d,0),glm::vec2(-d,0),glm::vec2(-d,d) });
+	sectionCtrPt[1].setCtrlPt({ glm::vec2(-d,d),glm::vec2(0,d/2.),glm::vec2(0,d/2.),glm::vec2(d,0) });
+	sectionCtrPt[2].setCtrlPt({ glm::vec2(d,0),glm::vec2(0,-d / 2.),glm::vec2(0,-d / 2.),glm::vec2(-d,-d) });
+
+	section.Init(sectionCtrPt);
+
+	std::vector<PieceWiseBezierCurve<glm::vec2>> sections({ section,section,section});
+
+	PieceWiseBezierSurface<glm::vec3> pwbezsurf = InitPWBezSurf(track, sections);
+
+
+	m_pwbezSurf.Init(pwbezsurf, 5, 10);
 	return true;
 }
 
@@ -195,6 +229,7 @@ void MyApp::OpenGLRender()
 	glLineWidth(1.0f);
 	m_bezierCurve.draw(GL_LINE_STRIP);
 	m_bezierSurface.draw(GL_TRIANGLE_STRIP);
+	m_pwbezSurf.Draw(GL_TRIANGLE_STRIP);
 }
 
 void MyApp::Destroy()

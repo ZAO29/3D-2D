@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Constant.h"
-
+#include "glm.hpp"
 
 
 
@@ -84,11 +84,67 @@ public:
 	template<typename Precision>
 	std::vector< std::vector<Vec> > Sample(int nbPtu, int nbPtv);
 
+private:
 	std::vector<BezierCurve<Vec> > m_ctrlPts;
 };
+
+template < class Vec>
+class PieceWiseBezierSurface
+{
+public:
+	PieceWiseBezierSurface() {};
+	PieceWiseBezierSurface(int n, int m);
+
+	unsigned int getN() { return m_grid.size(); }
+	unsigned int getM() { return m_grid[0].size(); }
+
+	template<typename Precision>
+	Vec Eval(Precision u, Precision v);
+
+	void setBezSurface(int i, int j, BezierSurface<Vec> bezSurf) { m_grid[i][j] = bezSurf; }
+
+	BezierSurface<Vec> getBezSurface(int i, int j) { return m_grid[i][j]; }
+
+	template<typename Precision>
+	PieceWiseBezierSurface<Vec> derivateU();
+
+	template<typename Precision>
+	PieceWiseBezierSurface<Vec> derivateV();
+
+	std::vector<std::vector<Vec> > Sample(int i, int j, int nbPtu, int nbPtv);
+
+private:
+	std::vector<std::vector<BezierSurface<Vec>>> m_grid;
+};
+
+
+
+template < class Vec>
+class PieceWiseBezierCurve
+{
+public:
+	PieceWiseBezierCurve() {};
+
+	void Init(std::vector<BezierCurve<Vec>> list) { m_list = list; }
+
+	unsigned int size() { return m_list.size(); }
+
+
+	BezierCurve<Vec> getPiece(int i) { return m_list[i]; }
+
+	unsigned int getN() { return m_list.size(); }
+
+
+
+
+
+private:
+	std::vector<BezierCurve<Vec>> m_list;
+};
+
 
 
 
 #include "Bezier.hpp"
 
-
+PieceWiseBezierSurface<glm::vec3> InitPWBezSurf(PieceWiseBezierCurve<glm::vec2> track, std::vector<PieceWiseBezierCurve<glm::vec2>> sections);

@@ -176,6 +176,7 @@
     <ClInclude Include="BezierSurfaceDrawable.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="MyApp.h" />
+    <ClInclude Include="PieceWiseBezierSurfaceDrawable.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClCompile Include="BezierSurfaceDrawable.cpp" />
     <ClCompile Include="MyApp.cpp" />
     <ClCompile Include="OpenGLHelloWorld.cpp" />
+    <ClCompile Include="PieceWiseBezierSurfaceDrawable.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

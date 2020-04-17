@@ -4,6 +4,7 @@
 #include "ZGLDrawable.h"
 #include "BezierCurveDrawable.h"
 #include "BezierSurfaceDrawable.h"
+#include "PieceWiseBezierSurfaceDrawable.h"
 
 struct ctrl
 {
@@ -34,6 +35,7 @@ protected :
 	Camera* m_pCam;
 	BezierCurveDrawable m_bezierCurve;
 	BezierSurfaceDrawable m_bezierSurface;
+	PieceWiseBezierSurfaceDrawable m_pwbezSurf;
 	ctrl m_ctrl;
 };
 

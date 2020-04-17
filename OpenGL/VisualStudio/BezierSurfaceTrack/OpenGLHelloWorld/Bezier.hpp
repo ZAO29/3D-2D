@@ -226,6 +226,74 @@ inline std::vector<std::vector<Vec>> BezierSurface<Vec>::Sample(int nbPtu, int n
 }
 
 
+template<class Vec>
+inline std::vector<std::vector<Vec>> PieceWiseBezierSurface<Vec>::Sample(int i, int j, int nbPtu, int nbPtv)
+{
+	return m_grid[i][j].Sample(nbPtu, nbPtv);
+}
+
+
+template<class Vec>
+template<typename Precision>
+inline Vec PieceWiseBezierSurface<Vec>::Eval(Precision u, Precision v)
+{
+	int i = (int)std::floor(u);
+	i = i % m_grid.size();
+	Precision uReal = u - Precision(i);
+
+	int j = (int)std::floor(v);
+	j = j % m_grid[0].size();
+	Precision vReal = v - Precision(j);
+
+	return m_grid[i][j].Eval(uReal, vReal);
+}
+
+template<class Vec>
+template<typename Precision>
+inline PieceWiseBezierSurface<Vec> PieceWiseBezierSurface<Vec>::derivateU()
+{
+	unsigned int n = getN();
+	unsigned int m = getM();
+	PieceWiseBezierSurface derivateU(n,m);
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			derivateU.m_grid[i][j] = m_grid[i][j].derivateU();
+		}
+	}
+}
+
+template<class Vec>
+template<typename Precision>
+inline PieceWiseBezierSurface<Vec> PieceWiseBezierSurface<Vec>::derivateV()
+{
+	unsigned int n = getN();
+	unsigned int m = getM();
+	PieceWiseBezierSurface derivateV(n, m);
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			derivateV.m_grid[i][j] = m_grid[i][j].derivateV();
+		}
+	}
+}
+
+template<class Vec>
+PieceWiseBezierSurface<Vec>::PieceWiseBezierSurface(int n, int m):m_grid(n)
+{
+	for (auto &v : m_grid)
+	{
+		v.resize(m);
+	}
+}
+
+
+
+
 
 
 

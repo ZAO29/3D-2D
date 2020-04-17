@@ -9,7 +9,13 @@ public:
 	BezierSurfaceDrawable();
 	~BezierSurfaceDrawable();
 
+	BezierSurfaceDrawable(const BezierSurfaceDrawable & a) {
+		throw std::runtime_error("not implemented");
+	} 
+
 	void Init(std::vector<std::vector<glm::vec3>> ctrlPts, int nbPtu, int nbPtv);
+
+	void Init(BezierSurface<glm::vec3> bezierSurface, int nbPtu, int nbPtv);
 
 	void draw(int method);
 
