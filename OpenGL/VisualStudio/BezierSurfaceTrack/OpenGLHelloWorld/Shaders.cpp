@@ -29,6 +29,7 @@
 
 #define VERTEX_SHADER_EXT "vert"
 #define FRAG_SHADER_EXT "frag"
+#define GEOM_SHADER_EXT "geom" 
 
 
 Shader::Shader() : m_shaderProg(0){
@@ -67,7 +68,7 @@ bool Shader::Init(std::string name, bool  bgeometry, MapUniform uniforms)
 
     if (bgeometry)
     {
-        if(!LoadShader(std::string(name+".gs").c_str()))
+        if(!LoadShader(std::string(name+"."+GEOM_SHADER_EXT).c_str()))
             return false;
     }
    
@@ -117,7 +118,7 @@ bool Shader::LoadShader(const char * shader_file_path)
         shaderType = GL_FRAGMENT_SHADER;
         shaderTypeStr = " FRAGMENT ";
     }
-    if(ext == "gs")
+    if(ext == GEOM_SHADER_EXT)
     {
         shaderType = GL_GEOMETRY_SHADER;
         shaderTypeStr = " GEOMETRY ";

@@ -46,7 +46,7 @@ bool MyApp::Init()
 	mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	mapUniform[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
 
-	m_shader.Init("shader", false, mapUniform);
+	m_shader.Init("shader", true, mapUniform);
 
 	float a = 1.0f;
 
@@ -206,7 +206,7 @@ bool MyApp::Init()
 	PieceWiseBezierSurface<glm::vec3> pwbezsurf = InitPWBezSurf(track, sections);
 
 
-	m_pwbezSurf.Init(pwbezsurf, 5, 10);
+	m_pwbezSurf.Init(pwbezsurf, 20, 40);
 	return true;
 }
 
@@ -227,8 +227,8 @@ void MyApp::OpenGLRender()
 	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
 	m_VAOdrawable.Render(GL_TRIANGLES);
 	glLineWidth(1.0f);
-	m_bezierCurve.draw(GL_LINE_STRIP);
-	m_bezierSurface.draw(GL_TRIANGLE_STRIP);
+	//m_bezierCurve.draw(GL_LINE_STRIP);
+	//m_bezierSurface.draw(GL_TRIANGLE_STRIP);
 	m_pwbezSurf.Draw(GL_TRIANGLE_STRIP);
 }
 

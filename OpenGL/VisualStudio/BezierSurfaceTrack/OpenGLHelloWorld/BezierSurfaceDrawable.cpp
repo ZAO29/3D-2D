@@ -51,27 +51,27 @@ void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbP
 		{
 			for (int j = 0; j < nc; j++)
 			{
-				triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
+				//triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
+				//triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
 
-				//glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
-				//glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i+1]));
+				glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
+				glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i+1]));
 
-				//triangleStripSamples.push_back(VertexData(samples[j][i],v, 1.0));
-				//triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i],v, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
 			}
 		}
 		else
 		{
 			for (int j = nc - 1; j >= 0; j--)
 			{
-				//glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
-				//glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i + 1]));
+				glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
+				glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i + 1]));
 
-				triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
-				//triangleStripSamples.push_back(VertexData(samples[j][i], v, 1.0));
-				//triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
+				//triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
+				//triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i], v, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
 
 
 			}

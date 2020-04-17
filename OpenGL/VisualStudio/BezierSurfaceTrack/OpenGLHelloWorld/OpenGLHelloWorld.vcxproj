@@ -196,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
+    <None Include="shader.geom" />
     <None Include="shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
