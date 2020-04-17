@@ -3,6 +3,7 @@
 
 #include "CameraFree.h"
 #include "CameraTrackBall.h"
+#include "CameraPieceWiseBezierSurface.h"
 
 #include "imgui.h"
 
@@ -205,6 +206,8 @@ bool MyApp::Init()
 
 	PieceWiseBezierSurface<glm::vec3> pwbezsurf = InitPWBezSurf(track, sections);
 
+	m_CameraMap[BEZIERCAMERA] = new CameraPieceWiseBezierSurface(m_pWindowEnv->get(),pwbezsurf);
+	m_pCam = m_CameraMap[BEZIERCAMERA];
 
 	m_pwbezSurf.Init(pwbezsurf, 20, 40);
 	return true;
@@ -225,7 +228,7 @@ void MyApp::OpenGLRender()
 
 	m_shader.updateUniform(SHADER_SIZE, (void *)&m_elapsedTime);
 	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
-	m_VAOdrawable.Render(GL_TRIANGLES);
+	//m_VAOdrawable.Render(GL_TRIANGLES);
 	glLineWidth(1.0f);
 	//m_bezierCurve.draw(GL_LINE_STRIP);
 	//m_bezierSurface.draw(GL_TRIANGLE_STRIP);

@@ -15,6 +15,14 @@ float MyBeta<float>(float i, float j)
 	return std::betaf(i, j);
 }
 
+template<>
+float MyModulo<float>(float a, float b)
+{
+	return std::fmod(a, b);
+}
+
+
+
 PieceWiseBezierSurface<glm::vec3> InitPWBezSurf(PieceWiseBezierCurve<glm::vec2> track, std::vector<PieceWiseBezierCurve<glm::vec2>> sections)
 {
 	int n = track.size();

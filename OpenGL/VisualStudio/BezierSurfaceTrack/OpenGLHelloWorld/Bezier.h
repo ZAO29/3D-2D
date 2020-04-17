@@ -44,6 +44,9 @@ Precision MyBeta(Precision i, Precision j); // { throw std::runtime_error("beta 
 template <class Precision>
 Precision BinomialCoeff(int i, int m);
 
+template <class Precision>
+Precision MyModulo(Precision a, Precision b);
+
 
 template <class Precision>
 Precision evalBernStein(Precision t, int i, int m);

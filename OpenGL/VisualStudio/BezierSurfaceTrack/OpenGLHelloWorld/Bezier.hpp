@@ -237,15 +237,24 @@ template<class Vec>
 template<typename Precision>
 inline Vec PieceWiseBezierSurface<Vec>::Eval(Precision u, Precision v)
 {
+	Precision umod(m_grid[0].size());
+	u = MyModulo<Precision>(u,umod);
+	while (u < 0)
+		u += umod;
+
 	int i = (int)std::floor(u);
-	i = i % m_grid.size();
+	
 	Precision uReal = u - Precision(i);
 
+	Precision vmod(m_grid.size());
+	v = MyModulo<Precision>(v, vmod);
+	while (v < 0)
+		v += vmod;
 	int j = (int)std::floor(v);
-	j = j % m_grid[0].size();
+	
 	Precision vReal = v - Precision(j);
 
-	return m_grid[i][j].Eval(uReal, vReal);
+	return m_grid[j][i].Eval(uReal, vReal);
 }
 
 template<class Vec>
@@ -260,9 +269,11 @@ inline PieceWiseBezierSurface<Vec> PieceWiseBezierSurface<Vec>::derivateU()
 	{
 		for (int j = 0; j < m; j++)
 		{
-			derivateU.m_grid[i][j] = m_grid[i][j].derivateU();
+			derivateU.m_grid[i][j] = m_grid[i][j].derivateU<Precision>();
 		}
 	}
+
+	return derivateU;
 }
 
 template<class Vec>
@@ -277,9 +288,11 @@ inline PieceWiseBezierSurface<Vec> PieceWiseBezierSurface<Vec>::derivateV()
 	{
 		for (int j = 0; j < m; j++)
 		{
-			derivateV.m_grid[i][j] = m_grid[i][j].derivateV();
+			derivateV.m_grid[i][j] = m_grid[i][j].derivateV<Precision>();
 		}
 	}
+
+	return derivateV;
 }
 
 template<class Vec>

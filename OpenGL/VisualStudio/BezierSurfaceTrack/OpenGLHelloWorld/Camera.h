@@ -38,7 +38,8 @@
 enum eCameraType
 {
 	TRACKBALLCAMERA,
-	FREECAMERA
+	FREECAMERA,
+	BEZIERCAMERA
 };
 
 struct confProjPerspective
