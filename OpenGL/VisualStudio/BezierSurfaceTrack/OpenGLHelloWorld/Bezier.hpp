@@ -79,6 +79,18 @@ inline Vec BezierCurve<Vec>::Eval(Precision t)
 
 
 template<class Vec>
+BezierSurface<Vec>::BezierSurface(int n, int m):m_ctrlPts(n)
+{
+	for (auto& v : m_ctrlPts)
+	{
+		v = BezierCurve<Vec>(m);
+	}
+}
+
+
+
+
+template<class Vec>
 inline void BezierSurface<Vec>::setCtrlPt(std::vector<std::vector<Vec> > ctrlPts)
 {
 	m_ctrlPts.resize(ctrlPts.size());
@@ -104,6 +116,8 @@ inline void BezierSurface<Vec>::setCtrlPt(std::vector<BezierCurve<Vec>> v)
 }
 
 
+
+
 template<class Vec>
 template<typename Precision>
 inline BezierSurface<Vec> BezierSurface<Vec>::derivateU()
@@ -122,6 +136,44 @@ inline BezierSurface<Vec> BezierSurface<Vec>::derivateU()
 	return derivateUsurf;
 
 }
+
+
+template<class Vec>
+inline BezierSurface<Vec> BezierSurface<Vec>::transpose()
+{
+	int n = m_ctrlPts.size();
+	int m = m_ctrlPts[0].size();
+
+	BezierSurface trans(m, n);
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			trans.setCtrlPt(i, j, getCtrlPt(j, i));
+		}
+	}
+
+	return trans;
+}
+
+
+
+template<class Vec>
+template<typename Precision>
+inline BezierSurface<Vec> BezierSurface<Vec>::derivateV()
+{
+	BezierSurface<Vec> bezSurfaceTrans = transpose();
+	
+	BezierSurface<Vec> BezierSurfaceDerTrans = bezSurfaceTrans.derivateU<Precision>();
+
+	return BezierSurfaceDerTrans.transpose();
+
+}
+
+
+
+
 
 template<class Vec>
 template<typename Precision>

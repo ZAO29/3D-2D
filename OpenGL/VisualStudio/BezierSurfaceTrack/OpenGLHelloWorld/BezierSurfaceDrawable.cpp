@@ -21,8 +21,10 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 	samples = m_bezierSurface.Sample<float>(nbPtu, nbPtv);
 
 	BezierSurface<glm::vec3> derivateSurf = m_bezierSurface.derivateU<float>();
+	BezierSurface<glm::vec3> derivateSurfV = m_bezierSurface.derivateV<float>();
 
 	std::vector<std::vector<glm::vec3>> derivateSamples = derivateSurf.Sample<float>(nbPtu, nbPtv);
+	std::vector<std::vector<glm::vec3>> derivateSamplesV = derivateSurfV.Sample<float>(nbPtu, nbPtv);
 
 	int nc = samples.size();
 	int nl = samples[0].size();
@@ -38,16 +40,29 @@ void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, in
 		{
 			for (int j = 0; j < nc; j++)
 			{
-				triangleStripSamples.push_back(VertexData(samples[j][i],glm::normalize(derivateSamples[j][i]),1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i+1],glm::normalize(derivateSamples[j][i+1]), 1.0));
+				/*triangleStripSamples.push_back(VertexData(samples[j][i],glm::normalize(derivateSamples[j][i]),1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i+1],glm::normalize(derivateSamples[j][i+1]), 1.0));*/
+				
+				glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
+				glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i+1]));
+				
+				triangleStripSamples.push_back(VertexData(samples[j][i],v, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
 			}
 		}
 		else
 		{
 			for (int j = nc-1; j >= 0; j--)
 			{
-				triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
+				glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
+				glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i + 1]));
+				
+				/*triangleStripSamples.push_back(VertexData(samples[j][i],glm::normalize(derivateSamples[j][i]),1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i+1],glm::normalize(derivateSamples[j][i+1]), 1.0));*/
+				triangleStripSamples.push_back(VertexData(samples[j][i], v, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
+
+
 			}
 		}
 		left2Right = !left2Right;

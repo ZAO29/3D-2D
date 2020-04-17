@@ -155,6 +155,22 @@ bool MyApp::Init()
 	ctrlPtGrid[2][3] = coeff1 * glm::vec3(1., 1., -1.);
 
 
+	/*ctrlPtGrid[0][0] = coeff1 * glm::vec3(-1., -1., -1.);
+	ctrlPtGrid[0][1] = coeff1 * glm::vec3(0., -1., -1);
+	ctrlPtGrid[0][2] = coeff1 * glm::vec3(0, -1., -1);
+	ctrlPtGrid[0][3] = coeff1 * glm::vec3(1., -1., -1.);
+
+	ctrlPtGrid[1][0] = coeff1 * glm::vec3(-1., 0., -0.);
+	ctrlPtGrid[1][1] = coeff1 * glm::vec3(0., 0., 0.);
+	ctrlPtGrid[1][2] = coeff1 * glm::vec3(0., 0., 0.);
+	ctrlPtGrid[1][3] = coeff1 * glm::vec3(1., 0., 0.);
+
+	ctrlPtGrid[2][0] = coeff1 * glm::vec3(-1., 1., -1.);
+	ctrlPtGrid[2][1] = coeff1 * glm::vec3(0., 1., -2.);
+	ctrlPtGrid[2][2] = coeff1 * glm::vec3(0., 1., -2.);
+	ctrlPtGrid[2][3] = coeff1 * glm::vec3(-1., 1., -1.);*/
+
+
 	m_bezierSurface.Init(ctrlPtGrid, 100, 500);
 
 	return true;

@@ -13,9 +13,15 @@ public:
 	BezierCurve(){}
 	~BezierCurve();
 
+	BezierCurve(int n) :m_ctrlPts(n) {}
 
 	void setCtrlPt(std::vector<Vec> ctrlPts) { m_ctrlPts = ctrlPts; }
 	std::vector<Vec> getCtrlPt() { return m_ctrlPts; }
+
+	Vec getCtrlPt(int i) { return m_ctrlPts[i]; }
+	void setCtrlPt(int i, Vec v) { m_ctrlPts[i] = v; }
+
+	unsigned int size() { return m_ctrlPts.size(); }
 
 	template<typename Precision>
 	Vec Eval(Precision t);
@@ -49,9 +55,16 @@ public:
 	BezierSurface(){}
 	~BezierSurface() {}
 
+	BezierSurface(int n, int m);
+
+
 	void setCtrlPt(std::vector<std::vector<Vec> > ctrlPts);
 
 	void setCtrlPt(std::vector<BezierCurve<Vec>> v);
+
+	Vec getCtrlPt(int i, int j) { return m_ctrlPts[i].getCtrlPt(j);}
+
+	void setCtrlPt(int i, int j, Vec v) { m_ctrlPts[i].setCtrlPt(j,v); }
 
 	template<typename Precision>
 	Vec Eval(Precision u, Precision v);
@@ -59,6 +72,11 @@ public:
 	template<typename Precision>
 	BezierSurface<Vec> derivateU();
 
+	template<typename Precision>
+	BezierSurface<Vec> derivateV();
+
+
+	BezierSurface<Vec> transpose();
 
 	template<typename Precision>
 	BezierCurve<Vec> Eval(Precision u);
