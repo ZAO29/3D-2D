@@ -87,7 +87,8 @@ void ZGLApp::Run()
 		clock = std::chrono::system_clock::now();
 		std::chrono::duration<float> elapsed_seconds = clock - m_time;
 		m_time = clock;
-		m_elapsedTime = cos(elapsed_seconds.count());
+		m_elapsedTime = elapsed_seconds.count();
+		m_cumulTime += m_elapsedTime;
 		
 
 		glClearColor(0., 0., 0., 1);

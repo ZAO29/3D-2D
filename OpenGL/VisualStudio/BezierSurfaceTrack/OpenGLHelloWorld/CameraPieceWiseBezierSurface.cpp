@@ -11,7 +11,7 @@ CameraPieceWiseBezierSurface::CameraPieceWiseBezierSurface(GLFWwindow* pwin, Pie
 	m_surfaceDerU(surf.derivateU<float>()),
 	m_surfaceDerV(surf.derivateV<float>())
 {
-	m_speed = 0.001;
+	m_speed = 1.;
 }
 
 CameraPieceWiseBezierSurface::~CameraPieceWiseBezierSurface()

@@ -56,7 +56,8 @@ protected :
 
 	std::chrono::time_point<std::chrono::system_clock> m_time;
 	float m_elapsedTime;
-	
+	float m_cumulTime = 0.0;;
+
 	bool m_bImguiRender = false;
 
 	

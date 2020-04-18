@@ -12,7 +12,7 @@
 #include "Constant.h"
 
 
-#define SHADER_SIZE "usize"
+#define SHADER_SIZE "uTime"
 #define SHADER_MVP "uMVP"
 
 
@@ -226,7 +226,7 @@ void MyApp::OpenGLRender()
 
 	MVP = m_pCam->getProjectionView() * m_pCam->getView();
 
-	m_shader.updateUniform(SHADER_SIZE, (void *)&m_elapsedTime);
+	m_shader.updateUniform(SHADER_SIZE, (void *)&m_cumulTime);
 	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
 	//m_VAOdrawable.Render(GL_TRIANGLES);
 	glLineWidth(1.0f);

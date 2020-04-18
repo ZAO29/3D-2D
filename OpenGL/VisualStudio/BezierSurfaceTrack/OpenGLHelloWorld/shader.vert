@@ -8,12 +8,12 @@ layout (location = 1) in vec3 color;
 layout (location = 2) in float alpha;
 
 
-uniform float usize;
+
 uniform mat4 uMVP;
 
 void main() {
      
-    gl_Position = uMVP * vec4(usize * position, 1.0);
+    gl_Position = uMVP * vec4(position, 1.0);
 	//gl_Position = vec4(usize * position, 1.0);
 	fragColor = vec4(color,alpha);
 }
