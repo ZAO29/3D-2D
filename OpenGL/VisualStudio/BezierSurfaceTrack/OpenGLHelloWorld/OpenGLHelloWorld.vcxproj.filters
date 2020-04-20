@@ -16,6 +16,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{7430bec3-7a37-4fd2-a651-11052954d10c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tinyXML2">
+      <UniqueIdentifier>{c57085d3-48f3-45d0-8f17-e7230b737de0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -48,6 +51,12 @@
     <ClInclude Include="CameraPieceWiseBezierSurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tinyXML\tinyxml2.h">
+      <Filter>tinyXML2</Filter>
+    </ClInclude>
+    <ClInclude Include="PWBezierCurveParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -72,6 +81,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CameraPieceWiseBezierSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyXML\tinyxml2.cpp">
+      <Filter>tinyXML2</Filter>
+    </ClCompile>
+    <ClCompile Include="PWBezierCurveParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

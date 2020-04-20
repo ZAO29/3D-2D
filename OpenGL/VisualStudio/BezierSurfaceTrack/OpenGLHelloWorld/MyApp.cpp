@@ -11,6 +11,8 @@
 
 #include "Constant.h"
 
+#include "PWBezierCurveParser.h"
+
 
 #define SHADER_SIZE "uTime"
 #define SHADER_MVP "uMVP"
@@ -186,12 +188,13 @@ bool MyApp::Init()
 	
 
 	PieceWiseBezierCurve<glm::vec2> track;
-	std::vector<BezierCurve<glm::vec2>> trackCtrPt(2);
+	/*std::vector<BezierCurve<glm::vec2>> trackCtrPt(2);
 	float s = 5.0;
 	trackCtrPt[0].setCtrlPt({ glm::vec2(-s,-s),glm::vec2(-s,0),glm::vec2(-s,0),glm::vec2(0,0) });
 	trackCtrPt[1].setCtrlPt({ glm::vec2(0,0),glm::vec2(s,0),glm::vec2(s,0),glm::vec2(s,s) });
-	track.Init(trackCtrPt);
+	track.Init(trackCtrPt);*/
 
+	track = PWBezierCurveParser::Parse("D:/Documents/inkscape/test.svg", "monza");
 
 	PieceWiseBezierCurve<glm::vec2> section;
 	std::vector<BezierCurve<glm::vec2>> sectionCtrPt(3);
@@ -202,14 +205,18 @@ bool MyApp::Init()
 
 	section.Init(sectionCtrPt);
 
-	std::vector<PieceWiseBezierCurve<glm::vec2>> sections({ section,section,section});
+	std::vector<PieceWiseBezierCurve<glm::vec2>> sections(track.size()+1);
+	for (auto& sec : sections)
+	{
+		sec = section;
+	}
 
 	PieceWiseBezierSurface<glm::vec3> pwbezsurf = InitPWBezSurf(track, sections);
 
 	m_CameraMap[BEZIERCAMERA] = new CameraPieceWiseBezierSurface(m_pWindowEnv->get(),pwbezsurf);
 	m_pCam = m_CameraMap[BEZIERCAMERA];
 
-	m_pwbezSurf.Init(pwbezsurf, 20, 40);
+	m_pwbezSurf.Init(pwbezsurf, 3, 100);
 	return true;
 }
 
