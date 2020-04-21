@@ -2,6 +2,7 @@
 #include <ZGL/ZGLApp.h>
 #include <ZGL/Shaders.h>
 #include <ZGL/ZGLDrawable.h>
+#include <ZGL/FBO.h>
 #include "BezierCurveDrawable.h"
 #include "BezierSurfaceDrawable.h"
 #include "PieceWiseBezierSurfaceDrawable.h"
@@ -37,5 +38,9 @@ protected :
 	BezierSurfaceDrawable m_bezierSurface;
 	PieceWiseBezierSurfaceDrawable m_pwbezSurf;
 	ctrl m_ctrl;
+	FBO m_FBO;
+	Shader m_quadShader;
+	ZGLVAODrawable m_quad;
+
 };
 

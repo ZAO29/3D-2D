@@ -25,7 +25,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-
+#include "Debugging.h"
 
 
 
@@ -52,12 +52,13 @@ void GLAPIENTRY GLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum se
         sType = "PORTABILITY";
         break;
     default:
-        return;
         sType = "OTHER";
         break;
     }
+
     std::cout << "GL_DEBUG "<<sType.c_str()<<" : "<<message<<std::endl;
-	throw std::runtime_error("OPENGL ERROR");
+	if(type == GL_DEBUG_TYPE_ERROR)
+		INTERNALERROR("OPENGL ERROR");
 
 }
 
@@ -173,7 +174,7 @@ void ZGLApp::InitImgui()
 #endif
 	if (err)
 	{
-		throw std::runtime_error("IMGUI : Failed to initialize OpenGL loader!\n");
+		INTERNALERROR("IMGUI : Failed to initialize OpenGL loader!\n");
 		
 	}
 
@@ -221,6 +222,7 @@ void ZGLApp::ImguiDestroy()
 
 bool ZGLApp::Init()
 {
+
 	m_time = std::chrono::system_clock::now();
 
 	m_pWindowEnv = new WindowEnv();

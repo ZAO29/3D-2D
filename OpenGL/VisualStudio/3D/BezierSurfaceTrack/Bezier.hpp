@@ -10,7 +10,7 @@ template<class Vec>
 inline BoundingBox<Vec> BezierCurve<Vec>::getBoundingBox() const
 {
 	if (m_ctrlPts.size() == 0)
-		throw std::runtime_error("impossible to compute bounding box of a void BezierCurve");
+		INTERNALERROR("impossible to compute bounding box of a void BezierCurve");
 	Vec v_min = m_ctrlPts[0], v_max = m_ctrlPts[0];
 	int dim = v_min.length();
 	for (auto& ctrlPt : m_ctrlPts)
@@ -329,7 +329,7 @@ template<class Vec>
 inline BoundingBox<Vec> PieceWiseBezierCurve<Vec>::getBoundingBox() const
 {
 	if (m_list.size() == 0)
-		throw std::runtime_error("bounding box of empty pwbezcurve cannot be computed");
+		INTERNALERROR("bounding box of empty pwbezcurve cannot be computed");
 
 	BoundingBox<Vec> bb = m_list[0].getBoundingBox();
 

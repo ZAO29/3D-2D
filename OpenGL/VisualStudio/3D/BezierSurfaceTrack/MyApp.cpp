@@ -218,11 +218,49 @@ bool MyApp::Init()
 	m_pCam = m_CameraMap[BEZIERCAMERA];
 
 	m_pwbezSurf.Init(pwbezsurf, 3, 100);
+
+
+	//mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
+	//mapUniform[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
+
+
+	std::vector<glm::vec2> quad_vertex_buffer_data = {
+		glm::vec2(0,0),
+		glm::vec2(1,0),
+		glm::vec2(1,1),
+		glm::vec2(0,0),
+		glm::vec2(0,1),
+		glm::vec2(1,1)
+	};
+
+	ZGLVAODrawableParam paramDrawableQuad;
+	paramDrawableQuad.m_stride = sizeof(glm::vec2);
+	paramDrawableQuad.m_nbVertex = quad_vertex_buffer_data.size();
+	paramDrawableQuad.m_pVertices = (void *)&quad_vertex_buffer_data[0];
+	// color
+	ZGLStride strideQuad;
+	strideQuad.m_offset = sizeof(glm::vec2),
+	strideQuad.m_type = GL_FLOAT;
+	strideQuad.m_size = 2;
+
+	paramDrawableQuad.m_strides = { strideQuad };
+
+	m_quad.Init(paramDrawableQuad);
+
+	m_quadShader.Init("quad", false, MapUniform());
+	m_FBO.Init(500, 500, 1);
+
 	return true;
 }
 
 void MyApp::OpenGLRender()
 {
+	m_FBO.BindForWriting();
+	glClearColor(1., 0., 0., 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	FBO::BindToScreen();
+
 	m_pCam->Update(m_elapsedTime);
 	
 	m_shader.Enable();
@@ -241,6 +279,13 @@ void MyApp::OpenGLRender()
 	//m_bezierCurve.draw(GL_LINE_STRIP);
 	//m_bezierSurface.draw(GL_TRIANGLE_STRIP);
 	m_pwbezSurf.Draw(GL_TRIANGLE_STRIP);
+
+	m_FBO.BindForReading(GL_TEXTURE0);
+	glDisable(GL_DEPTH_TEST);
+	m_quadShader.Enable();
+	m_quad.Render(GL_TRIANGLES);
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void MyApp::Destroy()

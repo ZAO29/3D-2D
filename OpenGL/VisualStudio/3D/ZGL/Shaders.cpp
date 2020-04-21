@@ -20,6 +20,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/gl.h>
+#include "Debugging.h"
 
 
 
@@ -58,29 +59,28 @@ bool Shader::Init(std::string name, bool  bgeometry, MapUniform uniforms)
    m_shaderProg = glCreateProgram(); 
    
    if (m_shaderProg == 0) {
-        fprintf(stderr, "Error creating shader program\n");
-        return false;
+	   INTERNALERROR(" error creating shader");
     }
  
     if (!LoadShader(std::string(name+"."+VERTEX_SHADER_EXT).c_str())) {
-        return false;
+		INTERNALERROR(" error creating vertex shader");
     }
 
     if (bgeometry)
     {
-        if(!LoadShader(std::string(name+"."+GEOM_SHADER_EXT).c_str()))
-            return false;
+		if(!LoadShader(std::string(name + "." + GEOM_SHADER_EXT).c_str()))
+			INTERNALERROR(" error creating geometry shader");
     }
    
     if (!LoadShader(std::string(name+"."+FRAG_SHADER_EXT).c_str())) {
-        return false;
+		INTERNALERROR(" error creating fragment shader");
     }
     
     
         
     
     if (!Finalize()) {
-        return false;
+		INTERNALERROR(" error finalize shader");
     }
    
 
@@ -97,7 +97,7 @@ bool Shader::LoadShader(const char * shader_file_path)
     if(m_shaderProg == 0)
     {
         std::cout<<"Shader Program not initialized"<<shader_file_path<<std::endl;
-        return false;
+		INTERNALERROR("Shader program not initialized");
     }
     
     std::string file(shader_file_path);
@@ -140,7 +140,7 @@ bool Shader::LoadShader(const char * shader_file_path)
     } else
     {
         fprintf(stdout, "ERROR shader : impossible to open %s\n", shader_file_path);
-        return false;
+		INTERNALERROR("impossible to open file");
     }
  
     
@@ -162,7 +162,7 @@ bool Shader::LoadShader(const char * shader_file_path)
     {
 		glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &ShaderErrorMessage[0]);
         fprintf(stdout, "%s\n", &ShaderErrorMessage[0]); 
-        return false;
+		INTERNALERROR(" shader error message");
     }
     
     // Lit le programme
@@ -184,7 +184,7 @@ bool Shader::Finalize()
 	if (Success == 0) {
 		glGetProgramInfoLog(m_shaderProg, sizeof(ErrorLog), NULL, ErrorLog);
 		fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-        return false;
+		INTERNALERROR("linking shader");
 	}
 
     glValidateProgram(m_shaderProg);
@@ -192,7 +192,7 @@ bool Shader::Finalize()
     if (!Success) {
         glGetProgramInfoLog(m_shaderProg, sizeof(ErrorLog), NULL, ErrorLog);
         fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-        return false;
+        INTERNALERROR("invalid error prgm")
     }
 
     // Delete the intermediate shader objects that have been added to the program
@@ -212,8 +212,7 @@ bool Shader::SetUniformID(unsigned int& ID,std::string shader_var)
     if(ID == 0xFFFFFFFF)
     {
         std::cout<<__FUNCTION__<< " Invalid location for "<<shader_var<<std::endl;
-		throw std::runtime_error("error setting uniform ID");
-		return false;
+		INTERNALERROR("error setting uniform ID");
     }
     
     return true;
@@ -238,7 +237,7 @@ void Shader::updateUniform(std::string name, const void * pdata)
 	}
 	else
 	{
-		throw std::runtime_error(" impossible to update uniform with this name, not present in the map");
+		INTERNALERROR(" impossible to update uniform with this name, not present in the map");
 	}
 }
 
@@ -254,7 +253,7 @@ void UniformVar::update(const void * pdata)
 	switch (m_type)
 	{
 		case eZGLtypeUniform::ZGL_UNDEFINED:
-			throw std::runtime_error("undefined type of uniform variable");
+			INTERNALERROR("undefined type of uniform variable");
 			break;
 
 		case  eZGLtypeUniform::ZGL_FVEC1:
@@ -268,6 +267,6 @@ void UniformVar::update(const void * pdata)
 			break;
 		
 		default :
-			throw std::runtime_error("unhandle type of uniform variable");
+			INTERNALERROR("unhandle type of uniform variable");
 	}
 }

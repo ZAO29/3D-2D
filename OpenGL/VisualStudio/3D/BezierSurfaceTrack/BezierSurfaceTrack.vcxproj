@@ -189,7 +189,7 @@
     <ClCompile Include="BezierSurfaceDrawable.cpp" />
     <ClCompile Include="CameraPieceWiseBezierSurface.cpp" />
     <ClCompile Include="MyApp.cpp" />
-    <ClCompile Include="OpenGLHelloWorld.cpp" />
+    <ClCompile Include="BezierSurfaceTrackMain.cpp" />
     <ClCompile Include="PieceWiseBezierSurfaceDrawable.cpp" />
     <ClCompile Include="PWBezierCurveParser.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -201,6 +201,8 @@
     <ClCompile Include="tinyXML\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="quad.frag" />
+    <None Include="quad.vert" />
     <None Include="shader.frag" />
     <None Include="shader.geom" />
     <None Include="shader.vert" />

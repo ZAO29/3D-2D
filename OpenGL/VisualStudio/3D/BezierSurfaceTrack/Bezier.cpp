@@ -28,7 +28,7 @@ PieceWiseBezierSurface<glm::vec3> InitPWBezSurf(PieceWiseBezierCurve<glm::vec2> 
 	int n = track.size();
 	int m = sections[0].size();
 	if ((sections.size()-1) != n)
-		throw std::runtime_error("invalid data");
+		INTERNALERROR("invalid data");
 
 	glm::vec3 z(0., 0., 1.);
 
@@ -36,14 +36,14 @@ PieceWiseBezierSurface<glm::vec3> InitPWBezSurf(PieceWiseBezierCurve<glm::vec2> 
 	{
 		if (section.size() != m)
 		{
-			throw std::runtime_error("invalid data");
+			INTERNALERROR("invalid data");
 		}
 
 		for (int i = 0; i < m; i++)
 		{
 			BezierCurve<glm::vec2> sectionC = section.getPiece(i);
 			if (sectionC.size() != 4)
-				throw std::runtime_error("invalid data size different of 4");
+				INTERNALERROR("invalid data size different of 4");
 		}
 	}
 

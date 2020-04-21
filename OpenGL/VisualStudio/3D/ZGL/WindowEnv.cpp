@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include "ZGLApp.h"
 #include "Listener.h"
+#include "Debugging.h"
 
 
 void error_callback(int error, const char* description)
@@ -55,7 +56,7 @@ void WindowEnv::init(int32_t width, int32_t height, void * pApp)
 		std::cout << __FUNCTION__ << " window alreadey created " << std::endl;
 		glfwTerminate();
 
-		throw std::runtime_error("failed to create window");
+		INTERNALERROR("failed to create window");
 	}
 
 
@@ -87,7 +88,7 @@ void WindowEnv::init(int32_t width, int32_t height, void * pApp)
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 
-		throw std::runtime_error("failed to create window");
+		INTERNALERROR("failed to create window");
 	}
 
 	glfwMakeContextCurrent(m_pwindow);
@@ -125,7 +126,7 @@ void WindowEnv::initGlew()
 	if (GLEW_OK != glewInit())
 	{
 		std::cout << "Failed to initialize GLEW" << std::endl;
-		throw std::runtime_error("Failed to initialize GLEW");
+		INTERNALERROR("Failed to initialize GLEW");
 	}
 
 	// Define the viewport dimensions

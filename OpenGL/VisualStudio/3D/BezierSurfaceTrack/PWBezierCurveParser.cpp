@@ -51,18 +51,18 @@ std::vector<glm::vec2> PWBezierCurveParser::ParseCtrlPt(std::string filename, st
 	XMLDocument doc;
 	XMLError status = doc.LoadFile(filename.c_str());
 	if (status != XML_SUCCESS)
-		throw std::runtime_error("FAIL");
+		INTERNALERROR("FAIL");
 
 
 	tinyxml2::XMLElement* root = doc.FirstChildElement("svg");
 	if (root == nullptr)
 	{
-		throw std::runtime_error("fail");
+		INTERNALERROR("fail");
 	}
 	tinyxml2::XMLElement* gv = root->FirstChildElement("g");
 	if (gv == nullptr)
 	{
-		throw std::runtime_error("fail");
+		INTERNALERROR("fail");
 	}
 	tinyxml2::XMLElement* pathList = gv->FirstChildElement("path");
 
@@ -81,7 +81,7 @@ std::vector<glm::vec2> PWBezierCurveParser::ParseCtrlPt(std::string filename, st
 	}
 
 	if (!find)
-		throw std::runtime_error("not found");
+		INTERNALERROR("not found");
 
 	std::string bezierCurveDescription(pathList->Attribute("d"));
 
@@ -100,7 +100,7 @@ std::vector<glm::vec2> PWBezierCurveParser::ParseCtrlPt(std::string filename, st
 			idFound = i;
 			if (alreadyFound)
 			{
-				throw std::runtime_error("multiple delimitor found ");
+				INTERNALERROR("multiple delimitor found ");
 			}
 
 			findDelimiters[i] = true;
@@ -111,7 +111,7 @@ std::vector<glm::vec2> PWBezierCurveParser::ParseCtrlPt(std::string filename, st
 
 	if (!alreadyFound)
 	{
-		throw std::runtime_error(" C/C delimitor not found");
+		INTERNALERROR(" C/C delimitor not found");
 	}
 
 	bool isAbsolute = (idFound == 0);
@@ -127,7 +127,7 @@ std::vector<glm::vec2> PWBezierCurveParser::ParseCtrlPt(std::string filename, st
 		f = tokenLeft.find("m");
 		if (f == std::string::npos)
 		{
-			throw std::runtime_error("impossible to find M or m");
+			INTERNALERROR("impossible to find M or m");
 		}
 	}
 	tokenLeft = tokenLeft.substr(f + 1, tokenLeft.size());

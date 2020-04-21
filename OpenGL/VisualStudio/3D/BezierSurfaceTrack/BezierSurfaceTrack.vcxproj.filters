@@ -11,9 +11,6 @@
     <ClCompile Include="PieceWiseBezierSurfaceDrawable.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="OpenGLHelloWorld.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="MyApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -29,6 +26,7 @@
     <ClCompile Include="Bezier.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="BezierSurfaceTrackMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -72,6 +70,12 @@
       <Filter>shader</Filter>
     </None>
     <None Include="shader.vert">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="quad.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="quad.vert">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
