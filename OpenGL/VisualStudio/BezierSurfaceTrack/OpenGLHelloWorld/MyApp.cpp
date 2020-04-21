@@ -193,8 +193,9 @@ bool MyApp::Init()
 	trackCtrPt[0].setCtrlPt({ glm::vec2(-s,-s),glm::vec2(-s,0),glm::vec2(-s,0),glm::vec2(0,0) });
 	trackCtrPt[1].setCtrlPt({ glm::vec2(0,0),glm::vec2(s,0),glm::vec2(s,0),glm::vec2(s,s) });
 	track.Init(trackCtrPt);*/
-
-	track = PWBezierCurveParser::Parse("D:/Documents/inkscape/test.svg", "monza");
+	std::string path = "path839";
+	//std::string path = "curvelong";
+	track = PWBezierCurveParser::Parse("D:/Documents/inkscape/test.svg", path);
 
 	PieceWiseBezierCurve<glm::vec2> section;
 	std::vector<BezierCurve<glm::vec2>> sectionCtrPt(3);
@@ -255,7 +256,6 @@ void MyApp::ImguiDraw()
 	static int counter = 0;
 
 	ImGui::Begin("MyAPP",nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);                          // Create a window called "Hello, world!" and append into it.
-
 	ImGui::Text("This is some useful text.");
 
 	const char * items[] = { "TRACKBALL","FREE","BEZIER" };
@@ -270,13 +270,7 @@ void MyApp::ImguiDraw()
 		}
 
 	}
-	ImGui::LabelText(" position "," %f,%f,%f",
-		m_pCam->getEyePos().x,
-		m_pCam->getEyePos().y,
-		m_pCam->getEyePos().z);
-	ImGui::LabelText(" direction "," %f,%f,%f",
-		m_pCam->getDirection().x,
-		m_pCam->getDirection().y,
-		m_pCam->getDirection().z);
+	m_pCam->ImguiDraw();
+	
 	ImGui::End();
 }

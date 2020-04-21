@@ -29,6 +29,7 @@
 #include <gtx/rotate_vector.hpp>
 
 #include "Listener.h"
+#include "imgui.h"
 
 
 
@@ -203,11 +204,11 @@ void Camera::Update(float elapsedTime)
 		}
 		if (Listener::sgetKeyState(GLFW_KEY_F))
 		{
-			m_eye *= 1.1;
+			m_speed *= 1.01;
 		}
 		if (Listener::sgetKeyState(GLFW_KEY_G))
 		{
-			m_eye /= 1.1;
+			m_speed /= 1.01;
 		}
 
 		bool buttonPressed = Listener::sgetMouseButtonState(GLFW_MOUSE_BUTTON_LEFT) ||
@@ -239,6 +240,21 @@ void Camera::Update(float elapsedTime)
 		m_mousePos.x = xpos;
 		m_mousePos.y = ypos;
 	
+}
+
+void Camera::ImguiDraw()
+{
+
+	ImGui::LabelText(" position ", " %f,%f,%f",
+		getEyePos().x,
+		getEyePos().y,
+		getEyePos().z);
+	ImGui::LabelText(" direction ", " %f,%f,%f",
+		getDirection().x,
+		getDirection().y,
+		getDirection().z);
+	ImGui::LabelText("speed ", " %f", m_speed);
+
 }
 
 /*

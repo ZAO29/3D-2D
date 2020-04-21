@@ -66,7 +66,7 @@ std::vector<glm::vec2> PWBezierCurveParser::ParseCtrlPt(std::string filename, st
 	}
 	tinyxml2::XMLElement* pathList = gv->FirstChildElement("path");
 
-	std::string pathId("piece3");
+	std::string pathId(path);
 	bool  find = false;
 	while (pathList != nullptr && !find)
 	{
@@ -141,7 +141,7 @@ std::vector<glm::vec2> PWBezierCurveParser::ParseCtrlPt(std::string filename, st
 
 		glm::vec2 v = getCtrlPt(tokenRight);
 		if (!isAbsolute)
-			v += listCtrlPt[0];
+			v += listCtrlPt[listCtrlPt.size()-1];
 
 		listCtrlPt.push_back(v);
 	}

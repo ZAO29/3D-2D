@@ -102,6 +102,8 @@ public:
     }
     
 	virtual void Update(float elapsedTime);
+
+	void ImguiDraw();
     
 	
 
