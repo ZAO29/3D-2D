@@ -1,7 +1,7 @@
 #pragma once
 #include "glm.hpp"
 #include "Bezier.h"
-#include "ZGLDrawable.h"
+#include "ZGL/ZGLDrawable.h"
 
 class BezierCurveDrawable
 {

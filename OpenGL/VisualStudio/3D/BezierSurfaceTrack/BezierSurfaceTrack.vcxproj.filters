@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="tinyXML\tinyxml2.cpp">
+      <Filter>tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="PWBezierCurveParser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="PieceWiseBezierSurfaceDrawable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLHelloWorld.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="MyApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraPieceWiseBezierSurface.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="BezierCurveDrawable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="BezierSurfaceDrawable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Bezier.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="tinyXML\tinyxml2.h">
+      <Filter>tinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="Bezier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierCurveDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierSurfaceDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPieceWiseBezierSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PieceWiseBezierSurfaceDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PWBezierCurveParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bezier.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader.geom">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader.vert">
+      <Filter>shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="tinyXML">
+      <UniqueIdentifier>{3bb754cd-fe85-45ee-b796-3e1f16b3c900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{d2c70e5d-b9a5-485f-924e-a86003751c23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{c49c271c-c6fc-4651-934e-f453845aa253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{487fd557-deaa-4b4f-aa36-be1b94cf613c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,7 +1,7 @@
 #pragma once
-#include "ZGLApp.h"
-#include "Shaders.h"
-#include "ZGLDrawable.h"
+#include <ZGL/ZGLApp.h>
+#include <ZGL/Shaders.h>
+#include <ZGL/ZGLDrawable.h>
 #include "BezierCurveDrawable.h"
 #include "BezierSurfaceDrawable.h"
 #include "PieceWiseBezierSurfaceDrawable.h"

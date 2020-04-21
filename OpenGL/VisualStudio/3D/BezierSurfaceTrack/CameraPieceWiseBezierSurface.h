@@ -1,5 +1,5 @@
 #pragma once
-#include "Camera.h"
+#include <ZGL/Camera.h>
 #include "Bezier.h"
 
 class CameraPieceWiseBezierSurface : public Camera

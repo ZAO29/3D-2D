@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "MyApp.h"
 
-#include "CameraFree.h"
-#include "CameraTrackBall.h"
+#include <ZGL/CameraFree.h>
+#include <ZGL/CameraTrackBall.h>
 #include "CameraPieceWiseBezierSurface.h"
 
-#include "imgui.h"
+#include <ZGL/imgui/imgui.h>
 
 #include <gtc/type_ptr.hpp>
 
