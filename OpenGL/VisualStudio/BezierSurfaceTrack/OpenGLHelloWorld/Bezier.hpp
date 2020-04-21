@@ -7,6 +7,27 @@ BezierCurve<Vec>::~BezierCurve()
 
 
 template<class Vec>
+inline BoundingBox<Vec> BezierCurve<Vec>::getBoundingBox() const
+{
+	if (m_ctrlPts.size() == 0)
+		throw std::runtime_error("impossible to compute bounding box of a void BezierCurve");
+	Vec v_min = m_ctrlPts[0], v_max = m_ctrlPts[0];
+	int dim = v_min.length();
+	for (auto& ctrlPt : m_ctrlPts)
+	{
+		for (int i = 0; i < dim; i++)
+		{
+			if (v_min[i] > ctrlPt[i])
+				v_min[i] = ctrlPt[i];
+			if (v_max[i] < ctrlPt[i])
+				v_max[i] = ctrlPt[i];
+		}
+	}
+
+	return BoundingBox<Vec>(v_min, v_max);
+}
+
+template<class Vec>
 template<typename Precision>
 inline BezierCurve<Vec> BezierCurve<Vec>::Derivate()
 {
@@ -302,6 +323,22 @@ PieceWiseBezierSurface<Vec>::PieceWiseBezierSurface(int n, int m):m_grid(n)
 	{
 		v.resize(m);
 	}
+}
+
+template<class Vec>
+inline BoundingBox<Vec> PieceWiseBezierCurve<Vec>::getBoundingBox() const
+{
+	if (m_list.size() == 0)
+		throw std::runtime_error("bounding box of empty pwbezcurve cannot be computed");
+
+	BoundingBox<Vec> bb = m_list[0].getBoundingBox();
+
+	for (auto& bezcurve : m_list)
+	{
+		bb.Union(bezcurve.getBoundingBox());
+	}
+
+	return bb;
 }
 
 

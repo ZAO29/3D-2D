@@ -173,6 +173,7 @@
     <ClInclude Include="..\OpenGLHelloWorld\WindowEnv.h" />
     <ClInclude Include="..\OpenGLHelloWorld\ZGLApp.h" />
     <ClInclude Include="..\OpenGLHelloWorld\ZGLDrawable.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

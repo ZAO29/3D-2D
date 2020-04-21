@@ -254,11 +254,11 @@ void MyApp::ImguiDraw()
 	static float f = 0.0f;
 	static int counter = 0;
 
-	ImGui::Begin("MyAPP");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::Begin("MyAPP",nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);                          // Create a window called "Hello, world!" and append into it.
 
 	ImGui::Text("This is some useful text.");
 
-	const char * items[] = { "TRACKBALL","FREE" };
+	const char * items[] = { "TRACKBALL","FREE","BEZIER" };
 	if (ImGui::Combo(" CAMERA ", &m_ctrl.m_selectedCam, items, IM_ARRAYSIZE(items)))
 	{
 		if (m_CameraMap[static_cast<eCameraType>(m_ctrl.m_selectedCam)] != nullptr)
@@ -270,5 +270,13 @@ void MyApp::ImguiDraw()
 		}
 
 	}
+	ImGui::LabelText(" position "," %f,%f,%f",
+		m_pCam->getEyePos().x,
+		m_pCam->getEyePos().y,
+		m_pCam->getEyePos().z);
+	ImGui::LabelText(" direction "," %f,%f,%f",
+		m_pCam->getDirection().x,
+		m_pCam->getDirection().y,
+		m_pCam->getDirection().z);
 	ImGui::End();
 }

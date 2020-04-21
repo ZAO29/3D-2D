@@ -35,6 +35,11 @@ PieceWiseBezierCurve<glm::vec2> PWBezierCurveParser::Parse(std::string filename,
 	PieceWiseBezierCurve<glm::vec2> PWBezCurve;
 	PWBezCurve.Init(listBezCurve);
 
+	auto bb = PWBezCurve.getBoundingBox();
+
+	auto center = bb.getCenter<float>();
+
+	PWBezCurve.Translate(-center);
 	return PWBezCurve;
 
 }

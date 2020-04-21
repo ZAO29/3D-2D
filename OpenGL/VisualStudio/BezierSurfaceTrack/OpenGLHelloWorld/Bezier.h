@@ -2,7 +2,7 @@
 
 #include "Constant.h"
 #include "glm.hpp"
-
+#include <ZGL/BoundingBox.h>
 
 
 #include <vector>
@@ -28,6 +28,20 @@ public:
 
 	template<typename Precision>
 	std::vector<Vec> Sample(int nbPt);
+
+
+
+	BoundingBox<Vec> getBoundingBox() const;
+
+	void Translate(Vec const & t)
+	{
+		for (auto& v : m_ctrlPts)
+			{
+				v += t;
+			}
+	}
+
+
 
 	template<typename Precision>
 	BezierCurve<Vec> Derivate();
@@ -137,8 +151,9 @@ public:
 
 	unsigned int getN() { return m_list.size(); }
 
-
-
+	BoundingBox<Vec> getBoundingBox() const;
+	
+	void Translate(Vec const &v) { for (auto& bezcurve : m_list) { bezcurve.Translate(v); } }
 
 
 private:
@@ -151,3 +166,7 @@ private:
 #include "Bezier.hpp"
 
 PieceWiseBezierSurface<glm::vec3> InitPWBezSurf(PieceWiseBezierCurve<glm::vec2> track, std::vector<PieceWiseBezierCurve<glm::vec2>> sections);
+
+
+
+
