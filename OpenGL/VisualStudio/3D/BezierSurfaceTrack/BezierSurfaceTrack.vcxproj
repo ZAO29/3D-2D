@@ -212,6 +212,8 @@
     <None Include="shader.frag" />
     <None Include="shader.geom" />
     <None Include="shader.vert" />
+    <None Include="shape.frag" />
+    <None Include="shape.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -29,7 +29,7 @@ void PieceWiseBezierSurfaceDrawable::Init(PieceWiseBezierSurface<glm::vec3> pwbe
 	{
 		for (int j = 0; j < m; j++)
 		{
-			m_drawablesGrid[i][j].Init(m_pwbezSurf.getBezSurface(i, j), nbPtu, nbPtv);
+			m_drawablesGrid[i][j].Init(m_pwbezSurf.getBezSurface(i, j), nbPtu, nbPtv,glm::ivec2(i,j));
 		}
 	}
 }

@@ -54,7 +54,12 @@ bool MyApp::Init()
 	mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	mapUniform[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
 
-	m_shader.Init("shader", true, mapUniform);
+	m_shader[0].Init("shader", true, mapUniform);
+	MapUniform mapUniform1;
+
+	mapUniform1[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
+	mapUniform1[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
+	m_shader[1].Init("shape", false, mapUniform1);
 
 	float a = 1.0f;
 
@@ -67,19 +72,19 @@ bool MyApp::Init()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	std::vector<VertexData> verticesInit =
 	{
-		VertexData(glm::vec3(a, a, a),glm::vec3(1.0, 0.0,0.0), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, a), glm::vec3(1.0, 0.0, 0.0), 1.0),// Right
-		VertexData(glm::vec3(a, -a, a), glm::vec3(1.0, 0.0, 0.0), 0.5),// Top
-		VertexData(glm::vec3(a, a, a),glm::vec3(0.0, 1.0,0.0), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, a), glm::vec3(0.0, 1.0, 0.0), 1.0),// Right
-		VertexData(glm::vec3(-a, a, a), glm::vec3(0.0, 1.0, 0.0), 0.5),// Top
+		VertexData(glm::vec3(a, a, a),glm::vec3(1.0, 0.0,0.0),glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, a), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.), 1.0),// Right
+		VertexData(glm::vec3(a, -a, a), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.), 0.5),// Top
+		VertexData(glm::vec3(a, a, a),glm::vec3(0.0, 1.0,0.0), glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, a), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.), 1.0),// Right
+		VertexData(glm::vec3(-a, a, a), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.), 0.5),// Top
 
-		VertexData(glm::vec3(a, a, -a),glm::vec3(0.0, 0.0,1.0), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, -a), glm::vec3(0.0, 0.0, 1.0), 1.0),// Right
-		VertexData(glm::vec3(a, -a, -a), glm::vec3(0.0, 0.0, 1.0), 0.5),// Top
-		VertexData(glm::vec3(a, a, -a),glm::vec3(1.0, 1.0,1.0), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, -a), glm::vec3(1.0, 1.0, 1.0), 1.0),// Right
-		VertexData(glm::vec3(-a, a, -a), glm::vec3(1.0, 1.0, 1.0), 0.5)// Top
+		VertexData(glm::vec3(a, a, -a),glm::vec3(0.0, 0.0,1.0), glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, -a), glm::vec3(0.0, 0.0, 1.0), glm::vec2(0.),1.0),// Right
+		VertexData(glm::vec3(a, -a, -a), glm::vec3(0.0, 0.0, 1.0), glm::vec2(0.), 0.5),// Top
+		VertexData(glm::vec3(a, a, -a),glm::vec3(1.0, 1.0,1.0), glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, -a), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.), 1.0),// Right
+		VertexData(glm::vec3(-a, a, -a), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.), 0.5)// Top
 
 	};
 
@@ -297,7 +302,7 @@ void MyApp::OpenGLRender()
 	glEnable(GL_DEPTH_TEST);
 	m_pCam->Update(m_elapsedTime);
 	
-	m_shader.Enable();
+	m_shader[m_idShader].Enable();
 
 
 
@@ -306,8 +311,8 @@ void MyApp::OpenGLRender()
 
 	MVP = m_pCam->getProjectionView() * m_pCam->getView();
 
-	m_shader.updateUniform(SHADER_SIZE, (void *)&m_cumulTime);
-	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
+	m_shader[m_idShader].updateUniform(SHADER_SIZE, (void *)&m_cumulTime);
+	m_shader[m_idShader].updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
 	//m_VAOdrawable.Render(GL_TRIANGLES);
 	glLineWidth(1.0f);
 	//m_bezierCurve.draw(GL_LINE_STRIP);
@@ -322,12 +327,12 @@ void MyApp::OpenGLRender()
 	bUseTex = 1;
 	m_quadShader.updateUniform(SHADER_OFFSET_SCALE, (void *)&m_offsetScale);
 	m_quadShader.updateUniform(SHADER_USETEX, (void *)&bUseTex);
-	m_quad.Render(GL_TRIANGLES);
+	//m_quad.Render(GL_TRIANGLES);
 
 	bUseTex = 0;
 	m_quadShader.updateUniform(SHADER_OFFSET_SCALE, (void *)&m_offsetScaleCurve);
 	m_quadShader.updateUniform(SHADER_USETEX, (void *)&bUseTex);
-	m_trackDrawable.draw(GL_LINE_STRIP);
+	//m_trackDrawable.draw(GL_LINE_STRIP);
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -364,6 +369,8 @@ void MyApp::ImguiDraw()
 	
 	ImGui::SliderFloat4("offsetSCale", &m_offsetScale[0], 0.1f, 10.0f);
 	ImGui::SliderFloat4("offsetSCaleCurve", &m_offsetScaleCurve[0], 0.1f, 10.0f);
+
+	ImGui::Checkbox(" id shader", &m_idShader);
 
 	ImGui::End();
 }

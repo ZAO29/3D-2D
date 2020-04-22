@@ -13,17 +13,17 @@ BezierSurfaceDrawable::~BezierSurfaceDrawable()
 {
 }
 
-void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, int nbPtu, int nbPtv)
+void BezierSurfaceDrawable::Init(std::vector<std::vector<glm::vec3>> ctrlPts, int nbPtu, int nbPtv, glm::ivec2 offsetuv)
 {
 	BezierSurface<glm::vec3> bezierSurface;
 	bezierSurface.setCtrlPt(ctrlPts);
 
-	Init(bezierSurface, nbPtu, nbPtv);
+	Init(bezierSurface, nbPtu, nbPtv, offsetuv);
 
 
 }
 
-void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbPtu, int nbPtv)
+void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbPtu, int nbPtv, glm::ivec2 offsetuv)
 {
 	m_bezierSurface = bezierSurface;
 
@@ -57,8 +57,11 @@ void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbP
 				glm::vec3 v = glm::normalize(glm::cross(derivateSamples[j][i], derivateSamplesV[j][i]));
 				glm::vec3 v1 = glm::normalize(glm::cross(derivateSamples[j][i+1], derivateSamplesV[j][i+1]));
 
-				triangleStripSamples.push_back(VertexData(samples[j][i],v, 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
+				glm::vec2 uv = glm::vec2(offsetuv) + glm::vec2(float(i) / float(nl), float(j) / float(nc));
+				glm::vec2 uv1 = glm::vec2(offsetuv) + glm::vec2(float(i+1) / float(nl), float(j) / float(nc));
+
+				triangleStripSamples.push_back(VertexData(samples[j][i],v,uv, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1,uv1, 1.0));
 			}
 		}
 		else
@@ -70,8 +73,12 @@ void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbP
 
 				//triangleStripSamples.push_back(VertexData(samples[j][i], glm::normalize(derivateSamples[j][i]), 1.0));
 				//triangleStripSamples.push_back(VertexData(samples[j][i + 1], glm::normalize(derivateSamples[j][i + 1]), 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i], v, 1.0));
-				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, 1.0));
+				
+				glm::vec2 uv = glm::vec2(offsetuv) + glm::vec2(float(i) / float(nl), float(j) / float(nc));
+				glm::vec2 uv1 = glm::vec2(offsetuv) + glm::vec2(float(i + 1) / float(nl), float(j) / float(nc));
+
+				triangleStripSamples.push_back(VertexData(samples[j][i], v,uv, 1.0));
+				triangleStripSamples.push_back(VertexData(samples[j][i + 1], v1, uv1, 1.0));
 
 
 			}
@@ -113,6 +120,12 @@ void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbP
 		stride2.m_type = GL_FLOAT;
 	stride2.m_size = 3;
 
+	///uv
+	ZGLStride stride25;
+	stride25.m_offset = sizeof(glm::vec2),
+	stride25.m_type = GL_FLOAT;
+	stride25.m_size = 2;
+
 	//alpha
 	ZGLStride stride3;
 	stride3.m_offset = sizeof(float),
@@ -126,7 +139,7 @@ void BezierSurfaceDrawable::Init(BezierSurface<glm::vec3> bezierSurface, int nbP
 	paramDrawable.m_stride = sizeof(VertexData);
 	paramDrawable.m_nbVertex = vertices.size();
 	paramDrawable.m_pVertices = (void *)&vertices[0];
-	paramDrawable.m_strides = { stride1, stride2, stride3 };
+	paramDrawable.m_strides = { stride1, stride2,stride25, stride3 };
 
 	m_drawable.Init(paramDrawable);
 }

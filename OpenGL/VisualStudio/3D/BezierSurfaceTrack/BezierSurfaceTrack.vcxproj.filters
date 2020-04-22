@@ -78,6 +78,12 @@
     <None Include="quad.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="shape.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shape.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="tinyXML">

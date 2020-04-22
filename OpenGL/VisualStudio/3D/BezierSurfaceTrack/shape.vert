@@ -12,6 +12,9 @@ layout (location = 3) in float alpha;
 
 uniform mat4 uMVP;
 
+
+
+
 void main() {
      
     gl_Position = uMVP * vec4(position, 1.0);

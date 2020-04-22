@@ -11,7 +11,7 @@ CameraPieceWiseBezierSurface::CameraPieceWiseBezierSurface(GLFWwindow* pwin, Pie
 	m_surfaceDerU(surf.derivateU<float>()),
 	m_surfaceDerV(surf.derivateV<float>())
 {
-	m_speed = 1.;
+	m_speed = 0.1;
 }
 
 CameraPieceWiseBezierSurface::~CameraPieceWiseBezierSurface()
@@ -31,6 +31,20 @@ void CameraPieceWiseBezierSurface::Update(float elapsedTime)
 	{
 		m_parameter.y -= elapsedTime * m_speed;
 	}
+
+
+	if (Listener::sgetKeyState(GLFW_KEY_F))
+	{
+		m_speed *= 1.01;
+
+
+	}
+
+	if (Listener::sgetKeyState(GLFW_KEY_G))
+	{
+		m_speed /= 1.01;
+	}
+
 
 
 	if (Listener::sgetKeyState(GLFW_KEY_LEFT))
