@@ -1,22 +1,49 @@
 #pragma once
-#include "glm.hpp"
 #include "Bezier.h"
 #include "ZGL/ZGLDrawable.h"
 
+template<typename Vec>
 class BezierCurveDrawable
 {
 public:
 	BezierCurveDrawable() {};
 	~BezierCurveDrawable();
-	void Init(std::vector<glm::vec3> ctrlPts, int nbPt);
+	template <typename Precision>
+	void Init(std::vector<Vec> ctrlPts, int nbPt);
+
+
+	BoundingBox<Vec> getBoundingBox() { return m_bezierCurve.getBoundingBox(); }
 
 	void draw(int method);
 
 
 private :
-	BezierCurve<glm::vec3> m_bezierCurve;
-	unsigned int m_nbPt;
+	BezierCurve<Vec> m_bezierCurve;
 	ZGLVAODrawable m_drawable;
 
 };
 
+
+
+
+template<typename Vec>
+class PieceWiseBezierCurveDrawable
+{
+public:
+	PieceWiseBezierCurveDrawable() {};
+	~PieceWiseBezierCurveDrawable() {};
+	template <typename Precision>
+	void Init(std::vector<BezierCurve<Vec>> list, int nbPt);
+
+	void draw(int method);
+
+	template<typename Precision>
+	BoundingBox<Vec> getBoundingBox();
+
+
+private:
+	std::vector<BezierCurveDrawable<Vec>> m_bezCurveDrawables;
+
+};
+
+#include "BezierCurveDrawable.hpp"

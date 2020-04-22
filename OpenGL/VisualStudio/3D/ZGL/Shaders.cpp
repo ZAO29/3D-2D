@@ -250,15 +250,24 @@ void Shader::Enable()
 void UniformVar::update(const void * pdata)
 {
 	const GLfloat * pdataf;
+	const GLint * pdatai;
 	switch (m_type)
 	{
 		case eZGLtypeUniform::ZGL_UNDEFINED:
 			INTERNALERROR("undefined type of uniform variable");
 			break;
 
+		case eZGLtypeUniform::ZGL_IVEC1:
+			pdatai = reinterpret_cast<const GLint*>(pdata);
+			glUniform1iv(m_ID, 1, pdatai);
+			break;
 		case  eZGLtypeUniform::ZGL_FVEC1:
 			pdataf = reinterpret_cast<const GLfloat*>(pdata);
 			glUniform1fv(m_ID, 1, pdataf);
+			break;
+		case  eZGLtypeUniform::ZGL_FVEC4:
+			pdataf = reinterpret_cast<const GLfloat*>(pdata);
+			glUniform4fv(m_ID, 1, pdataf);
 			break;
 
 		case eZGLtypeUniform::ZGL_FMAT4 :

@@ -26,9 +26,11 @@
 enum eZGLtypeUniform
 {
 	ZGL_UNDEFINED,
+	ZGL_IVEC1,
 	ZGL_FVEC1,
 	ZGL_FVEC2,
 	ZGL_FVEC3,
+	ZGL_FVEC4,
 	ZGL_FMAT4,
 };
 

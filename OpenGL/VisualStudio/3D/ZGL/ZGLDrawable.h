@@ -16,7 +16,7 @@
 
 
 #include <vector>
-
+#include "Debugging.h"
 
 
 
@@ -42,7 +42,7 @@ struct ZGLVAODrawableParam
 class ZGLVAODrawable {
 public:
     ZGLVAODrawable();
-    ZGLVAODrawable(const ZGLVAODrawable& orig);
+	ZGLVAODrawable(const ZGLVAODrawable& orig) { INTERNALERROR("not implemented"); }
     virtual ~ZGLVAODrawable();
     
     void Init(ZGLVAODrawableParam init);

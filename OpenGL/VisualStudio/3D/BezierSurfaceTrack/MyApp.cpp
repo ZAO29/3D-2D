@@ -1,4 +1,7 @@
 #include "stdafx.h"
+
+#include <algorithm>
+
 #include "MyApp.h"
 
 #include <ZGL/CameraFree.h>
@@ -16,6 +19,8 @@
 
 #define SHADER_SIZE "uTime"
 #define SHADER_MVP "uMVP"
+#define SHADER_OFFSET_SCALE "uOffsetScale"
+#define SHADER_USETEX "uUseTex"
 
 
 
@@ -131,7 +136,7 @@ bool MyApp::Init()
 	m_pCam = m_CameraMap[TRACKBALLCAMERA];
 	float coeff = 0.25;
 	std::vector<glm::vec3> ctrlPt = { coeff * glm::vec3(0,0,-50), coeff * glm::vec3(0,50,-50), coeff * glm::vec3(50,0,50),coeff * glm::vec3(0,0,50) };
-	m_bezierCurve.Init(ctrlPt, 100);
+	//m_bezierCurve.Init(ctrlPt, 100);
 
 
 	std::vector<std::vector<glm::vec3>> ctrlPtGrid;
@@ -196,6 +201,19 @@ bool MyApp::Init()
 	std::string path = "path839";
 	//std::string path = "curvelong";
 	track = PWBezierCurveParser::Parse("D:/Documents/inkscape/test.svg", path);
+	m_trackDrawable.Init<float>(track.getPieces(),100);
+	
+	BoundingBox<glm::vec2> bbTrack = m_trackDrawable.getBoundingBox<float>();
+
+	m_offsetScaleCurve.x = -bbTrack.getCenter<float>().x;
+	m_offsetScaleCurve.y = -bbTrack.getCenter<float>().y;
+
+	float scaleMax = 0.5 / std::max(bbTrack.getSize().x, bbTrack.getSize().y);
+	m_offsetScaleCurve.z = scaleMax;
+	m_offsetScaleCurve.w = scaleMax;
+
+
+
 
 	PieceWiseBezierCurve<glm::vec2> section;
 	std::vector<BezierCurve<glm::vec2>> sectionCtrPt(3);
@@ -205,6 +223,8 @@ bool MyApp::Init()
 	sectionCtrPt[2].setCtrlPt({ glm::vec2(d,0),glm::vec2(0,-d / 2.),glm::vec2(0,-d / 2.),glm::vec2(-d,-d) });
 
 	section.Init(sectionCtrPt);
+
+
 
 	std::vector<PieceWiseBezierCurve<glm::vec2>> sections(track.size()+1);
 	for (auto& sec : sections)
@@ -247,7 +267,11 @@ bool MyApp::Init()
 
 	m_quad.Init(paramDrawableQuad);
 
-	m_quadShader.Init("quad", false, MapUniform());
+
+	MapUniform uniformMap1;
+	uniformMap1[SHADER_OFFSET_SCALE]= UniformVar(eZGLtypeUniform::ZGL_FVEC4);
+	uniformMap1[SHADER_USETEX] = UniformVar(eZGLtypeUniform::ZGL_IVEC1);
+	m_quadShader.Init("quad", false, uniformMap1);
 	m_FBO.Init(500, 500, 1);
 
 	return true;
@@ -256,11 +280,21 @@ bool MyApp::Init()
 void MyApp::OpenGLRender()
 {
 	m_FBO.BindForWriting();
-	glClearColor(1., 0., 0., 1);
+
+	glClearColor(0., 0., 1., 0.5);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_DEPTH_TEST);
+	m_quadShader.Enable();
+	
+	int bUseTex = 0;
+	//m_quadShader.updateUniform(SHADER_OFFSET_SCALE, (void *)&m_offsetScaleCurve);
+	m_quadShader.updateUniform(SHADER_OFFSET_SCALE, (void *)&m_offsetScale);
+	m_quadShader.updateUniform(SHADER_USETEX, (void *)&bUseTex);
+
+	m_quad.Render(GL_TRIANGLE_STRIP);
 
 	FBO::BindToScreen();
-
+	glEnable(GL_DEPTH_TEST);
 	m_pCam->Update(m_elapsedTime);
 	
 	m_shader.Enable();
@@ -283,7 +317,18 @@ void MyApp::OpenGLRender()
 	m_FBO.BindForReading(GL_TEXTURE0);
 	glDisable(GL_DEPTH_TEST);
 	m_quadShader.Enable();
+	
+	//glm::vec4 offsetScale(0, 0, 1.0, 1.0);
+	bUseTex = 1;
+	m_quadShader.updateUniform(SHADER_OFFSET_SCALE, (void *)&m_offsetScale);
+	m_quadShader.updateUniform(SHADER_USETEX, (void *)&bUseTex);
 	m_quad.Render(GL_TRIANGLES);
+
+	bUseTex = 0;
+	m_quadShader.updateUniform(SHADER_OFFSET_SCALE, (void *)&m_offsetScaleCurve);
+	m_quadShader.updateUniform(SHADER_USETEX, (void *)&bUseTex);
+	m_trackDrawable.draw(GL_LINE_STRIP);
+
 
 	glEnable(GL_DEPTH_TEST);
 }
@@ -317,5 +362,8 @@ void MyApp::ImguiDraw()
 	}
 	m_pCam->ImguiDraw();
 	
+	ImGui::SliderFloat4("offsetSCale", &m_offsetScale[0], 0.1f, 10.0f);
+	ImGui::SliderFloat4("offsetSCaleCurve", &m_offsetScaleCurve[0], 0.1f, 10.0f);
+
 	ImGui::End();
 }

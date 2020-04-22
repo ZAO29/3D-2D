@@ -31,6 +31,8 @@ public:
 	template<typename Precision>
 	Vec getCenter() { return (m_boxMax + m_boxMin) / Precision(2.); }
 
+	Vec getSize() { return (m_boxMax - m_boxMin); }
+
 private:
 	Vec m_boxMin;
 	Vec m_boxMax;

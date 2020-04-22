@@ -42,6 +42,14 @@ public:
 			}
 	}
 
+	void Scale(Vec const & s)
+	{
+		for (auto& v : m_ctrlPts)
+		{
+			v /= s;
+		}
+	}
+
 
 
 	template<typename Precision>
@@ -147,6 +155,9 @@ public:
 
 	unsigned int size() { return m_list.size(); }
 
+	std::vector<BezierCurve<Vec>> getPieces() {
+		return m_list;
+	}
 
 	BezierCurve<Vec> getPiece(int i) { return m_list[i]; }
 
@@ -155,6 +166,8 @@ public:
 	BoundingBox<Vec> getBoundingBox() const;
 	
 	void Translate(Vec const &v) { for (auto& bezcurve : m_list) { bezcurve.Translate(v); } }
+
+	void Scale(Vec const &v) { for (auto& bezcurve : m_list) { bezcurve.Scale(v); } }
 
 
 private:

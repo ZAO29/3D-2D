@@ -4,11 +4,19 @@
 layout (location = 0) out vec4 FragColor;
 
 in vec2 uv;
+uniform bool uUseTex;
 
 layout(binding =0) uniform sampler2D tex;
 
+
 void main()
 {
-        FragColor = vec4(texture(tex,uv).xyz,1.0);
+        if(uUseTex)
+		{	
+			FragColor = texture(tex,uv).xyzw;
+		}else
+		{
+			FragColor = vec4(1.0,1.0,1.0,1.0);
+		}
 		//FragColor = vec4(1.,0.,0.,1.0);
 }

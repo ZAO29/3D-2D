@@ -17,9 +17,6 @@
     <ClCompile Include="CameraPieceWiseBezierSurface.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="BezierCurveDrawable.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="BezierSurfaceDrawable.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -27,6 +24,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="BezierSurfaceTrackMain.cpp" />
+    <ClCompile Include="BezierCurveDrawable.hpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
