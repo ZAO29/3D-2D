@@ -51,6 +51,15 @@ public:
 	}
 
 
+	template<typename Mat>
+	void Mult(Mat const &m) {
+		for (auto& v : m_ctrlPts)
+		{
+			v = m * v;
+		}
+	}
+
+
 
 	template<typename Precision>
 	BezierCurve<Vec> Derivate();
@@ -166,6 +175,9 @@ public:
 	BoundingBox<Vec> getBoundingBox() const;
 	
 	void Translate(Vec const &v) { for (auto& bezcurve : m_list) { bezcurve.Translate(v); } }
+
+	template<typename Mat>
+	void Mult(Mat const &m) { for (auto& bezcurve : m_list) { bezcurve.Mult<Mat>(m); } }
 
 	void Scale(Vec const &v) { for (auto& bezcurve : m_list) { bezcurve.Scale(v); } }
 

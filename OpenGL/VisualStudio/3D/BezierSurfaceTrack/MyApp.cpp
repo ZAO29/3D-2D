@@ -19,6 +19,7 @@
 
 #define SHADER_SIZE "uTime"
 #define SHADER_MVP "uMVP"
+#define SHADER_VISI "uVisi"
 #define SHADER_OFFSET_SCALE "uOffsetScale"
 #define SHADER_USETEX "uUseTex"
 
@@ -59,8 +60,10 @@ bool MyApp::Init()
 
 	mapUniform1[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	mapUniform1[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
+	mapUniform1[SHADER_VISI] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	m_shader[1].Init("shape", false, mapUniform1);
-
+	m_shader[1].Enable();
+	m_shader[1].updateUniform(SHADER_VISI, (void *)&m_visi);
 	float a = 1.0f;
 
 
@@ -198,14 +201,18 @@ bool MyApp::Init()
 	
 
 	PieceWiseBezierCurve<glm::vec2> track;
-	/*std::vector<BezierCurve<glm::vec2>> trackCtrPt(2);
-	float s = 5.0;
-	trackCtrPt[0].setCtrlPt({ glm::vec2(-s,-s),glm::vec2(-s,0),glm::vec2(-s,0),glm::vec2(0,0) });
-	trackCtrPt[1].setCtrlPt({ glm::vec2(0,0),glm::vec2(s,0),glm::vec2(s,0),glm::vec2(s,s) });
-	track.Init(trackCtrPt);*/
-	std::string path = "path839";
+	std::vector<BezierCurve<glm::vec2>> trackCtrPt(10);
+	float s = 50.0;
+	for (int i=0;i<trackCtrPt.size();i++)
+		trackCtrPt[i].setCtrlPt({ glm::vec2(i*s,0),
+								glm::vec2((i + 0.5)*s,0),
+								  glm::vec2((i + 0.5)*s,0),
+								  glm::vec2((i + 1)*s,0) });
+	
+	track.Init(trackCtrPt);
+	//std::string path = "path842";
 	//std::string path = "curvelong";
-	track = PWBezierCurveParser::Parse("D:/Documents/inkscape/test.svg", path);
+	//track = PWBezierCurveParser::Parse("D:/Documents/inkscape/test.svg", path);
 	m_trackDrawable.Init<float>(track.getPieces(),100);
 	
 	BoundingBox<glm::vec2> bbTrack = m_trackDrawable.getBoundingBox<float>();
@@ -232,9 +239,17 @@ bool MyApp::Init()
 
 
 	std::vector<PieceWiseBezierCurve<glm::vec2>> sections(track.size()+1);
+	glm::mat2x2 m;
+	float theta = PI / 2;
+	m[0][0] = cos(theta);
+	m[0][1] = sin(theta);
+	m[1][0] = -sin(theta);
+	m[1][1] = cos(theta);
+
 	for (auto& sec : sections)
 	{
 		sec = section;
+			section.Mult(m);
 	}
 
 	PieceWiseBezierSurface<glm::vec3> pwbezsurf = InitPWBezSurf(track, sections);
@@ -278,7 +293,7 @@ bool MyApp::Init()
 	uniformMap1[SHADER_USETEX] = UniformVar(eZGLtypeUniform::ZGL_IVEC1);
 	m_quadShader.Init("quad", false, uniformMap1);
 	m_FBO.Init(500, 500, 1);
-
+	
 	return true;
 }
 
@@ -371,6 +386,10 @@ void MyApp::ImguiDraw()
 	ImGui::SliderFloat4("offsetSCaleCurve", &m_offsetScaleCurve[0], 0.1f, 10.0f);
 
 	ImGui::Checkbox(" id shader", &m_idShader);
-
+	if (ImGui::SliderFloat("visi", &m_visi, 0.1f, 2.0f))
+	{
+		m_shader[1].Enable();
+		m_shader[1].updateUniform(SHADER_VISI, (void *)&m_visi);
+	}
 	ImGui::End();
 }
