@@ -10,7 +10,7 @@ uniform float uTime;
 uniform float uVisi;
 
 void main() {
-    float a = cos(10.*fragColor_out.x*uTime);
+    float a = (1.+cos(100.*fragColor_out.x+3.*uTime))/2.f;
 	outColor = vec4(a,a,a,1.0)*exp(-z*uVisi)+(1-exp(-z*uVisi))*vec4(1.,1.,1.,1.);
 	//outColor = vec4(1.,0.,0.,1.0);
 }

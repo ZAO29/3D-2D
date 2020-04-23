@@ -35,7 +35,6 @@ protected :
 	std::map<eCameraType, Camera*> m_CameraMap;
 	Camera* m_pCam;
 	PieceWiseBezierCurveDrawable<glm::vec2> m_trackDrawable;
-	BezierSurfaceDrawable m_bezierSurface;
 	PieceWiseBezierSurfaceDrawable m_pwbezSurf;
 	ctrl m_ctrl;
 	FBO m_FBO;

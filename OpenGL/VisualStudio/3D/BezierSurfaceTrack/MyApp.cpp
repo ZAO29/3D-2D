@@ -54,8 +54,11 @@ bool MyApp::Init()
 
 	mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	mapUniform[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
+	mapUniform[SHADER_VISI] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 
 	m_shader[0].Init("shader", true, mapUniform);
+	m_shader[0].Enable();
+	m_shader[0].updateUniform(SHADER_VISI, (void *)&m_visi);
 	MapUniform mapUniform1;
 
 	mapUniform1[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
@@ -142,64 +145,7 @@ bool MyApp::Init()
 	m_CameraMap[TRACKBALLCAMERA] = new CameraTrackBall(m_pWindowEnv->get());
 	m_CameraMap[FREECAMERA] = new CameraFree(m_pWindowEnv->get());
 	m_pCam = m_CameraMap[TRACKBALLCAMERA];
-	float coeff = 0.25;
-	std::vector<glm::vec3> ctrlPt = { coeff * glm::vec3(0,0,-50), coeff * glm::vec3(0,50,-50), coeff * glm::vec3(50,0,50),coeff * glm::vec3(0,0,50) };
-	//m_bezierCurve.Init(ctrlPt, 100);
-
-
-	std::vector<std::vector<glm::vec3>> ctrlPtGrid;
-	ctrlPtGrid.resize(4);
 	
-	for (auto & ctrlPtLine : ctrlPtGrid)
-	{
-		ctrlPtLine.resize(4);
-	}
-	float coeff1 = 3.0;
-	ctrlPtGrid[0][0] = coeff1 * glm::vec3(-1., -1., -1.);
-	ctrlPtGrid[0][1] = coeff1 * glm::vec3(-0.5, -1., -1);
-	ctrlPtGrid[0][2] = coeff1 * glm::vec3(0.5, -1., -1.);
-	ctrlPtGrid[0][3] = coeff1 * glm::vec3(1., -1., -1.);
-
-	ctrlPtGrid[1][0] = coeff1 * glm::vec3(-1., 0., -1.);
-	ctrlPtGrid[1][1] = coeff1 * glm::vec3(-0.5, 0., -1.);
-	ctrlPtGrid[1][2] = coeff1 * glm::vec3(0.5, 0., -1.);
-	ctrlPtGrid[1][3] = coeff1 * glm::vec3(1., 0., -1.);
-
-	ctrlPtGrid[2][0] = coeff1 * glm::vec3(-1., 1., 1.);
-	ctrlPtGrid[2][1] = coeff1 * glm::vec3(-0.5, 1., 1.);
-	ctrlPtGrid[2][2] = coeff1 * glm::vec3(0.5, 1., 1.);
-	ctrlPtGrid[2][3] = coeff1 * glm::vec3(1., 1., 1.);
-
-	ctrlPtGrid[3][0] = coeff1 * glm::vec3(-1., 2., 1.);
-	ctrlPtGrid[3][1] = coeff1 * glm::vec3(-0.5, 2., 1.);
-	ctrlPtGrid[3][2] = coeff1 * glm::vec3(0.5, 2., 1.);
-	ctrlPtGrid[3][3] = coeff1 * glm::vec3(1., 2., 1.);
-
-
-
-
-
-	/*ctrlPtGrid[0][0] = coeff1 * glm::vec3(-1., -1., -1.);
-	ctrlPtGrid[0][1] = coeff1 * glm::vec3(0., -1., -1);
-	ctrlPtGrid[0][2] = coeff1 * glm::vec3(0, -1., -1);
-	ctrlPtGrid[0][3] = coeff1 * glm::vec3(1., -1., -1.);
-
-	ctrlPtGrid[1][0] = coeff1 * glm::vec3(-1., 0., -0.);
-	ctrlPtGrid[1][1] = coeff1 * glm::vec3(0., 0., 0.);
-	ctrlPtGrid[1][2] = coeff1 * glm::vec3(0., 0., 0.);
-	ctrlPtGrid[1][3] = coeff1 * glm::vec3(1., 0., 0.);
-
-	ctrlPtGrid[2][0] = coeff1 * glm::vec3(-1., 1., -1.);
-	ctrlPtGrid[2][1] = coeff1 * glm::vec3(0., 1., -2.);
-	ctrlPtGrid[2][2] = coeff1 * glm::vec3(0., 1., -2.);
-	ctrlPtGrid[2][3] = coeff1 * glm::vec3(-1., 1., -1.);*/
-
-
-	m_bezierSurface.Init(ctrlPtGrid, 100, 500);
-
-
-	
-
 	PieceWiseBezierCurve<glm::vec2> track;
 	std::vector<BezierCurve<glm::vec2>> trackCtrPt(10);
 	float s = 50.0;
@@ -226,15 +172,36 @@ bool MyApp::Init()
 
 
 
+	float d = 1.0;
+	/*PieceWiseBezierCurve<glm::vec2> section;
+	std::vector<BezierCurve<glm::vec2>> sectionCtrPt(4);
+	sectionCtrPt[0].setCtrlPt({ glm::vec2(-d,-d),glm::vec2(-d,0),glm::vec2(-d,0),glm::vec2(-d,d) });
+	sectionCtrPt[1].setCtrlPt({ glm::vec2(-d,d),glm::vec2(0,d/2.),glm::vec2(0,d/2.),glm::vec2(d,0) });
+	sectionCtrPt[2].setCtrlPt({ glm::vec2(d,0),glm::vec2(d,0),glm::vec2(d,0),glm::vec2(d,0) });
+	sectionCtrPt[3].setCtrlPt({ glm::vec2(d,0),glm::vec2(0,-d / 2.),glm::vec2(0,-d / 2.),glm::vec2(-d,-d) });*/
+
 
 	PieceWiseBezierCurve<glm::vec2> section;
 	std::vector<BezierCurve<glm::vec2>> sectionCtrPt(3);
-	float d = 1.0;
 	sectionCtrPt[0].setCtrlPt({ glm::vec2(-d,-d),glm::vec2(-d,0),glm::vec2(-d,0),glm::vec2(-d,d) });
-	sectionCtrPt[1].setCtrlPt({ glm::vec2(-d,d),glm::vec2(0,d/2.),glm::vec2(0,d/2.),glm::vec2(d,0) });
+	sectionCtrPt[1].setCtrlPt({ glm::vec2(-d,d),glm::vec2(0,d / 2.),glm::vec2(0,d / 2.),glm::vec2(d,0) });
 	sectionCtrPt[2].setCtrlPt({ glm::vec2(d,0),glm::vec2(0,-d / 2.),glm::vec2(0,-d / 2.),glm::vec2(-d,-d) });
 
+	/*std::vector<BezierCurve<glm::vec2>> sectionCtrPt(1);
+	sectionCtrPt[0].setCtrlPt({ glm::vec2(-d,-d),glm::vec2(-d,0),glm::vec2(-d,0),glm::vec2(-d,d) });*/
+	
 	section.Init(sectionCtrPt);
+
+	PieceWiseBezierCurve<glm::vec2> sectionSquare;
+	std::vector<BezierCurve<glm::vec2>> sectionCtrPtSquare(4);
+	
+	sectionCtrPtSquare[0].setCtrlPt({ glm::vec2(-d,-d),glm::vec2(-d,0),glm::vec2(-d,0),glm::vec2(-d,d) });
+	sectionCtrPtSquare[1].setCtrlPt({ glm::vec2(-d,d),glm::vec2(0,d),glm::vec2(0,d),glm::vec2(d,d) });
+	sectionCtrPtSquare[2].setCtrlPt({ glm::vec2(d,d),glm::vec2(d,0),glm::vec2(d,0),glm::vec2(d,-d) });
+	sectionCtrPtSquare[3].setCtrlPt({ glm::vec2(d,-d),glm::vec2(0,-d),glm::vec2(0,-d),glm::vec2(-d,-d) });
+	
+
+	sectionSquare.Init(sectionCtrPtSquare);
 
 
 
@@ -246,18 +213,28 @@ bool MyApp::Init()
 	m[1][0] = -sin(theta);
 	m[1][1] = cos(theta);
 
+	bool b = false;
 	for (auto& sec : sections)
 	{
 		sec = section;
+		/*if (!b)
+			sec = section;
+		else
+			sec = sectionSquare;*/
+
+		b = !b;
 			section.Mult(m);
+			//sectionSquare.Mult(m);
 	}
 
 	PieceWiseBezierSurface<glm::vec3> pwbezsurf = InitPWBezSurf(track, sections);
 
+	
+
 	m_CameraMap[BEZIERCAMERA] = new CameraPieceWiseBezierSurface(m_pWindowEnv->get(),pwbezsurf);
 	m_pCam = m_CameraMap[BEZIERCAMERA];
 
-	m_pwbezSurf.Init(pwbezsurf, 3, 100);
+	m_pwbezSurf.Init(pwbezsurf, 10, 100);
 
 
 	//mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
@@ -299,11 +276,14 @@ bool MyApp::Init()
 
 void MyApp::OpenGLRender()
 {
-	m_FBO.BindForWriting();
+	
 
-	glClearColor(0., 0., 1., 0.5);
+	glClearColor(1., 1., 1., 1.);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	m_FBO.BindForWriting();
 	glDisable(GL_DEPTH_TEST);
+	
 	m_quadShader.Enable();
 	
 	int bUseTex = 0;
@@ -390,6 +370,8 @@ void MyApp::ImguiDraw()
 	{
 		m_shader[1].Enable();
 		m_shader[1].updateUniform(SHADER_VISI, (void *)&m_visi);
+		m_shader[0].Enable();
+		m_shader[0].updateUniform(SHADER_VISI, (void *)&m_visi);
 	}
 	ImGui::End();
 }

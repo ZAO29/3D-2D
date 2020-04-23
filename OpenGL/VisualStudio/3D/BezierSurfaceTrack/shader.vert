@@ -16,5 +16,5 @@ void main() {
      
     gl_Position = uMVP * vec4(position, 1.0);
 	//gl_Position = vec4(usize * position, 1.0);
-	fragColor = vec4(vec3(uv.xy,0.),alpha);
+	fragColor = vec4(vec3(0.),alpha);
 }
