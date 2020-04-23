@@ -6,7 +6,9 @@
 
 #include <ZGL/CameraFree.h>
 #include <ZGL/CameraTrackBall.h>
+#include <ZGL/Listener.h>
 #include "CameraPieceWiseBezierSurface.h"
+
 
 #include <ZGL/imgui/imgui.h>
 
@@ -22,6 +24,7 @@
 #define SHADER_VISI "uVisi"
 #define SHADER_OFFSET_SCALE "uOffsetScale"
 #define SHADER_USETEX "uUseTex"
+#define SHADER_USEMULTIUSE "uMultiUse"
 
 
 
@@ -55,10 +58,12 @@ bool MyApp::Init()
 	mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	mapUniform[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
 	mapUniform[SHADER_VISI] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
+	mapUniform[SHADER_USEMULTIUSE] = UniformVar(eZGLtypeUniform::ZGL_FVEC4);
 
 	m_shader[0].Init("shader", true, mapUniform);
 	m_shader[0].Enable();
 	m_shader[0].updateUniform(SHADER_VISI, (void *)&m_visi);
+	m_shader[0].updateUniform(SHADER_USEMULTIUSE, (void *)&m_multiUse);
 	MapUniform mapUniform1;
 
 	mapUniform1[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
@@ -67,78 +72,11 @@ bool MyApp::Init()
 	m_shader[1].Init("shape", false, mapUniform1);
 	m_shader[1].Enable();
 	m_shader[1].updateUniform(SHADER_VISI, (void *)&m_visi);
-	float a = 1.0f;
-
-
-
-	glm::mat3 permutation(0.);
-	permutation[1][0] = 1.;
-	permutation[2][1] = 1;
-	permutation[0][2] = 1;
-	// Set up vertex data (and buffer(s)) and attribute pointers
-	std::vector<VertexData> verticesInit =
-	{
-		VertexData(glm::vec3(a, a, a),glm::vec3(1.0, 0.0,0.0),glm::vec2(0.), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, a), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.), 1.0),// Right
-		VertexData(glm::vec3(a, -a, a), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.), 0.5),// Top
-		VertexData(glm::vec3(a, a, a),glm::vec3(0.0, 1.0,0.0), glm::vec2(0.), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, a), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.), 1.0),// Right
-		VertexData(glm::vec3(-a, a, a), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.), 0.5),// Top
-
-		VertexData(glm::vec3(a, a, -a),glm::vec3(0.0, 0.0,1.0), glm::vec2(0.), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, -a), glm::vec3(0.0, 0.0, 1.0), glm::vec2(0.),1.0),// Right
-		VertexData(glm::vec3(a, -a, -a), glm::vec3(0.0, 0.0, 1.0), glm::vec2(0.), 0.5),// Top
-		VertexData(glm::vec3(a, a, -a),glm::vec3(1.0, 1.0,1.0), glm::vec2(0.), 0.0), // Left
-		VertexData(glm::vec3(-a,-a, -a), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.), 1.0),// Right
-		VertexData(glm::vec3(-a, a, -a), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.), 0.5)// Top
-
-	};
-
-	std::vector<VertexData> vertices(verticesInit);
-
-	for (int i = 0; i < 2; i++)
-	{
-		auto vInit = verticesInit;
-
-		for (auto& vert : vInit)
-		{
-			vert.m_pos = permutation * vert.m_pos;
-		}
-
-		std::move(vInit.begin(), vInit.end(), std::back_inserter(vertices));
-
-		permutation = glm::transpose(permutation);
-	}
+	
 
 
 
 
-	// pos
-	ZGLStride stride1;
-	stride1.m_offset = sizeof(glm::vec3),
-		stride1.m_type = GL_FLOAT;
-	stride1.m_size = 3;
-
-	// color
-	ZGLStride stride2;
-	stride2.m_offset = sizeof(glm::vec3),
-		stride2.m_type = GL_FLOAT;
-	stride2.m_size = 3;
-
-	//alpha
-	ZGLStride stride3;
-	stride3.m_offset = sizeof(float),
-		stride3.m_type = GL_FLOAT;
-	stride3.m_size = 1;
-
-	ZGLVAODrawableParam paramDrawable;
-
-	paramDrawable.m_stride = sizeof(VertexData);
-	paramDrawable.m_nbVertex = vertices.size();
-	paramDrawable.m_pVertices = (void *)&vertices[0];
-	paramDrawable.m_strides = { stride1, stride2, stride3 };
-
-	m_VAOdrawable.Init(paramDrawable);
 
 
 
@@ -276,7 +214,7 @@ bool MyApp::Init()
 
 void MyApp::OpenGLRender()
 {
-	
+	UpdateMultiUse(m_elapsedTime);
 
 	glClearColor(1., 1., 1., 1.);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -373,5 +311,117 @@ void MyApp::ImguiDraw()
 		m_shader[0].Enable();
 		m_shader[0].updateUniform(SHADER_VISI, (void *)&m_visi);
 	}
+
+	if (ImGui::SliderFloat4(" tuning shader ", &m_multiUse[0], 0., 3.))
+	{
+		m_shader[0].Enable();
+		m_shader[0].updateUniform(SHADER_USEMULTIUSE, (void*)&m_multiUse);
+	}
+
 	ImGui::End();
+}
+
+void MyApp::UpdateMultiUse(float elapsedTime)
+{
+	float step = 0.1;
+	if (Listener::sgetKeyState(GLFW_KEY_H))
+		m_multiUse.x += elapsedTime * step;
+	if (Listener::sgetKeyState(GLFW_KEY_J))
+		m_multiUse.y += elapsedTime * step;
+	if (Listener::sgetKeyState(GLFW_KEY_K))
+		m_multiUse.z += elapsedTime * step;
+	if (Listener::sgetKeyState(GLFW_KEY_L))
+		m_multiUse.w += elapsedTime * step;
+
+
+	if (Listener::sgetKeyState(GLFW_KEY_C))
+		m_multiUse.x -= elapsedTime * step;
+	if (Listener::sgetKeyState(GLFW_KEY_V))
+		m_multiUse.y -= elapsedTime * step;
+	if (Listener::sgetKeyState(GLFW_KEY_B))
+		m_multiUse.z -= elapsedTime * step;
+	if (Listener::sgetKeyState(GLFW_KEY_N))
+		m_multiUse.w -= elapsedTime * step;
+
+	m_shader[0].Enable();
+	m_shader[0].updateUniform(SHADER_USEMULTIUSE, &m_multiUse[0]);
+
+	if (Listener::sgetKeyState(GLFW_KEY_R))
+	{
+		m_multiUse = glm::vec4(1., 0., 0., 1.);
+	}
+	
+}
+
+void MyApp::InitCube()
+{
+	float a = 1.0f;
+	glm::mat3 permutation(0.);
+	permutation[1][0] = 1.;
+	permutation[2][1] = 1;
+	permutation[0][2] = 1;
+	// Set up vertex data (and buffer(s)) and attribute pointers
+	std::vector<VertexData> verticesInit =
+	{
+		VertexData(glm::vec3(a, a, a),glm::vec3(1.0, 0.0,0.0),glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, a), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.), 1.0),// Right
+		VertexData(glm::vec3(a, -a, a), glm::vec3(1.0, 0.0, 0.0), glm::vec2(0.), 0.5),// Top
+		VertexData(glm::vec3(a, a, a),glm::vec3(0.0, 1.0,0.0), glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, a), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.), 1.0),// Right
+		VertexData(glm::vec3(-a, a, a), glm::vec3(0.0, 1.0, 0.0), glm::vec2(0.), 0.5),// Top
+
+		VertexData(glm::vec3(a, a, -a),glm::vec3(0.0, 0.0,1.0), glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, -a), glm::vec3(0.0, 0.0, 1.0), glm::vec2(0.),1.0),// Right
+		VertexData(glm::vec3(a, -a, -a), glm::vec3(0.0, 0.0, 1.0), glm::vec2(0.), 0.5),// Top
+		VertexData(glm::vec3(a, a, -a),glm::vec3(1.0, 1.0,1.0), glm::vec2(0.), 0.0), // Left
+		VertexData(glm::vec3(-a,-a, -a), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.), 1.0),// Right
+		VertexData(glm::vec3(-a, a, -a), glm::vec3(1.0, 1.0, 1.0), glm::vec2(0.), 0.5)// Top
+
+	};
+
+	std::vector<VertexData> vertices(verticesInit);
+
+	for (int i = 0; i < 2; i++)
+	{
+		auto vInit = verticesInit;
+
+		for (auto& vert : vInit)
+		{
+			vert.m_pos = permutation * vert.m_pos;
+		}
+
+		std::move(vInit.begin(), vInit.end(), std::back_inserter(vertices));
+
+		permutation = glm::transpose(permutation);
+	}
+
+
+
+
+	// pos
+	ZGLStride stride1;
+	stride1.m_offset = sizeof(glm::vec3),
+		stride1.m_type = GL_FLOAT;
+	stride1.m_size = 3;
+
+	// color
+	ZGLStride stride2;
+	stride2.m_offset = sizeof(glm::vec3),
+		stride2.m_type = GL_FLOAT;
+	stride2.m_size = 3;
+
+	//alpha
+	ZGLStride stride3;
+	stride3.m_offset = sizeof(float),
+		stride3.m_type = GL_FLOAT;
+	stride3.m_size = 1;
+
+	ZGLVAODrawableParam paramDrawable;
+
+	paramDrawable.m_stride = sizeof(VertexData);
+	paramDrawable.m_nbVertex = vertices.size();
+	paramDrawable.m_pVertices = (void *)&vertices[0];
+	paramDrawable.m_strides = { stride1, stride2, stride3 };
+
+	m_VAOdrawable.Init(paramDrawable);
 }

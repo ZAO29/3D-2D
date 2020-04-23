@@ -20,7 +20,16 @@ CameraPieceWiseBezierSurface::~CameraPieceWiseBezierSurface()
 
 void CameraPieceWiseBezierSurface::Update(float elapsedTime)
 {
-	if (Listener::sgetKeyState(GLFW_KEY_UP))
+	if (Listener::sgetKeyState(GLFW_KEY_A))
+	{
+		m_bForwardAuto = !m_bForwardAuto;
+	}
+
+
+
+
+	if (Listener::sgetKeyState(GLFW_KEY_UP) 
+		|| m_bForwardAuto)
 	{
 			m_parameter.y += elapsedTime * m_speed;
 

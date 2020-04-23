@@ -21,5 +21,7 @@ private:
 	PieceWiseBezierSurface<glm::vec3> m_surfaceDerU;
 	PieceWiseBezierSurface<glm::vec3> m_surfaceDerV;
 
+	bool m_bForwardAuto = true;
+
 };
 
