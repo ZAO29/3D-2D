@@ -48,7 +48,7 @@ WindowEnv::~WindowEnv()
 {
 }
 
-void WindowEnv::init(int32_t width, int32_t height, void * pApp)
+void WindowEnv::init(int32_t width, int32_t height, bool bFullScreen,void * pApp)
 {
 
 	if (nullptr != m_pwindow)
@@ -72,7 +72,15 @@ void WindowEnv::init(int32_t width, int32_t height, void * pApp)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // allow debugging
 	
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	m_pwindow = glfwCreateWindow(width, height, "LearnOpenGL", nullptr, nullptr);
+	if (bFullScreen)
+	{
+		m_pwindow = glfwCreateWindow(1920, 1080, "Triangle", glfwGetPrimaryMonitor(), nullptr);
+	}
+	else
+	{
+		m_pwindow = glfwCreateWindow(width, height, "Triangle", nullptr, nullptr);
+	}
+
 
 	/*------  CALLBACK  ------*/
 	glfwSetErrorCallback(error_callback);

@@ -10,7 +10,7 @@ public:
 	WindowEnv();
 	~WindowEnv();
 
-	void init(int32_t width, int32_t height, void * pApp);
+	void init(int32_t width, int32_t height,bool bFullScreen, void * pApp);
 
 	void PollEvent();
 

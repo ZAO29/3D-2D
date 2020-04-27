@@ -44,6 +44,10 @@ MyApp::~MyApp()
 
 bool MyApp::Init()
 {
+	//screen param
+	m_width = int(1280.0*1.1);
+	m_height = int(720 * 1.1);
+
 	ZGLApp::Init();
 	// BLENDING
 	glEnable(GL_BLEND);
@@ -85,7 +89,7 @@ bool MyApp::Init()
 	m_pCam = m_CameraMap[TRACKBALLCAMERA];
 	
 	PieceWiseBezierCurve<glm::vec2> track;
-	std::vector<BezierCurve<glm::vec2>> trackCtrPt(10);
+	std::vector<BezierCurve<glm::vec2>> trackCtrPt(5);
 	float s = 50.0;
 	for (int i=0;i<trackCtrPt.size();i++)
 		trackCtrPt[i].setCtrlPt({ glm::vec2(i*s,0),
@@ -172,7 +176,8 @@ bool MyApp::Init()
 	m_CameraMap[BEZIERCAMERA] = new CameraPieceWiseBezierSurface(m_pWindowEnv->get(),pwbezsurf);
 	m_pCam = m_CameraMap[BEZIERCAMERA];
 
-	m_pwbezSurf.Init(pwbezsurf, 10, 100);
+	float div = 2;
+	m_pwbezSurf.Init(pwbezsurf, float(10./2.), float(100./2.));
 
 
 	//mapUniform[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
@@ -346,10 +351,23 @@ void MyApp::UpdateMultiUse(float elapsedTime)
 	m_shader[0].Enable();
 	m_shader[0].updateUniform(SHADER_USEMULTIUSE, &m_multiUse[0]);
 
-	if (Listener::sgetKeyState(GLFW_KEY_R))
+	if (Listener::sgetKeyState(GLFW_KEY_W))
 	{
 		m_multiUse = glm::vec4(1., 0., 0., 1.);
+		m_visi = 0.1;
 	}
+
+	if (Listener::sgetKeyState(GLFW_KEY_O))
+	{
+		m_visi += elapsedTime * step * 8.;
+	}
+
+	if (Listener::sgetKeyState(GLFW_KEY_P))
+	{
+		m_visi -= elapsedTime * step * 8.;
+	}
+	m_shader[0].updateUniform(SHADER_VISI, &m_visi);
+
 	
 }
 

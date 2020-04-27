@@ -59,6 +59,9 @@ protected :
 	float m_cumulTime = 0.0;;
 
 	bool m_bImguiRender = false;
+	bool m_bfullScreen = false;
+	unsigned int m_width = 1080;
+	unsigned int m_height = 720;
 
 	
 };

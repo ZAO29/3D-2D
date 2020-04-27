@@ -79,8 +79,13 @@ ZGLApp::~ZGLApp()
 
 void ZGLApp::Run()
 {
-	while (m_pWindowEnv->IsRunning())
+	bool bMustClose = false;
+
+	while (m_pWindowEnv->IsRunning() && !bMustClose)
 	{
+		bMustClose = Listener::sgetKeyState(GLFW_KEY_ESCAPE);
+		
+		
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		m_pWindowEnv->PollEvent();
 
@@ -227,7 +232,8 @@ bool ZGLApp::Init()
 
 	m_pWindowEnv = new WindowEnv();
 
-    m_pWindowEnv->init(1280,720,(void *) this);
+    m_pWindowEnv->init(m_width,m_height,m_bfullScreen,(void *) this);
+	//m_pWindowEnv->init(1920, 1080, (void *)this);
 
     // MESSAGE ERREUR OPENGL
 	glEnable(GL_DEBUG_OUTPUT);
