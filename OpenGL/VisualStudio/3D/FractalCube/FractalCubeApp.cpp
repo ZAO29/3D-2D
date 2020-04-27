@@ -96,7 +96,7 @@ bool FractalCubeApp::Init()
 	}
 
 
-	float eps = 0.05;
+	float eps = 0.02;
 	std::vector<VertexData> quad_vertex_buffer_data = {
 		VertexData(glm::vec3(-1.0f + eps, -1.0f + eps, 0.0f),glm::vec2(0,0)),
 		VertexData(glm::vec3(1.0f - eps, -1.0f + eps, 0.0f),glm::vec2(1,0)),
@@ -117,7 +117,7 @@ bool FractalCubeApp::Init()
 		m_quad.Init(paramDrawable);
 	}
 
-	m_ptex = new Texture(0., 0., 1);
+	m_ptex = new Texture(0., 0., 0.);
 
 	MapUniform listvar;
 	listvar[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
@@ -127,17 +127,25 @@ bool FractalCubeApp::Init()
 	
 
 	m_pCam = new CameraFree(m_pWindowEnv->get());
-	m_pCam->setEyePos(glm::vec3(5, 0, 0));
-	m_pCam->setDirection(glm::vec3(-1, 0, 0));
+	m_pCam->setEyePos(glm::vec3(0, 5, 0));
+	m_pCam->setDirection(glm::vec3(0, -1, 0));
 	m_pCam->m_speed = 0.5f;
+
+
+	m_FBO[0].Init(m_width, m_height, 1);
+	m_FBO[1].Init(m_width, m_height, 1);
+
 
 	return true;
 }
 
 void FractalCubeApp::OpenGLRender()
 {
-	glClearColor(0., 0., 0., 1.);
-
+	bool id = false;
+	m_FBO[id].BindForWriting();
+	//FBO::BindToScreen();
+	glClearColor(1., 1., 1., 1.);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	m_shader.Enable();
 	
@@ -147,6 +155,52 @@ void FractalCubeApp::OpenGLRender()
 	m_ptex->Bind(GL_TEXTURE0);
 	m_quad.Render(GL_TRIANGLES);
 
+
+
+	for (int i = 0; i < m_nbOctave; i++)
+	{
+		bool next_id = !id;
+		{
+			m_FBO[next_id].BindForWriting();
+			m_FBO[id].BindForReading(GL_TEXTURE0);
+
+			glClearColor(0., 0., 0., 1.);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+			glEnable(GL_DEPTH_TEST);
+			MVP = m_pCam->getProjectionView() * m_pCam->getView();
+
+
+			m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
+
+			m_cube.Render(GL_TRIANGLES);
+			id = next_id;
+		}
+		next_id = !id;
+		m_FBO[next_id].BindForWriting();
+		m_FBO[id].BindForReading(GL_TEXTURE0);
+
+		glClearColor(1., 1., 1., 1.);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+		glEnable(GL_DEPTH_TEST);
+		MVP = m_pCam->getProjectionView() * m_pCam->getView();
+
+		MVP = glm::mat4(1.);
+		m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
+
+		m_quad.Render(GL_TRIANGLES);
+		id = next_id;
+	}
+
+
+
+	FBO::BindToScreen();
+	glClearColor(0., 0., 0., 1.);
+	glClear(GL_COLOR_BUFFER_BIT |  GL_DEPTH_BUFFER_BIT);
+	m_FBO[id].BindForReading(GL_TEXTURE0);
 	glEnable(GL_DEPTH_TEST);
 	MVP = m_pCam->getProjectionView() * m_pCam->getView();
 

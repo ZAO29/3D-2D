@@ -156,6 +156,18 @@ void Camera::Update(float elapsedTime)
 
 		}
 
+		if (Listener::sgetKeyState(GLFW_KEY_W))
+		{
+			m_deltaDegR += elapsedTime * m_speed;
+		}
+
+		if (Listener::sgetKeyState(GLFW_KEY_X))
+		{
+			m_deltaDegR -= elapsedTime * m_speed;
+		}
+
+
+
 		if (Listener::sgetKeyState(GLFW_KEY_RIGHT))
 		{
 			if (m_angleCtrl)
@@ -318,6 +330,12 @@ void Camera::ImguiDraw()
             m_direction = glm::rotate<float>(m_direction,m_deltaDegP,m_right);
             m_up = glm::rotate<float>(m_up,m_deltaDegP,m_right);
      }
+
+	 if (m_deltaDegR)
+	 {
+		 m_right = glm::rotate<float>(m_right, m_deltaDegR, m_direction);
+		 m_up = glm::rotate<float>(m_up, m_deltaDegR, m_direction);
+	 }
  }
  
  

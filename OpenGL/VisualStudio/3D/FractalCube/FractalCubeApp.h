@@ -4,6 +4,7 @@
 #include <ZGL/ZGLDrawable.h>
 #include <ZGL/Shaders.h>
 #include <ZGL/Texture.h>
+#include <ZGL/FBO.h>
 
 class FractalCubeApp : public ZGLApp
 {
@@ -21,6 +22,8 @@ private :
 	ZGLVAODrawable m_quad;
 	Shader m_shader;
 	Texture* m_ptex;
+	FBO m_FBO[2];
+	int m_nbOctave = 15;
 
 };
 

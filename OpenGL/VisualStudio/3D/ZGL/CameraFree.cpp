@@ -43,6 +43,7 @@ glm::mat4 CameraFree::getView()
 
      m_deltaDegP = 0.;
      m_deltaDegH = 0.;
+	 m_deltaDegR = 0.;
      
      
      

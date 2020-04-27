@@ -167,6 +167,7 @@ protected :
     
     float m_deltaDegP = 0.f;
     float m_deltaDegH = 0.f;
+	float m_deltaDegR = 0.f;
     
     
     
