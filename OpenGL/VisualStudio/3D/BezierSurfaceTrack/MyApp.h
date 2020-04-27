@@ -37,7 +37,7 @@ protected :
 	ZGLVAODrawable m_VAOdrawable;
 
 	std::map<eCameraType, Camera*> m_CameraMap;
-	Camera* m_pCam;
+	
 	PieceWiseBezierCurveDrawable<glm::vec2> m_trackDrawable;
 	PieceWiseBezierSurfaceDrawable m_pwbezSurf;
 	ctrl m_ctrl;

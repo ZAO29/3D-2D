@@ -21,7 +21,7 @@
 
 
 
-
+#define SHADER_MVP "uMVP"
 
 enum eZGLtypeUniform
 {

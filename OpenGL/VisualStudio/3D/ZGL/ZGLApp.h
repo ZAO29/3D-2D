@@ -52,7 +52,7 @@ protected :
     
     
     WindowEnv* m_pWindowEnv;
-	
+	Camera* m_pCam;
 
 	std::chrono::time_point<std::chrono::system_clock> m_time;
 	float m_elapsedTime;

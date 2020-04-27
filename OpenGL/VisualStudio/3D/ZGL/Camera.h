@@ -143,6 +143,7 @@ public:
     eProjectionType m_projectionType = PERSPECTIVE;
     confProjPerspective m_projPerspective;
     confProjOrtho m_projOrtho;
+	float m_speed = 0.01f;
     
 protected :
     
@@ -152,7 +153,7 @@ protected :
     glm::vec3  m_right = glm::vec3(1.,0.,0.);
     glm::vec3  m_up = glm::vec3(0.,10.,0.);
     
-    float m_speed = 0.01f;
+    
 
 	
     

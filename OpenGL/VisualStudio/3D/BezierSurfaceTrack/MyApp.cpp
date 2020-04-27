@@ -20,7 +20,7 @@
 
 
 #define SHADER_SIZE "uTime"
-#define SHADER_MVP "uMVP"
+
 #define SHADER_VISI "uVisi"
 #define SHADER_OFFSET_SCALE "uOffsetScale"
 #define SHADER_USETEX "uUseTex"
@@ -238,7 +238,6 @@ void MyApp::OpenGLRender()
 
 	FBO::BindToScreen();
 	glEnable(GL_DEPTH_TEST);
-	m_pCam->Update(m_elapsedTime);
 	
 	m_shader[m_idShader].Enable();
 

@@ -88,14 +88,13 @@ void ZGLApp::Run()
 		
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		m_pWindowEnv->PollEvent();
-
 		std::chrono::time_point<std::chrono::system_clock> clock;
 		clock = std::chrono::system_clock::now();
 		std::chrono::duration<float> elapsed_seconds = clock - m_time;
 		m_time = clock;
 		m_elapsedTime = elapsed_seconds.count();
 		m_cumulTime += m_elapsedTime;
-		
+		m_pCam->Update(m_elapsedTime);
 
 		glClearColor(0., 0., 0., 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
