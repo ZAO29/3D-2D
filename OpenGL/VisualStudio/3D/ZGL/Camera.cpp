@@ -156,14 +156,14 @@ void Camera::Update(float elapsedTime)
 
 		}
 
-		if (Listener::sgetKeyState(GLFW_KEY_W))
-		{
-			m_deltaDegR += elapsedTime * m_speed;
-		}
+		//if (Listener::sgetKeyState(GLFW_KEY_W))
+		//{
+			m_deltaDegR += elapsedTime * m_speed/2.;
+		//}
 
 		if (Listener::sgetKeyState(GLFW_KEY_X))
 		{
-			m_deltaDegR -= elapsedTime * m_speed;
+			m_deltaDegR -= elapsedTime * m_speed/2.;
 		}
 
 

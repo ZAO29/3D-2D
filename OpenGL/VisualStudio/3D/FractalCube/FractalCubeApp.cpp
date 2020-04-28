@@ -16,6 +16,12 @@ FractalCubeApp::~FractalCubeApp()
 
 bool FractalCubeApp::Init()
 {
+	//m_bfullScreen = true;
+	//m_width = 1920;
+	//m_height = 1080;
+	m_bfullScreen = false;
+	m_width = 1280;
+	m_height = 720;
 	ZGLApp::Init();
 
 	float a = 1.0f;
@@ -124,16 +130,22 @@ bool FractalCubeApp::Init()
 	m_shader.Init("shader", false, listvar);
 
 
-	
+	m_motionBlurShader.Init("motionblur", false, MapUniform());
 
 	m_pCam = new CameraFree(m_pWindowEnv->get());
-	m_pCam->setEyePos(glm::vec3(0, 5, 0));
+	m_pCam->setEyePos(glm::vec3(0, 3, 0));
 	m_pCam->setDirection(glm::vec3(0, -1, 0));
-	m_pCam->m_speed = 0.5f;
+	m_pCam->m_speed = 0.3f;
 
 
 	m_FBO[0].Init(m_width, m_height, 1);
 	m_FBO[1].Init(m_width, m_height, 1);
+
+	m_MotionBlurFBOs.resize(m_nbMotionBlur);
+	for (auto & FBO : m_MotionBlurFBOs)
+	{
+		FBO.Init(m_width, m_height, 1);
+	}
 
 
 	return true;
@@ -155,7 +167,7 @@ void FractalCubeApp::OpenGLRender()
 	m_ptex->Bind(GL_TEXTURE0);
 	m_quad.Render(GL_TRIANGLES);
 
-
+	float step = 1. / float(m_nbOctave);
 
 	for (int i = 0; i < m_nbOctave; i++)
 	{
@@ -197,7 +209,8 @@ void FractalCubeApp::OpenGLRender()
 
 
 
-	FBO::BindToScreen();
+	
+	m_MotionBlurFBOs[m_idFBO].BindForWriting();
 	glClearColor(0., 0., 0., 1.);
 	glClear(GL_COLOR_BUFFER_BIT |  GL_DEPTH_BUFFER_BIT);
 	m_FBO[id].BindForReading(GL_TEXTURE0);
@@ -208,6 +221,16 @@ void FractalCubeApp::OpenGLRender()
 	m_shader.updateUniform(SHADER_MVP, (void *)glm::value_ptr(MVP));
 	
 	m_cube.Render(GL_TRIANGLES);
+
+	FBO::BindToScreen();
+	m_motionBlurShader.Enable();
+	for (int i = 0; i < m_nbMotionBlur; i++)
+	{
+		m_MotionBlurFBOs[i].BindForReading(GL_TEXTURE0 + i);
+	}
+	m_MotionBlurFBOs[id].RenderQuad();
+	m_idFBO++;
+	m_idFBO = m_idFBO % m_nbMotionBlur;
 }
 
 void FractalCubeApp::Destroy()

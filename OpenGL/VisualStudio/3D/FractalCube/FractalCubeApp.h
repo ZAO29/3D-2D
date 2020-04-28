@@ -21,9 +21,14 @@ private :
 	ZGLVAODrawable m_cube;
 	ZGLVAODrawable m_quad;
 	Shader m_shader;
+	Shader m_motionBlurShader;
 	Texture* m_ptex;
 	FBO m_FBO[2];
-	int m_nbOctave = 15;
+	int m_nbOctave = 30;
+
+	std::vector<FBO> m_MotionBlurFBOs;
+	int m_nbMotionBlur = 1;
+	int m_idFBO = 0;
 
 };
 

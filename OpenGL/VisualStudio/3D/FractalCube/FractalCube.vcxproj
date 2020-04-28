@@ -168,6 +168,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="motionblur.frag" />
+    <None Include="motionblur.vert" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
   </ItemGroup>

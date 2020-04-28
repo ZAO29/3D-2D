@@ -46,5 +46,11 @@
     <None Include="shader.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="motionblur.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="motionblur.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
