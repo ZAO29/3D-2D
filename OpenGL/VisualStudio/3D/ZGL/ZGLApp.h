@@ -63,6 +63,14 @@ protected :
 	unsigned int m_width = 1080;
 	unsigned int m_height = 720;
 
+
+
+	eCameraType m_typeCamera = eCameraType::FREECAMERA;
+
+	std::map<eCameraType, Camera*> m_CameraMap;
+	std::string m_name = "ZGLApp";
+	
+
 	
 };
 

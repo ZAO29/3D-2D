@@ -41,6 +41,7 @@ void main() {
 
 	vec4 diff= vec4(color0-color4,1.);
 
-	outColor = abs(diff + outColor)/2.;
+	//outColor = abs(diff + outColor)/2.;
 	//outColor = diff;
+	outColor = vec4(color0,1.0);
 }

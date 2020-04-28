@@ -47,6 +47,7 @@ bool MyApp::Init()
 	//screen param
 	m_width = int(1280.0*1.1);
 	m_height = int(720 * 1.1);
+	m_name = "Triangle";
 
 	ZGLApp::Init();
 	// BLENDING
@@ -84,9 +85,7 @@ bool MyApp::Init()
 
 
 
-	m_CameraMap[TRACKBALLCAMERA] = new CameraTrackBall(m_pWindowEnv->get());
-	m_CameraMap[FREECAMERA] = new CameraFree(m_pWindowEnv->get());
-	m_pCam = m_CameraMap[TRACKBALLCAMERA];
+	
 	
 	PieceWiseBezierCurve<glm::vec2> track;
 	std::vector<BezierCurve<glm::vec2>> trackCtrPt(5);
@@ -284,25 +283,14 @@ void MyApp::Destroy()
 
 void MyApp::ImguiDraw()
 {
+	ZGLApp::ImguiDraw();
+	
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
+	
 	static float f = 0.0f;
 	static int counter = 0;
 
-	ImGui::Begin("MyAPP",nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);                          // Create a window called "Hello, world!" and append into it.
-	ImGui::Text("This is some useful text.");
 
-	const char * items[] = { "TRACKBALL","FREE","BEZIER" };
-	if (ImGui::Combo(" CAMERA ", &m_ctrl.m_selectedCam, items, IM_ARRAYSIZE(items)))
-	{
-		if (m_CameraMap[static_cast<eCameraType>(m_ctrl.m_selectedCam)] != nullptr)
-		{
-			Camera* pformerCam = m_pCam;
-			m_pCam = m_CameraMap[static_cast<eCameraType>(m_ctrl.m_selectedCam)];
-
-			m_pCam->Init(pformerCam->getEyePos(), pformerCam->getDirection(), pformerCam->getUp());
-		}
-
-	}
-	m_pCam->ImguiDraw();
 	
 	ImGui::SliderFloat4("offsetSCale", &m_offsetScale[0], 0.1f, 10.0f);
 	ImGui::SliderFloat4("offsetSCaleCurve", &m_offsetScaleCurve[0], 0.1f, 10.0f);

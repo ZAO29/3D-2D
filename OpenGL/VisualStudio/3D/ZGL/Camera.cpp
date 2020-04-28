@@ -207,10 +207,10 @@ void Camera::Update(float elapsedTime)
 
 		if (Listener::sgetKeyState(GLFW_KEY_R))
 		{
-			m_eye = glm::vec3(0, 0, 500); // degree
-			m_direction = glm::vec3(0, 0, -1); // width / height
-			m_right = glm::vec3(1., 0., 0.);
-			m_up = glm::vec3(0., 1., 0.);
+			m_eye = m_eyeInit; // degree
+			m_direction = m_dirInit; // width / height
+			//m_right = glm::vec3(1., 0., 0.);
+			//m_up = glm::vec3(0., 1., 0.);
 
 			std::cout << __FILEFUNC__ << " reinitialisation " << std::endl;
 		}

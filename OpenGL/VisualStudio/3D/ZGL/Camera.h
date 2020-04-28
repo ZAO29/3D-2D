@@ -96,9 +96,11 @@ public:
     
     virtual ~Camera();
     
-    void Init(glm::vec3 a_eye, glm::vec3 a_direction, glm::vec3 a_up){m_eye = a_eye;
+    void Init(glm::vec3 a_eye, glm::vec3 a_direction, glm::vec3 a_up, float speed){m_eye = a_eye;
         m_direction = a_direction;
         m_up = a_up;
+		m_speed = speed;
+
     }
     
 	virtual void Update(float elapsedTime);
@@ -152,6 +154,11 @@ protected :
     glm::vec3  m_direction = glm::vec3(0,-20,20); // width / height
     glm::vec3  m_right = glm::vec3(1.,0.,0.);
     glm::vec3  m_up = glm::vec3(0.,10.,0.);
+
+
+public:
+	glm::vec3 m_eyeInit = glm::vec3(0.416801,0.642099,0.519630);
+	glm::vec3 m_dirInit = glm::vec3(0.450489,0.693998,0.561629);
     
     
 

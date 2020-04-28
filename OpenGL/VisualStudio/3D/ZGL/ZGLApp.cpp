@@ -27,6 +27,9 @@
 
 #include "Debugging.h"
 
+#include "CameraTrackBall.h"
+#include "CameraFree.h"
+
 
 
 
@@ -153,7 +156,24 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 
 void ZGLApp::ImguiDraw()
 {
-	
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);                          // Create a window called "Hello, world!" and append into it.
+	ImGui::Text("This is some useful text.");
+
+	const char * items[] = { "TRACKBALL","FREE","BEZIER" };
+	int camid = m_typeCamera;
+	if (ImGui::Combo(" CAMERA ", &camid, items, IM_ARRAYSIZE(items)))
+	{
+		if (m_CameraMap[static_cast<eCameraType>(camid)] != nullptr)
+		{
+			Camera* pformerCam = m_pCam;
+			m_pCam = m_CameraMap[static_cast<eCameraType>(camid)];
+			m_typeCamera = static_cast<eCameraType>(camid);
+			m_pCam->Init(pformerCam->getEyePos(), pformerCam->getDirection(), pformerCam->getUp(),pformerCam->m_speed);
+		}
+
+	}
+	m_pCam->ImguiDraw();
+	ImGui::End();
 }
 
 void ZGLApp::InitImgui()
@@ -231,7 +251,7 @@ bool ZGLApp::Init()
 
 	m_pWindowEnv = new WindowEnv();
 
-    m_pWindowEnv->init(m_width,m_height,m_bfullScreen,(void *) this);
+    m_pWindowEnv->init(m_width,m_height,m_bfullScreen,(void *) this, m_name);
 	//m_pWindowEnv->init(1920, 1080, (void *)this);
 
     // MESSAGE ERREUR OPENGL
@@ -241,6 +261,16 @@ bool ZGLApp::Init()
     
 
 	InitImgui();
+
+
+	m_CameraMap[TRACKBALLCAMERA] = new CameraTrackBall(m_pWindowEnv->get());
+	m_CameraMap[FREECAMERA] = new CameraFree(m_pWindowEnv->get());
+	m_pCam = m_CameraMap[m_typeCamera];
+	if (m_pCam == nullptr)
+	{
+		INTERNALERROR(" nullptr camera");
+	}
+
 
 	return true;
             

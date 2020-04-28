@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <string>
 
 struct GLFWwindow;
 
@@ -10,7 +11,7 @@ public:
 	WindowEnv();
 	~WindowEnv();
 
-	void init(int32_t width, int32_t height,bool bFullScreen, void * pApp);
+	void init(int32_t width, int32_t height,bool bFullScreen, void * pApp, std::string name);
 
 	void PollEvent();
 

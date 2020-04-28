@@ -36,7 +36,7 @@ protected :
 	Shader m_shader[2];
 	ZGLVAODrawable m_VAOdrawable;
 
-	std::map<eCameraType, Camera*> m_CameraMap;
+	
 	
 	PieceWiseBezierCurveDrawable<glm::vec2> m_trackDrawable;
 	PieceWiseBezierSurfaceDrawable m_pwbezSurf;

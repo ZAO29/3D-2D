@@ -102,7 +102,7 @@ bool FractalCubeApp::Init()
 	}
 
 
-	float eps = 0.02;
+	float eps = 0.01;
 	std::vector<VertexData> quad_vertex_buffer_data = {
 		VertexData(glm::vec3(-1.0f + eps, -1.0f + eps, 0.0f),glm::vec2(0,0)),
 		VertexData(glm::vec3(1.0f - eps, -1.0f + eps, 0.0f),glm::vec2(1,0)),
@@ -240,4 +240,5 @@ void FractalCubeApp::Destroy()
 
 void FractalCubeApp::ImguiDraw()
 {
+	ZGLApp::ImguiDraw();
 }

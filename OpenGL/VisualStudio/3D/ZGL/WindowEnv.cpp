@@ -48,7 +48,7 @@ WindowEnv::~WindowEnv()
 {
 }
 
-void WindowEnv::init(int32_t width, int32_t height, bool bFullScreen,void * pApp)
+void WindowEnv::init(int32_t width, int32_t height, bool bFullScreen,void * pApp, std::string name)
 {
 
 	if (nullptr != m_pwindow)
@@ -74,11 +74,11 @@ void WindowEnv::init(int32_t width, int32_t height, bool bFullScreen,void * pApp
 	// Create a GLFWwindow object that we can use for GLFW's functions
 	if (bFullScreen)
 	{
-		m_pwindow = glfwCreateWindow(1920, 1080, "Triangle", glfwGetPrimaryMonitor(), nullptr);
+		m_pwindow = glfwCreateWindow(1920, 1080, name.c_str(), glfwGetPrimaryMonitor(), nullptr);
 	}
 	else
 	{
-		m_pwindow = glfwCreateWindow(width, height, "Triangle", nullptr, nullptr);
+		m_pwindow = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 	}
 
 

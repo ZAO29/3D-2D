@@ -43,10 +43,17 @@ glm::mat4 CameraTrackBall::getView()
             m_eye = glm::rotate<float>(m_eye,m_deltaDegP,m_right);
             m_up = glm::rotate<float>(m_up,m_deltaDegP,m_right);
      }
+
+	 if (m_deltaDegR)
+	 {
+		 m_up = glm::rotate<float>(m_up, m_deltaDegR, m_eye);
+		 m_right = glm::rotate<float>(m_right, m_deltaDegR, m_eye);
+	 }
      
      
      m_deltaDegP = 0.;
      m_deltaDegH = 0.;
+	 m_deltaDegR = 0.;
      m_direction = -glm::normalize(m_eye);
     return glm::lookAt(m_eye,m_direction,m_up);
 }
