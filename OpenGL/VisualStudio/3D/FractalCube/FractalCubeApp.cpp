@@ -16,12 +16,12 @@ FractalCubeApp::~FractalCubeApp()
 
 bool FractalCubeApp::Init()
 {
-	//m_bfullScreen = true;
-	//m_width = 1920;
-	//m_height = 1080;
-	m_bfullScreen = false;
-	m_width = 1280;
-	m_height = 720;
+	m_bfullScreen = true;
+	m_width = 1920;
+	m_height = 1080;
+	//m_bfullScreen = false;
+	//m_width = 1280;
+	//m_height = 720;
 	//m_width = 200;
 	//m_height = 200;
 	ZGLApp::Init();
@@ -151,6 +151,7 @@ bool FractalCubeApp::Init()
 
 
 	m_captureIm.Init(m_width, m_height);
+	m_captureVideo.Init(m_width, m_height, std::string("D:\\OUTPUT\\") + m_name + std::string(".avi"));
 
 	return true;
 }
@@ -226,10 +227,16 @@ void FractalCubeApp::OpenGLRender()
 	
 	m_cube.Render(GL_TRIANGLES);
 
-	if (!m_bImageCapture)
+	if (!m_bImageCapture && !m_bRecord)
 		FBO::BindToScreen();
 	else
-		m_captureIm.BindForWriting();
+	{
+		if (m_bImageCapture)
+			m_captureIm.BindForWriting();
+		else
+			m_captureVideo.BindForWriting();
+	}
+		
 
 	m_motionBlurShader.Enable();
 	for (int i = 0; i < m_nbMotionBlur; i++)
@@ -242,9 +249,22 @@ void FractalCubeApp::OpenGLRender()
 
 	if (m_bImageCapture)
 	{
-		m_captureIm.Snapshot(std::string("D:\\OUTPUT\\")+m_name,std::string("png"));
+		m_captureIm.Snapshot(std::string("D:\\OUTPUT\\")+m_name,std::string("jpg"));
 		m_bImageCapture = false;
 	}
+
+	if (m_bRecord)
+	{
+		m_captureVideo.Snapshot();
+	}
+
+	if (m_bendRecord)
+	{
+		m_bRecord = false;
+		m_captureVideo.End();
+		m_bendRecord = false;
+	}
+
 
 }
 

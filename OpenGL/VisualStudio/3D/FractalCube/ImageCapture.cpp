@@ -31,7 +31,6 @@ void ImageCapture::Init(int width, int height)
 {
 	cv::utils::logging::setLogLevel(cv::utils::logging::LOG_LEVEL_VERBOSE);
 	m_FBO.Init(width, height, 1);
-	m_im = cv::Mat(height, width, CV_32FC4);
 	m_data = new float[width*height * 4];
 }
 
@@ -41,6 +40,18 @@ void ImageCapture::BindForWriting()
 }
 
 void ImageCapture::Snapshot(std::string namefile, std::string ext)
+{
+	cv::Mat mat = Snapshot();
+	std::string realname = namefile + "_" + std::to_string(m_count) + "." + ext;
+	bool succeed = cv::imwrite(realname.c_str(), mat);
+	m_count++;
+	if (!succeed)
+	{
+		INTERNALERROR("impossible to write image");
+	}
+}
+
+cv::Mat ImageCapture::Snapshot()
 {
 	int width, height, alignment;
 	//glEnable(GL_TEXTURE_2D);
@@ -61,11 +72,7 @@ void ImageCapture::Snapshot(std::string namefile, std::string ext)
 	mat = 255 * mat;
 	cv::cvtColor(mat, mat, cv::COLOR_RGBA2BGRA, 4);
 	cv::flip(mat, mat, 1);
-	std::string realname = namefile +"_"+ std::to_string(m_count)+"."+ext;
-	bool succeed = cv::imwrite(realname.c_str(), mat);
-	m_count++;
-	if (!succeed)
-	{
-		INTERNALERROR("impossible to write image");
-	}
+
+	return mat;
+	
 }

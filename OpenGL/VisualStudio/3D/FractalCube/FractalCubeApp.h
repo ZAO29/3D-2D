@@ -6,6 +6,7 @@
 #include <ZGL/Texture.h>
 #include <ZGL/FBO.h>
 #include "ImageCapture.h"
+#include "MyVideoCapture.h"
 
 class FractalCubeApp : public ZGLApp
 {
@@ -33,6 +34,7 @@ private :
 
 	bool m_bImageCapture = false;
 	ImageCapture m_captureIm;
+	MyVideoCapture m_captureVideo;
 
 };
 

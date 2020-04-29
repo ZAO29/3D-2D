@@ -97,7 +97,11 @@ void ZGLApp::Run()
 		m_time = clock;
 		m_elapsedTime = elapsed_seconds.count();
 		m_cumulTime += m_elapsedTime;
-		m_pCam->Update(m_elapsedTime);
+		if (m_bfixedTime)
+			m_elapsedTime = m_timestep;
+		
+		if (!m_bImguiRender)
+			m_pCam->Update(m_elapsedTime);
 
 		m_FPSs[m_idFPS] = 1. / m_elapsedTime;
 		m_idFPS++;
@@ -150,6 +154,17 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 			m_bImguiRender = !m_bImguiRender;
 			std::cout << " imgui render " << m_bImguiRender << std::endl;
 		}
+
+		if (key == GLFW_KEY_Q)
+		{
+			m_bRecord = true;
+		}
+
+		if (key == GLFW_KEY_S)
+		{
+			m_bRecord = false;
+			m_bendRecord = true;
+		}
 	}
 	
 
@@ -181,6 +196,7 @@ void ZGLApp::ImguiDraw()
 	ImGui::PlotLines("FPS", &m_FPSs[0], m_FPSs.size());
 	ImGui::Text("FPS max : %f", *std::max_element(m_FPSs.begin(),m_FPSs.end()));
 	ImGui::Text("FPS min : %f", *std::min_element(m_FPSs.begin(), m_FPSs.end()));
+	ImGui::Checkbox("Fixed Time", &m_bfixedTime);
 
 	ImGui::End();
 }

@@ -15,10 +15,12 @@ public:
 	void BindForWriting();
 
 	void Snapshot(std::string namefile,std::string ext);
+	cv::Mat Snapshot();
+
 
 private :
 	FBO m_FBO;
-	cv::Mat m_im;
+	 
 	float* m_data;
 	unsigned int m_count = 0;
 

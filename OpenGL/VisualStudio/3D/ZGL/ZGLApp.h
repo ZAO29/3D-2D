@@ -73,6 +73,10 @@ protected :
 	std::string m_name = "ZGLApp";
 	std::vector<float> m_FPSs;
 	int m_idFPS;
+	bool m_bfixedTime = true;
+	float m_timestep = 1. / 60.;
+	bool m_bRecord;
+	bool m_bendRecord;
 	
 
 	
