@@ -309,8 +309,8 @@ void MyApp::ImguiDraw()
 		m_shader[0].Enable();
 		m_shader[0].updateUniform(SHADER_USEMULTIUSE, (void*)&m_multiUse);
 	}
-
 	ImGui::End();
+	
 }
 
 void MyApp::UpdateMultiUse(float elapsedTime)

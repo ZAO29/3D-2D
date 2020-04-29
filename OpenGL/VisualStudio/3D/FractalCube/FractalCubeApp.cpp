@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "FractalCubeApp.h"
 #include <ZGL/CameraFree.h>
-
+#include <ZGL/imgui/imgui.h>
 
 #include <gtc/type_ptr.hpp>
 
@@ -22,6 +22,8 @@ bool FractalCubeApp::Init()
 	m_bfullScreen = false;
 	m_width = 1280;
 	m_height = 720;
+	//m_width = 200;
+	//m_height = 200;
 	ZGLApp::Init();
 
 	float a = 1.0f;
@@ -148,6 +150,8 @@ bool FractalCubeApp::Init()
 	}
 
 
+	m_captureIm.Init(m_width, m_height);
+
 	return true;
 }
 
@@ -222,7 +226,11 @@ void FractalCubeApp::OpenGLRender()
 	
 	m_cube.Render(GL_TRIANGLES);
 
-	FBO::BindToScreen();
+	if (!m_bImageCapture)
+		FBO::BindToScreen();
+	else
+		m_captureIm.BindForWriting();
+
 	m_motionBlurShader.Enable();
 	for (int i = 0; i < m_nbMotionBlur; i++)
 	{
@@ -231,6 +239,13 @@ void FractalCubeApp::OpenGLRender()
 	m_MotionBlurFBOs[id].RenderQuad();
 	m_idFBO++;
 	m_idFBO = m_idFBO % m_nbMotionBlur;
+
+	if (m_bImageCapture)
+	{
+		m_captureIm.Snapshot(std::string("D:\\OUTPUT\\")+m_name,std::string("png"));
+		m_bImageCapture = false;
+	}
+
 }
 
 void FractalCubeApp::Destroy()
@@ -241,4 +256,10 @@ void FractalCubeApp::Destroy()
 void FractalCubeApp::ImguiDraw()
 {
 	ZGLApp::ImguiDraw();
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
+	if (ImGui::Button("screenshot"))
+	{
+		m_bImageCapture = true;
+	}
+	ImGui::End();
 }

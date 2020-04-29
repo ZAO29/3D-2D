@@ -27,6 +27,9 @@
     <ClInclude Include="FractalCubeApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ImageCapture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FractalCubeApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageCapture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

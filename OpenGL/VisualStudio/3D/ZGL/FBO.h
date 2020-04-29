@@ -33,6 +33,9 @@ public:
     
     void BindForReading(unsigned int texUnit, unsigned int texId=0);
     
+	int getTexID(unsigned int texId = 0) { return m_tex_IDS[0]; }
+
+
     void RenderQuad();
     
     static void BindToScreen();

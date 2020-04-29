@@ -23,6 +23,8 @@
 #include "Camera.h"
 #include "WindowEnv.h"
 
+#include <vector>
+
 
 
 
@@ -69,6 +71,8 @@ protected :
 
 	std::map<eCameraType, Camera*> m_CameraMap;
 	std::string m_name = "ZGLApp";
+	std::vector<float> m_FPSs;
+	int m_idFPS;
 	
 
 	

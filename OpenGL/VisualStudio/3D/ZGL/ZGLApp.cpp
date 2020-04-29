@@ -13,7 +13,7 @@
 
 #include "stdafx.h"
 
-
+#include <algorithm>
 
 #include "ZGLApp.h"
 
@@ -99,6 +99,10 @@ void ZGLApp::Run()
 		m_cumulTime += m_elapsedTime;
 		m_pCam->Update(m_elapsedTime);
 
+		m_FPSs[m_idFPS] = 1. / m_elapsedTime;
+		m_idFPS++;
+		m_idFPS = m_idFPS % m_FPSs.size();
+
 		glClearColor(0., 0., 0., 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -157,7 +161,7 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 void ZGLApp::ImguiDraw()
 {
 	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);                          // Create a window called "Hello, world!" and append into it.
-	ImGui::Text("This is some useful text.");
+	
 
 	const char * items[] = { "TRACKBALL","FREE","BEZIER" };
 	int camid = m_typeCamera;
@@ -173,6 +177,11 @@ void ZGLApp::ImguiDraw()
 
 	}
 	m_pCam->ImguiDraw();
+
+	ImGui::PlotLines("FPS", &m_FPSs[0], m_FPSs.size());
+	ImGui::Text("FPS max : %f", *std::max_element(m_FPSs.begin(),m_FPSs.end()));
+	ImGui::Text("FPS min : %f", *std::min_element(m_FPSs.begin(), m_FPSs.end()));
+
 	ImGui::End();
 }
 
@@ -246,6 +255,7 @@ void ZGLApp::ImguiDestroy()
 
 bool ZGLApp::Init()
 {
+	m_FPSs.resize(100);
 
 	m_time = std::chrono::system_clock::now();
 

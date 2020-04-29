@@ -33,6 +33,7 @@ ExportedObj/
 *.lib
 *.idb
 *.pch
+*.dll
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -70,3 +71,4 @@ MATLAB/subdivision/output/*
 
 
 /OpenGL/VisualStudio/BezierSurfaceTrack/OpenGLHelloWorld/imgui.ini
+

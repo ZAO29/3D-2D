@@ -5,6 +5,7 @@
 #include <ZGL/Shaders.h>
 #include <ZGL/Texture.h>
 #include <ZGL/FBO.h>
+#include "ImageCapture.h"
 
 class FractalCubeApp : public ZGLApp
 {
@@ -29,6 +30,9 @@ private :
 	std::vector<FBO> m_MotionBlurFBOs;
 	int m_nbMotionBlur = 1;
 	int m_idFBO = 0;
+
+	bool m_bImageCapture = false;
+	ImageCapture m_captureIm;
 
 };
 
