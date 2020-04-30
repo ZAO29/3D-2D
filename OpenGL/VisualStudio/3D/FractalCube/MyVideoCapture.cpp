@@ -30,6 +30,10 @@ void MyVideoCapture::BindForWriting()
 	m_capture.BindForWriting();
 }
 
+void MyVideoCapture::BindForReading()
+{
+}
+
 void MyVideoCapture::Snapshot()
 {
 	cv::Mat m = m_capture.Snapshot();

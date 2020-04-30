@@ -39,6 +39,11 @@ void ImageCapture::BindForWriting()
 	m_FBO.BindForWriting();
 }
 
+void ImageCapture::BindForReading()
+{
+	m_FBO.BindForReading(GL_TEXTURE0, 0);
+}
+
 void ImageCapture::Snapshot(std::string namefile, std::string ext)
 {
 	cv::Mat mat = Snapshot();

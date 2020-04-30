@@ -24,6 +24,7 @@ bool FractalCubeApp::Init()
 	//m_height = 720;
 	//m_width = 200;
 	//m_height = 200;
+	//m_typeCamera = eCameraType::TRACKBALLCAMERA;
 	ZGLApp::Init();
 
 	float a = 1.0f;
@@ -256,6 +257,10 @@ void FractalCubeApp::OpenGLRender()
 	if (m_bRecord)
 	{
 		m_captureVideo.Snapshot();
+		m_captureVideo.BindForReading();
+		FBO::BindToScreen();
+		m_FBO->RenderQuad();
+
 	}
 
 	if (m_bendRecord)

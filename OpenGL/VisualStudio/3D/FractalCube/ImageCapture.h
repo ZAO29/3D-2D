@@ -14,6 +14,8 @@ public:
 
 	void BindForWriting();
 
+	void BindForReading();
+
 	void Snapshot(std::string namefile,std::string ext);
 	cv::Mat Snapshot();
 

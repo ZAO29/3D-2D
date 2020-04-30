@@ -14,6 +14,7 @@ public:
 
 	void Init(int width, int height, std::string namefile);
 	void BindForWriting();
+	void BindForReading();
 
 	void Snapshot();
 
