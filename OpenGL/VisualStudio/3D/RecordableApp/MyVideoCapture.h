@@ -16,6 +16,8 @@ public:
 	void BindForWriting();
 	void BindForReading();
 
+	void RenderQuad();
+
 	void Snapshot();
 
 	void End();

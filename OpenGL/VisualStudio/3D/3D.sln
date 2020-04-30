@@ -12,6 +12,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZGL", "ZGL\ZGL.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FractalCube", "FractalCube\FractalCube.vcxproj", "{0C4FEA26-2B52-41F3-8183-94DCB3233FF9}"
 	ProjectSection(ProjectDependencies) = postProject
+		{61042E74-C693-44A9-A382-8C6804767D96} = {61042E74-C693-44A9-A382-8C6804767D96}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RecordableApp", "RecordableApp\RecordableApp.vcxproj", "{61042E74-C693-44A9-A382-8C6804767D96}"
+	ProjectSection(ProjectDependencies) = postProject
 		{FBC421FD-8B7E-4172-9F02-8F7233F16A0E} = {FBC421FD-8B7E-4172-9F02-8F7233F16A0E}
 	EndProjectSection
 EndProject
@@ -47,6 +52,14 @@ Global
 		{0C4FEA26-2B52-41F3-8183-94DCB3233FF9}.Release|x64.Build.0 = Release|x64
 		{0C4FEA26-2B52-41F3-8183-94DCB3233FF9}.Release|x86.ActiveCfg = Release|Win32
 		{0C4FEA26-2B52-41F3-8183-94DCB3233FF9}.Release|x86.Build.0 = Release|Win32
+		{61042E74-C693-44A9-A382-8C6804767D96}.Debug|x64.ActiveCfg = Debug|x64
+		{61042E74-C693-44A9-A382-8C6804767D96}.Debug|x64.Build.0 = Debug|x64
+		{61042E74-C693-44A9-A382-8C6804767D96}.Debug|x86.ActiveCfg = Debug|Win32
+		{61042E74-C693-44A9-A382-8C6804767D96}.Debug|x86.Build.0 = Debug|Win32
+		{61042E74-C693-44A9-A382-8C6804767D96}.Release|x64.ActiveCfg = Release|x64
+		{61042E74-C693-44A9-A382-8C6804767D96}.Release|x64.Build.0 = Release|x64
+		{61042E74-C693-44A9-A382-8C6804767D96}.Release|x86.ActiveCfg = Release|Win32
+		{61042E74-C693-44A9-A382-8C6804767D96}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

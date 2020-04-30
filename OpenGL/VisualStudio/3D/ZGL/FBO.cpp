@@ -15,7 +15,7 @@
 
 #include "FBO.h"
 
-#include <GL/glew.h>
+#include "GLGLEW.h"
 #include <stdio.h>
 #include "Debugging.h"
 

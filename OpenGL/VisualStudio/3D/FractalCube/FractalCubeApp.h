@@ -1,14 +1,18 @@
 #pragma once
 
-#include <ZGL/ZGLApp.h>
+
+
+#include <RecordableApp/RecordableApp.h>
+
 #include <ZGL/ZGLDrawable.h>
-#include <ZGL/Shaders.h>
 #include <ZGL/Texture.h>
 #include <ZGL/FBO.h>
-#include "ImageCapture.h"
-#include "MyVideoCapture.h"
 
-class FractalCubeApp : public ZGLApp
+
+
+
+
+class FractalCubeApp : public RecordableApp 
 {
 public:
 	FractalCubeApp();
@@ -32,9 +36,8 @@ private :
 	int m_nbMotionBlur = 1;
 	int m_idFBO = 0;
 
-	bool m_bImageCapture = false;
-	ImageCapture m_captureIm;
-	MyVideoCapture m_captureVideo;
+	
+
 
 };
 

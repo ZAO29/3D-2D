@@ -17,7 +17,7 @@
 
 #include <chrono>
 
-#include "GL/glew.h"
+#include "GLGLEW.h"
 
 #include <map>
 #include "Camera.h"
@@ -38,9 +38,10 @@ public:
 	virtual void OpenGLRender();
     virtual bool Init();
     void Run();
+	virtual void PostProcess() {};
 	virtual void Destroy();
 
-	void KeyCallback(int key, int scancode, int action, int mods);
+	virtual void KeyCallback(int key, int scancode, int action, int mods);
 	
 	virtual void ImguiDraw();
  
@@ -75,8 +76,7 @@ protected :
 	int m_idFPS;
 	bool m_bfixedTime = true;
 	float m_timestep = 1. / 60.;
-	bool m_bRecord;
-	bool m_bendRecord;
+
 	
 
 	

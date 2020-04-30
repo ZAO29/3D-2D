@@ -14,7 +14,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <GL/gl.h>
+
 #include <string>
 
 
@@ -30,7 +30,8 @@ public:
     
 private:
     std::string m_fileName = "";
-    unsigned int m_textureTarget = GL_TEXTURE_2D;
+		
+    unsigned int m_textureTarget = 0x0DE1; //GL_TEXTURE_2D
     unsigned int m_textureObj = 0;
 
     

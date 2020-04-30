@@ -114,6 +114,9 @@ void ZGLApp::Run()
 
 
 		OpenGLRender();
+
+		PostProcess();
+
 		if (m_bImguiRender)
 			ImguiRender();
 		
@@ -155,16 +158,7 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 			std::cout << " imgui render " << m_bImguiRender << std::endl;
 		}
 
-		if (key == GLFW_KEY_Q)
-		{
-			m_bRecord = true;
-		}
-
-		if (key == GLFW_KEY_S)
-		{
-			m_bRecord = false;
-			m_bendRecord = true;
-		}
+		
 	}
 	
 

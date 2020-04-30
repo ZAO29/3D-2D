@@ -2,7 +2,7 @@
 #include "BezierSurfaceDrawable.h"
 #include "Constant.h"
 
-#include "GL/glew.h"
+#include "ZGL/GLGLEW.h"
 
 BezierSurfaceDrawable::BezierSurfaceDrawable()
 {

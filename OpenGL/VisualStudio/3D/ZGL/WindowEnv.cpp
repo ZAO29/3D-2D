@@ -4,8 +4,8 @@
 
 
 // GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
+//#define GLEW_STATIC
+#include "GLGLEW.h"
 
 #include <GLFW/glfw3.h>
 #include "ZGLApp.h"

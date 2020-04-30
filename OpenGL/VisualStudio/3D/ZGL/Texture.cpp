@@ -18,8 +18,7 @@
 #include <cmath>
 
 
-#include <GL/glew.h>
-//#include <GL/gl.h>
+#include "GLGLEW.h"
 
 //#include <SOIL/SOIL.h>
 

@@ -16,6 +16,8 @@ public:
 
 	void BindForReading();
 
+	void RenderQuad() { m_FBO.RenderQuad(); }
+
 	void Snapshot(std::string namefile,std::string ext);
 	cv::Mat Snapshot();
 

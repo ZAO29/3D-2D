@@ -14,7 +14,7 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="shader">
-      <UniqueIdentifier>{e41fc4b5-0827-45cd-b739-e7adf2e3a62f}</UniqueIdentifier>
+      <UniqueIdentifier>{f2fc72bd-8df5-4591-b208-8535faf5886c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,7 +24,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FractalCubeApp.h">
+    <ClInclude Include="ImageCapture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVideoCapture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordableApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,24 +38,21 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FractalCube.cpp">
+    <ClCompile Include="ImageCapture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FractalCubeApp.cpp">
+    <ClCompile Include="MyVideoCapture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordableApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.frag">
+    <None Include="QuadShader.frag">
       <Filter>shader</Filter>
     </None>
-    <None Include="shader.vert">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="motionblur.frag">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="motionblur.vert">
+    <None Include="QuadShader.vert">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

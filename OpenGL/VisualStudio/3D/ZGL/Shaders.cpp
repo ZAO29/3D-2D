@@ -18,8 +18,7 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
-#include <GL/glew.h>
-#include <GL/gl.h>
+#include "GLGLEW.h"
 #include "Debugging.h"
 
 

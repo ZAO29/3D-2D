@@ -34,6 +34,11 @@ void MyVideoCapture::BindForReading()
 {
 }
 
+void MyVideoCapture::RenderQuad()
+{
+	m_capture.RenderQuad();
+}
+
 void MyVideoCapture::Snapshot()
 {
 	cv::Mat m = m_capture.Snapshot();
