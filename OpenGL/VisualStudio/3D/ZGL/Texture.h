@@ -18,11 +18,35 @@
 #include <string>
 
 
+struct TexParam
+{
+	TexParam(int width, int height, int channel, int type):
+	m_width(width),
+	m_height(height),
+	m_channel(channel),
+		m_type(type)
+	{}
+	TexParam() {}
+	int m_width = 0;
+	int m_height = 0;
+	int m_channel = 0x1908; // GL_RBGA
+	int m_type = 0; // GL_UNSIGNED BYTE
+
+};
+
+
 class Texture {
 public:
     Texture(unsigned int TextureTarget, const std::string& FileName);
     Texture(){}
     Texture(float r,float g, float b);
+
+	void Init(TexParam param, void* data=NULL);
+
+	void update(void* data);
+
+	TexParam getParam() { return m_param; }
+
     
     bool Load();
 
@@ -34,9 +58,8 @@ private:
     unsigned int m_textureTarget = 0x0DE1; //GL_TEXTURE_2D
     unsigned int m_textureObj = 0;
 
+	TexParam m_param;
     
-    int m_width = 0;
-    int m_height = 0;
 
 };
 

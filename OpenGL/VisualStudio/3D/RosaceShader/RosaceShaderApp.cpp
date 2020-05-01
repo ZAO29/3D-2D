@@ -78,6 +78,13 @@ bool RosaceShaderApp::Init()
 		m_quad.Init(paramDrawable);
 	}
 
+	m_FBO.Init(m_width, m_height);
+	TexParam texparameter;
+	texparameter.m_width = m_width;
+	texparameter.m_height = m_height;
+	texparameter.m_channel = GL_RED;
+	texparameter.m_type = GL_FLOAT;
+	m_tex.Init(texparameter);
 
 	return true;
 }
@@ -91,6 +98,9 @@ void RosaceShaderApp::OpenGLRender()
 	m_RosaceShader.updateUniform(SHADER_TIME, &t);
 	m_quad.Render(GL_TRIANGLES);
 
+
+	
+	
 
 }
 

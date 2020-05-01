@@ -110,13 +110,15 @@ void main() {
         pt = radBigCircle*vec2(cos(angle),sin(angle));
         multPt = radBigCircle*vec2(cos(multAngle),sin(multAngle));
         
-        color.x = 1.005*mix(droitePt(st,0.001,pt,multPt),color.x,float(i)/float(i+1));
-        color.y =1.0015* mix(droitePt(st,0.01,pt,multPt),color.y,float(i)/float(i+1));
-        color.z = 1.0015*mix(droitePt(st,0.05,pt,multPt),color.z,float(i)/float(i+1));
+        color.x = 1.000*max(droitePt(st,0.001,pt,multPt),color.x);
+		color.y = color.x;
+		color.z = color.x;
+       // color.y =1.000* max(0.75*droitePt(st,0.005,pt,multPt),color.y);
+        //color.z = 1.000*max(0.5*droitePt(st,0.025,pt,multPt),color.z);
         //color = max(val,color);
     }
     
-    color *= 15.;
+    //color *= 15.;
     
 
 

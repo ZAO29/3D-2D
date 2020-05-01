@@ -127,7 +127,7 @@ bool FractalCubeApp::Init()
 		m_quad.Init(paramDrawable);
 	}
 
-	m_ptex = new Texture(0., 0., 0.);
+	m_ptex = new Texture(1., 0., 0.);
 
 	MapUniform listvar;
 	listvar[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);

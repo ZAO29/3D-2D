@@ -23,6 +23,7 @@
 //#include <SOIL/SOIL.h>
 
 #include "Texture.h"
+#include "Debugging.h"
 
 
 
@@ -40,21 +41,46 @@ Texture::Texture(float r,float g, float b)
     
     
     std::vector<unsigned char> data = {ri,gi,bi};
-    m_width=1;
-    m_height=1;
-    m_textureTarget = GL_TEXTURE_2D;
-    GLuint GLChannel = GL_RGB;
+
     
-    glGenTextures(1, &m_textureObj);
-    glBindTexture(m_textureTarget, m_textureObj);
-    
-    glTexImage2D(m_textureTarget, 0, GLChannel, m_width, m_height, 0, GLChannel,
-              GL_UNSIGNED_BYTE, &data[0]);
+	TexParam param = TexParam(1, 1, GL_RGB, GL_UNSIGNED_BYTE);
     
    
-    
-    glTexParameterf(m_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(m_textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	Init(param, &data[0]);
+}
+
+void Texture::Init(TexParam param,void* data)
+{
+	m_param = param;
+
+
+	m_textureTarget = GL_TEXTURE_2D;
+
+
+	glGenTextures(1, &m_textureObj);
+	glBindTexture(m_textureTarget, m_textureObj);
+	int levelmap = 0;
+	glTexImage2D(m_textureTarget, levelmap, m_param.m_channel, m_param.m_width, m_param.m_height, 0, m_param.m_channel,
+		m_param.m_type, data);
+
+
+
+	glTexParameterf(m_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(m_textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+void Texture::update(void * data)
+{
+	if (m_textureObj == 0)
+	{
+		INTERNALERROR(" tex not created");
+	}
+		
+
+	glBindTexture(m_textureTarget, m_textureObj);
+	int levelmap = 0;
+	glTexImage2D(m_textureTarget, levelmap, m_param.m_channel, m_param.m_width, m_param.m_height, 0, m_param.m_channel,
+		m_param.m_type, data);
 }
 
 

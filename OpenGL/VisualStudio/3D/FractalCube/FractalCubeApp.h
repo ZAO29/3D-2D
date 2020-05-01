@@ -30,7 +30,7 @@ private :
 	Shader m_motionBlurShader;
 	Texture* m_ptex;
 	FBO m_FBO[2];
-	int m_nbOctave = 100;
+	int m_nbOctave = 3;
 
 	std::vector<FBO> m_MotionBlurFBOs;
 	int m_nbMotionBlur = 1;
