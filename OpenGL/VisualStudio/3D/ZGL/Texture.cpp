@@ -138,6 +138,18 @@ bool Texture::Load()
 
 
 
+void Texture::getData(void * data)
+{
+	Bind(GL_TEXTURE0);
+
+	glGetTexImage(m_textureTarget, 0, m_param.m_channel, m_param.m_type, data);
+}
+
+void Texture::Destroy()
+{
+	glDeleteTextures(1, &m_textureObj);
+}
+
 void Texture::Bind(unsigned int TextureUnit)
 {
     glActiveTexture(TextureUnit);

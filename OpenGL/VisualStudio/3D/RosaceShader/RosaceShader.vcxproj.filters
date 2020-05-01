@@ -46,5 +46,11 @@
     <None Include="Rosace.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="CompositionShader.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="CompositionShader.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

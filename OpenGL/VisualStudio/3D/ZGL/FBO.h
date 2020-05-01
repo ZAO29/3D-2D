@@ -16,6 +16,7 @@
 
 
 #include <vector>
+#include "Texture.h"
 
 
 
@@ -33,7 +34,12 @@ public:
     
     void BindForReading(unsigned int texUnit, unsigned int texId=0);
     
-	int getTexID(unsigned int texId = 0) { return m_tex_IDS[0]; }
+	int getTexID(unsigned int texId = 0) { return m_texs[texId].getID(); }
+
+
+	void getTexData(void* data, unsigned int texId = 0);
+
+	TexParam getTexParam(int texID = 0) { return m_texs[texID].getParam(); }
 
 
     void RenderQuad();
@@ -43,7 +49,7 @@ public:
 private:
 
    unsigned int m_fbo_ID;
-   std::vector<unsigned int> m_tex_IDS = std::vector<unsigned int>(1);
+   std::vector<Texture> m_texs;
    unsigned int m_depthRenderBuffer_ID;
    unsigned int m_quadMesh_ID;
 };

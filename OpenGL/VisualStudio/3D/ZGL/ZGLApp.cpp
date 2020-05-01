@@ -95,10 +95,13 @@ void ZGLApp::Run()
 		clock = std::chrono::system_clock::now();
 		std::chrono::duration<float> elapsed_seconds = clock - m_time;
 		m_time = clock;
-		m_elapsedTime = elapsed_seconds.count();
-		m_cumulTime += m_elapsedTime;
 		if (m_bfixedTime)
 			m_elapsedTime = m_timestep;
+		else
+		m_elapsedTime = elapsed_seconds.count();
+		
+		m_cumulTime += m_elapsedTime;
+
 		
 		if (!m_bImguiRender)
 			m_pCam->Update(m_elapsedTime);

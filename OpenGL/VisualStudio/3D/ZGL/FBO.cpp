@@ -31,19 +31,19 @@ FBO::~FBO() {
         glDeleteFramebuffers(1, &m_fbo_ID);
     }
 
-    for (auto& id : m_tex_IDS)
+    for (auto& tex : m_texs)
     {
-        glDeleteTextures(1, &id);
+		tex.Destroy();
     }
      
-    m_tex_IDS.resize(0); 
+    m_texs.resize(0); 
     
 }
 
 
 bool FBO::Init(unsigned int WindowWidth, unsigned int WindowHeight, unsigned int nbTex)
 {
-	m_tex_IDS.resize(nbTex);
+	m_texs.resize(nbTex);
     // Create the FBO
     glGenFramebuffers(1, &m_fbo_ID);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo_ID); 
@@ -51,18 +51,27 @@ bool FBO::Init(unsigned int WindowWidth, unsigned int WindowHeight, unsigned int
    
 	int toto = 1;
     // Create the depth buffer
-    glGenTextures(nbTex, &m_tex_IDS[0]);
+   
     
-    for (unsigned int i=0;i<nbTex;i++)
+	TexParam paramtex;
+	paramtex.m_width = WindowWidth;
+	paramtex.m_height = WindowHeight;
+	paramtex.m_channel = GL_RGBA;
+	paramtex.m_type = GL_FLOAT;
+
+	int i = 0;
+
+    for (auto& tex : m_texs)
     {
-        glBindTexture(GL_TEXTURE_2D, m_tex_IDS[i]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WindowWidth, WindowHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+		tex.Init(paramtex);
+
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+i, GL_TEXTURE_2D, m_tex_IDS[i], 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+i, GL_TEXTURE_2D, tex.getID(), 0);
+
     }
     
     
@@ -120,11 +129,15 @@ void FBO::BindForWriting()
 
 void FBO::BindForReading(unsigned int texUnit, unsigned int texId)
 {   
-    glActiveTexture(texUnit);
-    glBindTexture(GL_TEXTURE_2D, m_tex_IDS[texId]);
+	m_texs[texId].Bind(texUnit);
 }
 
 
+
+void FBO::getTexData(void * data, unsigned int texId)
+{
+	m_texs[texId].getData(data);
+}
 
 void FBO::RenderQuad()
 {

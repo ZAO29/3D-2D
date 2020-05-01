@@ -47,7 +47,12 @@ public:
 
 	TexParam getParam() { return m_param; }
 
+	int getID() { return m_textureObj; }
+
+	void getData(void* data);
     
+
+	void Destroy();
     bool Load();
 
     void Bind(unsigned int TextureUnit);

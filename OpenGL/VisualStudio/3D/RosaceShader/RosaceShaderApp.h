@@ -5,6 +5,7 @@
 #include <ZGL/ZGLDrawable.h>
 #include <ZGL/FBO.h>
 #include <ZGL/Texture.h>
+#include <RecordableApp/ImageCapture.h>
 
 class RosaceShaderApp : public RecordableApp
 {
@@ -20,8 +21,18 @@ public:
 
 	ZGLVAODrawable m_quad;
 	Shader m_RosaceShader;
-	FBO m_FBO;
-	Texture m_tex;
-	int m_nbPt = 500;
+	Shader m_compoShader;
+	
+	ImageCapture m_capture;
+
+	Texture m_texR;
+	Texture m_texG;
+	Texture m_texB;
+	int m_nbPt = 300;
+	int m_kernelSize = 20;
+	glm::ivec2 m_kernelMult = glm::ivec2(2, 3);
+	float m_reinitTime = 0;
+	float m_speed = 0.5;
+	bool m_equalize = true;
 };
 

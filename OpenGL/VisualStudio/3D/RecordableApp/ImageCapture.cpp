@@ -58,22 +58,16 @@ void ImageCapture::Snapshot(std::string namefile, std::string ext)
 
 cv::Mat ImageCapture::Snapshot()
 {
-	int width, height, alignment;
-	//glEnable(GL_TEXTURE_2D);
-	m_FBO.BindForReading(GL_TEXTURE0);
-	glGetIntegerv(GL_PACK_ALIGNMENT, &alignment);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-	// Fiddle with alignment to make sure you get properly aligned buffer/width.
 
+	TexParam param = m_FBO.getTexParam();
+	if (param.m_type != GL_FLOAT || param.m_channel != GL_RGBA)
+	{
+		INTERNALERROR("unhandle type of texture");
+	}
 
-	int mipmapLevel = 0;
-	//glGetTexImage(GL_TEXTURE_2D, mipmapLevel, GL_RGBA, GL_FLOAT, &imagedata[0]);
-	glGetTexImage(GL_TEXTURE_2D, mipmapLevel, GL_RGBA, GL_FLOAT, &m_data[0]);
-
-
-
-	cv::Mat mat(height, width, CV_32FC4, m_data);
+	
+	m_FBO.getTexData(m_data);
+	cv::Mat mat(param.m_height, param.m_width, CV_32FC4, m_data);
 	mat = 255 * mat;
 	cv::cvtColor(mat, mat, cv::COLOR_RGBA2BGRA, 4);
 	cv::flip(mat, mat, 1);

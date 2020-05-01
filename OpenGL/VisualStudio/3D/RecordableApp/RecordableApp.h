@@ -24,6 +24,7 @@ protected :
 	// screen or different FBO for recording
 	void setTargetRender();
 
+	Shader m_shaderQuad;
 
 private :
 	ImageCapture m_captureIm;
@@ -34,6 +35,6 @@ private :
 	bool m_bRecord;
 	bool m_bendRecord;
 
-	Shader m_shaderQuad;
+	
 };
 
