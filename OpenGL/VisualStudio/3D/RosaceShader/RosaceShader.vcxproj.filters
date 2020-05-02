@@ -52,5 +52,11 @@
     <None Include="CompositionShader.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="Blurr.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Blurr.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

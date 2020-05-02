@@ -7,6 +7,9 @@
 #define SHADER_TIME "u_time"
 #define SHADER_SCALE "u_scale"
 #define SHADER_NB_PT "u_nbPt"
+#define SHADER_DIR "u_dir"
+#define SHADER_RESOLUTION "u_resolution"
+#define SHADER_POWMULT "u_powmult"
 
 RosaceShaderApp::RosaceShaderApp()
 {
@@ -82,14 +85,42 @@ bool RosaceShaderApp::Init()
 
 	m_capture.Init(m_width, m_height);
 
+
+	//CPU BLurring
 	TexParam texparameter;
 	texparameter.m_width = m_width;
 	texparameter.m_height = m_height;
 	texparameter.m_channel = GL_RED;
 	texparameter.m_type = GL_UNSIGNED_BYTE;
-	m_texR.Init(texparameter);
-	m_texG.Init(texparameter);
-	m_texB.Init(texparameter);
+	
+	for (int i = 0; i < 3; i++)
+	{
+		m_texRGB[i].Init(texparameter);
+	}
+
+	
+
+
+
+	//GPU Blurring
+	MapUniform blurUniform;
+	blurUniform[SHADER_DIR] = UniformVar(eZGLtypeUniform::ZGL_FVEC2);
+	blurUniform[SHADER_RESOLUTION] = UniformVar(eZGLtypeUniform::ZGL_FVEC2);
+	blurUniform[SHADER_POWMULT] = UniformVar(eZGLtypeUniform::ZGL_FVEC2);
+	m_blurShader.Init("Blurr", false, blurUniform);
+	m_blurShader.Enable();
+	glm::vec2 res(m_height, m_width);
+	m_blurShader.updateUniform(SHADER_RESOLUTION, &res);
+	m_blurShader.updateUniform(SHADER_POWMULT, &m_powMult);
+	for (int i = 0; i < 2; i++)
+	{
+		m_pingpongFBO[i].Init(m_width, m_height);
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		m_RGBFBO[i].Init(m_width, m_height);
+	}
+
 
 	return true;
 }
@@ -104,47 +135,35 @@ int makeImpair(int a)
 
 void RosaceShaderApp::OpenGLRender()
 {
-	setTargetRender();
-	m_capture.BindForWriting();
+	if (m_blurTexnik == eBLURRING::CPU)
+		m_capture.BindForWriting();
+	else
+		m_pingpongFBO[0].BindForWriting();
+
 	glClearColor(0.,0.,0.,1.);
 	m_RosaceShader.Enable();
 	float t = m_speed*(m_cumulTime-m_reinitTime)+1;
 	m_RosaceShader.updateUniform(SHADER_TIME, &t);
 	m_quad.Render(GL_TRIANGLES);
 	
-	
-	cv::Mat im = m_capture.Snapshot();
-	cv::cvtColor(im, im, cv::COLOR_BGRA2GRAY, 1);
-	im.convertTo(im, CV_8U);
-	cv::Mat out1, out2, out3;
-	//im = im / 255.;
-	int kernel_impair = makeImpair(m_kernelSize);
-	int kernel2 = makeImpair(m_kernelSize*m_kernelMult.x);
-	int kernel3 = makeImpair(m_kernelSize*m_kernelMult.y);
-	cv::GaussianBlur(im, out1, cv::Size(kernel_impair, kernel_impair), 0, 0);
-	cv::GaussianBlur(im, out2, cv::Size(kernel2,kernel2), 0, 0);
-	cv::GaussianBlur(im, out3, cv::Size(kernel3,kernel3), 0, 0);
-
-	if (m_equalize)
+	if (m_blurTexnik == eBLURRING::CPU)
 	{
-		cv::equalizeHist(out1, out1);
-		cv::equalizeHist(out2, out2);
-		cv::equalizeHist(out3, out3);
-
-		//out1 = out1 / 255;
-		//out2 = out2 / 255;
-		//out3 = out3 / 255;
+		CPUBlurr();
 	}
-	m_texR.update(out1.ptr<float>());
-	m_texG.update(out2.ptr<float>());
-	m_texB.update(out2.ptr<float>());
+	else
+	{
+		GPUBlurr();
+	}
+
 
 	setTargetRender();
 	m_compoShader.Enable();
-	m_texR.Bind(GL_TEXTURE0);
-	m_texG.Bind(GL_TEXTURE1);
-	m_texB.Bind(GL_TEXTURE2);
 	m_quad.Render(GL_TRIANGLES);
+
+
+
+
+	
 
 	
 	
@@ -173,10 +192,130 @@ void RosaceShaderApp::ImguiDraw()
 		m_reinitTime = m_cumulTime;
 	}
 
-	ImGui::SliderFloat("speed", &m_speed, 0.1, 5);
-	ImGui::SliderInt2("kernel mult",&m_kernelMult[0], 1, 10);
+	
+
+	bool CPUblur = (m_blurTexnik == eBLURRING::CPU);
+	ImGui::Checkbox("equalize", &m_equalize);
+	if (ImGui::Checkbox("CPU blur",&CPUblur))
+	{
+		if (CPUblur)
+		{
+			m_blurTexnik = eBLURRING::CPU;
+		}
+		else
+		{
+			m_blurTexnik = eBLURRING::GPU;
+		}
+	}
+	if (!CPUblur)
+	{
+		ImGui::SliderInt3("GPU Blur nb iter", &m_nbBlurFilter[0], 1, 20);
+		bool bpow=ImGui::SliderFloat("GPU power", &m_powMult[0], 0., 2.);
+		bool bmult=ImGui::SliderFloat("GPU mult", &m_powMult[1], 1., 1.2);
+
+		if (bpow || bmult)
+		{
+			m_blurShader.Enable();
+			m_blurShader.updateUniform(SHADER_POWMULT, &m_powMult[0]);
+		}
+	}
+	else
+	{
+		ImGui::SliderFloat("speed", &m_speed, 0.1, 5);
+		ImGui::SliderInt2("kernel mult", &m_kernelMult[0], 1, 10);
+		
+	}
+
+	
 	
 
 
 	ImGui::End();
+}
+
+void RosaceShaderApp::CPUBlurr()
+{
+	cv::Mat im = m_capture.Snapshot();
+	cv::cvtColor(im, im, cv::COLOR_BGRA2GRAY, 1);
+	im.convertTo(im, CV_8U);
+	cv::Mat out1, out2, out3;
+	//im = im / 255.;
+	int kernel_impair = makeImpair(m_kernelSize);
+	int kernel2 = makeImpair(m_kernelSize*m_kernelMult.x);
+	int kernel3 = makeImpair(m_kernelSize*m_kernelMult.y);
+	cv::GaussianBlur(im, out1, cv::Size(kernel_impair, kernel_impair), 0, 0);
+	cv::GaussianBlur(im, out2, cv::Size(kernel2, kernel2), 0, 0);
+	cv::GaussianBlur(im, out3, cv::Size(kernel3, kernel3), 0, 0);
+
+	if (m_equalize)
+	{
+		cv::equalizeHist(out1, out1);
+		cv::equalizeHist(out2, out2);
+		cv::equalizeHist(out3, out3);
+
+	}
+	m_texRGB[0].update(out1.ptr<float>());
+	m_texRGB[1].update(out2.ptr<float>());
+	m_texRGB[2].update(out3.ptr<float>());
+
+	for (int idRGB = 0; idRGB < 3; idRGB++)
+	{
+		m_texRGB[idRGB].Bind(GL_TEXTURE0+idRGB);
+	}
+}
+
+void RosaceShaderApp::GPUBlurr()
+{
+	bool id = 0;
+	bool idnext;
+	glm::vec2 dir(0, 1);
+	glm::vec2 zeroDir(0);
+	m_blurShader.Enable();
+
+	for (int idRGB = 0; idRGB < 3; idRGB++)
+	{
+		for (int k = 0; k < m_nbBlurFilter[idRGB]; k++)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				idnext = !id;
+				m_pingpongFBO[id].BindForReading(GL_TEXTURE0);
+				m_pingpongFBO[idnext].BindForWriting();
+				m_blurShader.updateUniform(SHADER_DIR, &dir);
+				dir = glm::vec2(dir.y, -dir.x);
+				m_quad.Render(GL_TRIANGLES);
+				id = idnext;
+			}
+		}
+		m_pingpongFBO[id].BindForReading(GL_TEXTURE0);
+		m_RGBFBO[idRGB].BindForWriting();
+		m_blurShader.updateUniform(SHADER_DIR, &zeroDir);
+		m_quad.Render(GL_TRIANGLES);
+
+		if (m_equalize)
+		{
+			cv::Mat im = m_RGBFBO[idRGB].Snapshot();
+			cv::cvtColor(im, im, cv::COLOR_BGRA2GRAY, 1);
+			im.convertTo(im, CV_8U);
+			cv::equalizeHist(im, im);
+
+			m_texRGB[idRGB].update(im.ptr<float>());
+			
+		}
+	}
+	
+	for (int i = 0; i < 3; i++)
+	{
+		if (m_equalize)
+		{
+			m_texRGB[i].Bind(GL_TEXTURE0 + i);
+		}
+		else
+		{
+			m_RGBFBO[i].BindForReading(GL_TEXTURE0+i);
+		}
+		
+
+	}
+
 }

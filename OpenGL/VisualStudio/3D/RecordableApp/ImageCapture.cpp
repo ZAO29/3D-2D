@@ -39,9 +39,9 @@ void ImageCapture::BindForWriting()
 	m_FBO.BindForWriting();
 }
 
-void ImageCapture::BindForReading()
+void ImageCapture::BindForReading(int GL_textureI)
 {
-	m_FBO.BindForReading(GL_TEXTURE0, 0);
+	m_FBO.BindForReading(GL_textureI, 0);
 }
 
 void ImageCapture::Snapshot(std::string namefile, std::string ext)

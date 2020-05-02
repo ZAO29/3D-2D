@@ -50,7 +50,7 @@ bool FBO::Init(unsigned int WindowWidth, unsigned int WindowHeight, unsigned int
     
    
 	int toto = 1;
-    // Create the depth buffer
+ 
    
     
 	TexParam paramtex;

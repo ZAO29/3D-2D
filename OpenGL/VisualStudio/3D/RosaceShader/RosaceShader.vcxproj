@@ -168,6 +168,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Blurr.frag" />
+    <None Include="Blurr.vert" />
     <None Include="CompositionShader.frag" />
     <None Include="CompositionShader.vert" />
     <None Include="Rosace.frag" />

@@ -2,6 +2,7 @@
 #include <string>
 #include <ZGL/FBO.h>
 #include <opencv2/core.hpp>
+#include <ZGL/GLGLEW.h>
 
 class ImageCapture
 {
@@ -14,7 +15,7 @@ public:
 
 	void BindForWriting();
 
-	void BindForReading();
+	void BindForReading(int GL_textureI=GL_TEXTURE0);
 
 	void RenderQuad() { m_FBO.RenderQuad(); }
 
