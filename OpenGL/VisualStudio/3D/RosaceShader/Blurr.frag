@@ -36,5 +36,6 @@ void main() {
 	//outColor = smoothstep(vec4(0.),vec4(1.),outColor);
 	outColor = outColor * u_powmult.y;
 	outColor.w = 1.0;
+	outColor.z = 1. - outColor.z;
 
 }

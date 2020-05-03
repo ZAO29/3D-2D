@@ -20,7 +20,7 @@ void MyVideoCapture::Init(int width, int height, std::string namefile)
 	//int fcc = cv::VideoWriter::fourcc('X','2','6','4');
 	int fcc = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
 	//int fcc = cv::VideoWriter::fourcc('X', 'V', 'I', 'D');
-	bool isColor = false;
+	bool isColor = true;
 	m_writer = cv::VideoWriter(namefile,fcc, fps, cv::Size(width, height),isColor);
 	m_writer.open(namefile, fcc, fps, cv::Size(width, height),isColor);
 }
@@ -45,8 +45,9 @@ void MyVideoCapture::Snapshot()
 
 	
 	//std::string realname = "D://OUTPUT//DEBUG//test_" + std::to_string(m_count) + "." + "png";
+	//m = m/255;
 	
-	cv::cvtColor(m, m, cv::COLOR_BGRA2GRAY, 1);
+	cv::cvtColor(m, m, cv::COLOR_BGRA2BGR, 3);
 	m.convertTo(m, CV_8U);
 	/*bool succeed = cv::imwrite(realname.c_str(), m);
 	m_count++;

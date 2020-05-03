@@ -50,6 +50,7 @@ public:
 	float m_reinitTime = 0;
 	float m_speed = 0.5;
 	bool m_equalize = true;
+	int m_timeOffset = 0;
 
 
 	// GPU GAUSSIAN BLURR

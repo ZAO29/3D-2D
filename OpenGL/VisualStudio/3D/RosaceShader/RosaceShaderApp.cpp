@@ -22,13 +22,13 @@ RosaceShaderApp::~RosaceShaderApp()
 
 bool RosaceShaderApp::Init()
 {
-	//m_bfullScreen = true;
-	//m_width = 1920;
-	//m_height = 1080;
+	m_bfullScreen = true;
+	m_width = 1920;
+	m_height = 1080;
 	m_name = "RosaceShader";
-	m_bfullScreen = false;
-	m_width = 1280;
-	m_height = 720;
+	//m_bfullScreen = false;
+	//m_width = 1280;
+	//m_height = 720;
 
 
 	RecordableApp::Init();
@@ -142,7 +142,7 @@ void RosaceShaderApp::OpenGLRender()
 
 	glClearColor(0.,0.,0.,1.);
 	m_RosaceShader.Enable();
-	float t = m_speed*(m_cumulTime-m_reinitTime)+1;
+	float t = m_speed*(m_cumulTime-m_reinitTime)+1+m_timeOffset;
 	m_RosaceShader.updateUniform(SHADER_TIME, &t);
 	m_quad.Render(GL_TRIANGLES);
 	
@@ -192,10 +192,11 @@ void RosaceShaderApp::ImguiDraw()
 		m_reinitTime = m_cumulTime;
 	}
 
-	
+	ImGui::SliderInt("offset", &m_timeOffset, 0, 200);
 
 	bool CPUblur = (m_blurTexnik == eBLURRING::CPU);
 	ImGui::Checkbox("equalize", &m_equalize);
+	ImGui::SliderFloat("speed", &m_speed, 0.1, 5);
 	if (ImGui::Checkbox("CPU blur",&CPUblur))
 	{
 		if (CPUblur)
@@ -209,7 +210,7 @@ void RosaceShaderApp::ImguiDraw()
 	}
 	if (!CPUblur)
 	{
-		ImGui::SliderInt3("GPU Blur nb iter", &m_nbBlurFilter[0], 1, 20);
+		ImGui::SliderInt3("GPU Blur nb iter", &m_nbBlurFilter[0], 0, 20);
 		bool bpow=ImGui::SliderFloat("GPU power", &m_powMult[0], 0., 2.);
 		bool bmult=ImGui::SliderFloat("GPU mult", &m_powMult[1], 1., 1.2);
 
@@ -221,7 +222,7 @@ void RosaceShaderApp::ImguiDraw()
 	}
 	else
 	{
-		ImGui::SliderFloat("speed", &m_speed, 0.1, 5);
+		
 		ImGui::SliderInt2("kernel mult", &m_kernelMult[0], 1, 10);
 		
 	}

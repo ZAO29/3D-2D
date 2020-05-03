@@ -68,7 +68,7 @@ cv::Mat ImageCapture::Snapshot()
 	
 	m_FBO.getTexData(m_data);
 	cv::Mat mat(param.m_height, param.m_width, CV_32FC4, m_data);
-	mat = 255 * mat;
+	mat = 255*mat;
 	cv::cvtColor(mat, mat, cv::COLOR_RGBA2BGRA, 4);
 	cv::flip(mat, mat, 1);
 
