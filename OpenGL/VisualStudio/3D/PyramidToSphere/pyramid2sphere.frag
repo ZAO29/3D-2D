@@ -4,9 +4,12 @@
 layout(location = 0) out vec4 outColor;
 
 
-layout(location = 0) in vec3 color;
+layout(location = 0) in flat int colorID;
 
 
 void main() {
-	outColor = vec4(1.0,0.,0.,1.0);
+
+	vec3 colors[4] = vec3[4](vec3(1.,1.,0.), vec3(1.,0.,1.), vec3(0.,1.,1.), vec3(1.,1.,1.));
+
+	outColor = vec4(colors[colorID],1.0);
 }

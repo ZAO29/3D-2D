@@ -5,6 +5,14 @@
 #include <gtc/type_ptr.hpp>
 
 
+struct VertexPyrData
+{
+	VertexPyrData() {}
+	VertexPyrData(glm::vec2 HP, int colorID) :m_headingPitch(HP), m_colorID(colorID) {}
+
+	glm::vec2 m_headingPitch;
+	float m_colorID;
+};
 
 
 
@@ -36,25 +44,29 @@ bool PyramidToSphereApp::Init()
 	glm::vec2 pos2(2.*PI/3., PitchBase);
 	glm::vec2 pos3(4.*PI/3., PitchBase);
 
-	std::vector<glm::vec2> vert =
+	std::vector<VertexPyrData> vert =
 	{
-		pos0,pos1,pos2,
-		pos0,pos2,pos3,
-		pos0,pos3,pos1,
-		pos1,pos2,pos3
+		VertexPyrData(pos0,0),VertexPyrData(pos1,0),VertexPyrData(pos2,0),
+		VertexPyrData(pos0,1),VertexPyrData(pos2,1),VertexPyrData(pos3,1),
+		VertexPyrData(pos0,2),VertexPyrData(pos3,2),VertexPyrData(pos1,2),
+		VertexPyrData(pos1,3),VertexPyrData(pos2,3),VertexPyrData(pos3,3)
 
 	};
 
-	ZGLStride stride1;
-	stride1.m_offset = sizeof(glm::vec2),
+	ZGLStride stride1,stride2;
+	stride1.m_offset = sizeof(glm::vec2);
 	stride1.m_type = GL_FLOAT;
 	stride1.m_size = 2;
 
+	stride2.m_offset = sizeof(float);
+	stride2.m_type = GL_FLOAT;
+	stride2.m_size = 1;
+
 	ZGLVAODrawableParam paramDrawable;
-	paramDrawable.m_stride = sizeof(glm::vec2);
+	paramDrawable.m_stride = sizeof(VertexPyrData);
 	paramDrawable.m_nbVertex = vert.size();
 	paramDrawable.m_pVertices = (void *)&vert[0];
-	paramDrawable.m_strides = { stride1 };
+	paramDrawable.m_strides = { stride1,stride2 };
 
 	m_pyramid.Init(paramDrawable);
 
@@ -72,6 +84,7 @@ void PyramidToSphereApp::OpenGLRender()
 	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView();
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 	glDisable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 	m_pyramid.Render(GL_TRIANGLES);
 }
 
