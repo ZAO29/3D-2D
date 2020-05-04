@@ -25,6 +25,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RosaceShader", "RosaceShade
 		{61042E74-C693-44A9-A382-8C6804767D96} = {61042E74-C693-44A9-A382-8C6804767D96}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PyramidToSphere", "PyramidToSphere\PyramidToSphere.vcxproj", "{80D0AC52-D36F-4D29-B386-DA8B79842AA4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61042E74-C693-44A9-A382-8C6804767D96} = {61042E74-C693-44A9-A382-8C6804767D96}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -73,6 +78,14 @@ Global
 		{19B002A2-E3A9-4157-BA7D-CF771ACF92B9}.Release|x64.Build.0 = Release|x64
 		{19B002A2-E3A9-4157-BA7D-CF771ACF92B9}.Release|x86.ActiveCfg = Release|Win32
 		{19B002A2-E3A9-4157-BA7D-CF771ACF92B9}.Release|x86.Build.0 = Release|Win32
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Debug|x64.ActiveCfg = Debug|x64
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Debug|x64.Build.0 = Debug|x64
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Debug|x86.ActiveCfg = Debug|Win32
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Debug|x86.Build.0 = Debug|Win32
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Release|x64.ActiveCfg = Release|x64
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Release|x64.Build.0 = Release|x64
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Release|x86.ActiveCfg = Release|Win32
+		{80D0AC52-D36F-4D29-B386-DA8B79842AA4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
