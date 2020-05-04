@@ -55,6 +55,13 @@ struct GraphicPipelineType
 {
 	GraphicPipelineType(){}
 
+	GraphicPipelineType(GraphicPipelineType const &  gpt) :
+		vertex(gpt.vertex),
+		tesCtrl(gpt.tesCtrl),
+		tesEval(gpt.tesEval),
+		geometry(gpt.geometry),
+		frag(gpt.frag) {}
+
 	bool vertex = true;
 	bool tesCtrl = false;
 	bool tesEval = false;

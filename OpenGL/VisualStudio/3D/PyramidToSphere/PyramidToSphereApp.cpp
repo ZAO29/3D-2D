@@ -3,7 +3,10 @@
 #include <math.h>
 
 #include <gtc/type_ptr.hpp>
+#include <ZGL/imgui/imgui.h>
 
+
+#define SHADER_TESSLEVEL "utessLevel"
 
 struct VertexPyrData
 {
@@ -72,7 +75,13 @@ bool PyramidToSphereApp::Init()
 
 	MapUniform uniformMap;
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
-	m_shader.Init("pyramid2sphere", uniformMap);
+	uniformMap[SHADER_TESSLEVEL] = eZGLtypeUniform::ZGL_FVEC1;
+	GraphicPipelineType shaderType;
+	shaderType.tesCtrl = true;
+	shaderType.tesEval = true;
+	m_shader.Init("pyramid2sphere", uniformMap, shaderType);
+	m_shader.Enable();
+	m_shader.updateUniform(SHADER_TESSLEVEL, &m_tessLevel);
 
 	return true;
 }
@@ -83,9 +92,10 @@ void PyramidToSphereApp::OpenGLRender()
 	m_shader.Enable();
 	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView();
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
+	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
-	m_pyramid.Render(GL_TRIANGLES);
+	m_pyramid.Render(GL_PATCHES);
 }
 
 void PyramidToSphereApp::Destroy()
@@ -95,4 +105,11 @@ void PyramidToSphereApp::Destroy()
 void PyramidToSphereApp::ImguiDraw()
 {
 	RecordableApp::ImguiDraw();
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
+	if (ImGui::SliderFloat("tesselation level", &m_tessLevel, 1.0, 3.0))
+	{
+		m_shader.Enable();
+		m_shader.updateUniform(SHADER_TESSLEVEL, &m_tessLevel);
+	}
+	ImGui::End();
 }

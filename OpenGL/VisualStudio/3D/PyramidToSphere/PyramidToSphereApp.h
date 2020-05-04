@@ -17,5 +17,6 @@ public:
 private :
 	ZGLVAODrawable m_pyramid;
 	Shader m_shader;
+	float m_tessLevel = 1.0;
 };
 

@@ -1,7 +1,8 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 
-layout(location = 0) out flat int colorID_out;
+layout(location = 0) out vec2 HP_out;
+layout(location = 1) out flat float colorID_out;
 
 layout (location = 0) in vec2 HeadingPitch;
 layout (location = 1) in float colorID;
@@ -26,5 +27,6 @@ void main() {
 	 vec3 dirProj = cos(H)*x1+sin(H)*x2; 
 	 vec3 pos = cos(P)*dirProj+sin(P)*x3;
 	 colorID_out = int(colorID);
-    gl_Position = uMVP * vec4(pos, 1.0); 
+	 HP_out =  HeadingPitch;
+    //gl_Position = uMVP * vec4(pos, 1.0); 
 }

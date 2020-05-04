@@ -46,5 +46,11 @@
     <None Include="pyramid2sphere.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="pyramid2sphere.tesc">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="pyramid2sphere.tese">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

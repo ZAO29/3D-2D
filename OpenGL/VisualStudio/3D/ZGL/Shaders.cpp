@@ -137,6 +137,20 @@ bool Shader::LoadShader(const char * shader_file_path)
         shaderType = GL_VERTEX_SHADER;
         shaderTypeStr = " VERTEX ";
     }
+
+	if (ext == TCS_SHADER_EXT)
+	{
+		shaderType = GL_TESS_CONTROL_SHADER;
+		shaderTypeStr = " TESSELLATION CTRL ";
+	}
+
+
+	if (ext == TES_SHADER_EXT)
+	{
+		shaderType = GL_TESS_EVALUATION_SHADER;
+		shaderTypeStr = " TESSELLATION EVAL ";
+	}
+
     if(ext == FRAG_SHADER_EXT)
     {
         shaderType = GL_FRAGMENT_SHADER;
