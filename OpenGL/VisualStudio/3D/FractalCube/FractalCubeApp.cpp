@@ -131,10 +131,10 @@ bool FractalCubeApp::Init()
 
 	MapUniform listvar;
 	listvar[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
-	m_shader.Init("shader", false, listvar);
+	m_shader.Init("shader", listvar);
 
 
-	m_motionBlurShader.Init("motionblur", false, MapUniform());
+	m_motionBlurShader.Init("motionblur");
 
 	m_pCam = new CameraFree(m_pWindowEnv->get());
 	m_pCam->setEyePos(glm::vec3(0, 3, 0));

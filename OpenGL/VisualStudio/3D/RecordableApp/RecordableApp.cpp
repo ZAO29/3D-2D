@@ -25,7 +25,7 @@ bool RecordableApp::Init()
 	ZGLApp::Init();
 
 
-	m_shaderQuad.Init("../RecordableApp/QuadShader", false, MapUniform());
+	m_shaderQuad.Init("../RecordableApp/QuadShader");
 
 	m_captureIm.Init(m_width, m_height);
 	m_captureVideo.Init(m_width, m_height, std::string("D:\\OUTPUT\\") + m_name + std::string(".avi"));

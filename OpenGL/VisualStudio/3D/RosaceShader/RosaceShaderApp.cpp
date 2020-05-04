@@ -40,8 +40,8 @@ bool RosaceShaderApp::Init()
 	uniformMap[SHADER_SCALE] = UniformVar(eZGLtypeUniform::ZGL_FVEC2);
 	uniformMap[SHADER_NB_PT] = UniformVar(eZGLtypeUniform::ZGL_IVEC1);
 
-	m_RosaceShader.Init("Rosace", false, uniformMap);
-	m_compoShader.Init("CompositionShader", false, MapUniform());
+	m_RosaceShader.Init("Rosace",uniformMap);
+	m_compoShader.Init("CompositionShader");
 
 	glm::vec2 scale = glm::vec2(float(m_width) / float(m_height), 1.);
 	if (m_width > m_height)
@@ -107,7 +107,7 @@ bool RosaceShaderApp::Init()
 	blurUniform[SHADER_DIR] = UniformVar(eZGLtypeUniform::ZGL_FVEC2);
 	blurUniform[SHADER_RESOLUTION] = UniformVar(eZGLtypeUniform::ZGL_FVEC2);
 	blurUniform[SHADER_POWMULT] = UniformVar(eZGLtypeUniform::ZGL_FVEC2);
-	m_blurShader.Init("Blurr", false, blurUniform);
+	m_blurShader.Init("Blurr", blurUniform);
 	m_blurShader.Enable();
 	glm::vec2 res(m_height, m_width);
 	m_blurShader.updateUniform(SHADER_RESOLUTION, &res);

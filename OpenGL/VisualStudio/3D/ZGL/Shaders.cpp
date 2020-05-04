@@ -30,6 +30,8 @@
 #define VERTEX_SHADER_EXT "vert"
 #define FRAG_SHADER_EXT "frag"
 #define GEOM_SHADER_EXT "geom" 
+#define TCS_SHADER_EXT "tesc"
+#define TES_SHADER_EXT "tese" 
 
 
 Shader::Shader() : m_shaderProg(0){
@@ -53,7 +55,7 @@ Shader::~Shader() {
     }
 }
 
-bool Shader::Init(std::string name, bool  bgeometry, MapUniform uniforms)
+bool Shader::Init(std::string name, MapUniform uniforms, GraphicPipelineType type)
 {
    m_shaderProg = glCreateProgram(); 
    
@@ -61,19 +63,42 @@ bool Shader::Init(std::string name, bool  bgeometry, MapUniform uniforms)
 	   INTERNALERROR(" error creating shader");
     }
  
-    if (!LoadShader(std::string(name+"."+VERTEX_SHADER_EXT).c_str())) {
-		INTERNALERROR(" error creating vertex shader");
-    }
+   if (type.vertex)
+   {
+	   if (!LoadShader(std::string(name + "." + VERTEX_SHADER_EXT).c_str())) {
+		   INTERNALERROR(" error creating vertex shader");
+	   }
+   }
 
-    if (bgeometry)
-    {
-		if(!LoadShader(std::string(name + "." + GEOM_SHADER_EXT).c_str()))
-			INTERNALERROR(" error creating geometry shader");
+   if (type.tesCtrl)
+   {
+	   if (!LoadShader(std::string(name + "." + TCS_SHADER_EXT).c_str())) {
+		   INTERNALERROR(" error creating Tesselation Ctrl shader");
+	   }
+   }
+
+   if (type.tesEval)
+   {
+	   if (!LoadShader(std::string(name + "." + TES_SHADER_EXT).c_str())) {
+		   INTERNALERROR(" error creating Tesselation Eval shader");
+	   }
+   }
+
+
+   if (type.geometry)
+   {
+	   if (!LoadShader(std::string(name + "." + GEOM_SHADER_EXT).c_str()))
+	   {
+		   INTERNALERROR(" error creating geometry shader");
+	   }
     }
    
-    if (!LoadShader(std::string(name+"."+FRAG_SHADER_EXT).c_str())) {
-		INTERNALERROR(" error creating fragment shader");
-    }
+	if (type.frag)
+	{
+		if (!LoadShader(std::string(name + "." + FRAG_SHADER_EXT).c_str())) {
+			INTERNALERROR(" error creating fragment shader");
+		}
+	}
     
     
         

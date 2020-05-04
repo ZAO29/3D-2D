@@ -48,7 +48,7 @@ bool MyApp::Init()
 	m_width = int(1280.0*1.1);
 	m_height = int(720 * 1.1);
 	m_name = "Triangle";
-
+	m_bfixedTime = false;
 	ZGLApp::Init();
 	// BLENDING
 	glEnable(GL_BLEND);
@@ -64,8 +64,9 @@ bool MyApp::Init()
 	mapUniform[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
 	mapUniform[SHADER_VISI] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	mapUniform[SHADER_USEMULTIUSE] = UniformVar(eZGLtypeUniform::ZGL_FVEC4);
-
-	m_shader[0].Init("shader", true, mapUniform);
+	GraphicPipelineType typeShader;
+	typeShader.geometry = true;
+	m_shader[0].Init("shader", mapUniform,typeShader);
 	m_shader[0].Enable();
 	m_shader[0].updateUniform(SHADER_VISI, (void *)&m_visi);
 	m_shader[0].updateUniform(SHADER_USEMULTIUSE, (void *)&m_multiUse);
@@ -74,7 +75,7 @@ bool MyApp::Init()
 	mapUniform1[SHADER_SIZE] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
 	mapUniform1[SHADER_MVP] = UniformVar(eZGLtypeUniform::ZGL_FMAT4);
 	mapUniform1[SHADER_VISI] = UniformVar(eZGLtypeUniform::ZGL_FVEC1);
-	m_shader[1].Init("shape", false, mapUniform1);
+	m_shader[1].Init("shape",mapUniform1);
 	m_shader[1].Enable();
 	m_shader[1].updateUniform(SHADER_VISI, (void *)&m_visi);
 	
@@ -210,7 +211,7 @@ bool MyApp::Init()
 	MapUniform uniformMap1;
 	uniformMap1[SHADER_OFFSET_SCALE]= UniformVar(eZGLtypeUniform::ZGL_FVEC4);
 	uniformMap1[SHADER_USETEX] = UniformVar(eZGLtypeUniform::ZGL_IVEC1);
-	m_quadShader.Init("quad", false, uniformMap1);
+	m_quadShader.Init("quad", uniformMap1);
 	m_FBO.Init(500, 500, 1);
 	
 	return true;

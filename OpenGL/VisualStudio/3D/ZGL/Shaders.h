@@ -51,6 +51,18 @@ struct UniformVar
 typedef std::map<std::string, UniformVar> MapUniform;
 
 
+struct GraphicPipelineType
+{
+	GraphicPipelineType(){}
+
+	bool vertex = true;
+	bool tesCtrl = false;
+	bool tesEval = false;
+	bool geometry = false;
+	bool frag = true;
+};
+
+
 class Shader {
 public:
     Shader();
@@ -60,7 +72,7 @@ public:
     static void setShaderPath(std::string path){s_path = path;}
     
     
-    virtual bool Init(std::string name, bool  bgeometry, MapUniform uniforms);
+    virtual bool Init(std::string name, MapUniform uniforms=MapUniform(),GraphicPipelineType type=GraphicPipelineType());
 
 	void updateUniform(std::string name, const void * pdata);
 
