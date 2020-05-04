@@ -12,15 +12,23 @@ layout (location = 1) in float colorID_in[];
                                                                          
                                                                                                 
 // attributes of the output CPs
-layout (location = 0) out vec2 HP_out[];                                                                       
+layout (location = 0) out vec3 pos_out[];                                                                       
 layout (location = 1) out float colorID_out[];  
                                                                     
 uniform float utessLevel;                                                                                                                                                                                               
                                                                                                
 void main()                                                                                     
 {                                                                                               
-    // Set the control points of the output patch                                               
-    HP_out[gl_InvocationID] = HP_in[gl_InvocationID];                          
+    // Set the control points of the output patch   
+	vec3 x1=vec3(1.,0.,0.);
+	vec3 x2=vec3(0.,1.,0.);
+	vec3 x3=vec3(0.,0.,1.);	
+
+    float H = HP_in[gl_InvocationID].x;
+	float P = HP_in[gl_InvocationID].y;
+	vec3 dirProj = cos(H)*x1+sin(H)*x2; 
+	vec3 pos = cos(P)*dirProj+sin(P)*x3;
+    pos_out[gl_InvocationID] = pos;                          
     colorID_out[gl_InvocationID] = colorID_in[gl_InvocationID];                    
                                                                                                                                                                                                 
     // Calculate the tessellation levels                                                        
