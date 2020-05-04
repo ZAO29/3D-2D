@@ -173,7 +173,17 @@ void ZGLApp::KeyCallback(int key, int scancode, int action, int mods)
 void ZGLApp::ImguiDraw()
 {
 	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);                          // Create a window called "Hello, world!" and append into it.
-	
+	if(ImGui::Checkbox("WIREFRAME", &m_bwireframe))
+	{
+		if (m_bwireframe)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		else
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+	}
 
 	const char * items[] = { "TRACKBALL","FREE","BEZIER" };
 	int camid = m_typeCamera;

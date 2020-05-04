@@ -49,6 +49,8 @@ private :
 	void InitImgui();
 	void ImguiRender();
 	void ImguiDestroy();
+
+	bool m_bwireframe = false;
     
 protected :     
         

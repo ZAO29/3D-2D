@@ -13,15 +13,7 @@ layout (location = 1) in float colorID_in[];
 layout (location = 0) out vec3 color_out;                                                                        
                                                                          
                                                                                                 
-vec2 interpolate2D(vec2 v0, vec2 v1, vec2 v2)                                                   
-{                                                                                               
-    return vec2(gl_TessCoord.x) * v0 + vec2(gl_TessCoord.y) * v1 + vec2(gl_TessCoord.z) * v2;   
-}                                                                                               
-                                                                                                
-vec3 interpolate3D(vec3 v0, vec3 v1, vec3 v2)                                                   
-{                                                                                               
-    return vec3(gl_TessCoord.x) * v0 + vec3(gl_TessCoord.y) * v1 + vec3(gl_TessCoord.z) * v2;   
-}                                                                                               
+uniform float utessLevel;                                                                                           
                                                                                                 
 void main()                                                                                     
 {                                                                                               
@@ -29,9 +21,9 @@ void main()
 	
 	vec3 pos = gl_TessCoord.x* pos_in[0] + gl_TessCoord.y* pos_in[1] + gl_TessCoord.z* pos_in[2];  
 
-    pos = normalize(pos);
-	float P = atan(pos.z,length(pos.xy));
-	float H = atan(pos.y,pos.x);
+    vec3 posN = normalize(pos);
+	float P = atan(posN.z,length(posN.xy));
+	float H = atan(posN.y,posN.x);
 	// Set the control points of the output patch   
 	vec3 x1=vec3(1.,0.,0.);
 	vec3 x2=vec3(0.,1.,0.);
@@ -39,10 +31,13 @@ void main()
 
 	vec3 dirProj = cos(H)*x1+sin(H)*x2; 
 	vec3 posSphere = cos(P)*dirProj+sin(P)*x3;
-
+	float t = exp((1.-utessLevel)/10.);
+	//float t = utessLevel/100.;
+	//float t = 1.0;
+	vec3 Posmean = (1.-t)*posSphere+t*pos;   
 
 	
-	gl_Position = uMVP * vec4(posSphere, 1.0);
+	gl_Position = uMVP * vec4(Posmean, 1.0);
 	
 	vec3 colors[4] = vec3[4](vec3(1.,1.,0.), vec3(1.,0.,1.), vec3(0.,1.,1.), vec3(1.,1.,1.));
 	

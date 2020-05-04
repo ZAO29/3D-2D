@@ -105,6 +105,7 @@ void PyramidToSphereApp::Destroy()
 void PyramidToSphereApp::ImguiDraw()
 {
 	RecordableApp::ImguiDraw();
+
 	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
 	if (ImGui::SliderFloat("tesselation level", &m_tessLevel, 1.0, 100.0))
 	{
