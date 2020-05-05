@@ -18,5 +18,6 @@ private :
 	ZGLVAODrawable m_pyramid;
 	Shader m_shader;
 	float m_tessLevel = 1.0;
+	float m_multColor = 0.5;
 };
 

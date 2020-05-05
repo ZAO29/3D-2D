@@ -7,7 +7,7 @@ uniform mat4 uMVP;
                                                                    
                                                                                                 
 layout (location = 0) in vec3 pos_in[];                                                                       
-layout (location = 1) in float colorID_in[];                                                                       
+layout (location = 1) in flat float colorID_in[];                                                                       
                                                                        
                                                                                                 
 layout (location = 0) out vec3 color_out;                                                                        
@@ -41,5 +41,5 @@ void main()
 	
 	vec3 colors[4] = vec3[4](vec3(1.,1.,0.), vec3(1.,0.,1.), vec3(0.,1.,1.), vec3(1.,1.,1.));
 	
-	color_out= gl_TessCoord/4. + 3.*colors[int(colorID_in[0])]/4.;
+	color_out= colors[int(colorID_in[0])];
 }                                                                                               

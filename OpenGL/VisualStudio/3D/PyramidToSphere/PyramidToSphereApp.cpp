@@ -7,6 +7,7 @@
 
 
 #define SHADER_TESSLEVEL "utessLevel"
+#define SHADER_GEOMCOLORMULT "umult"
 
 struct VertexPyrData
 {
@@ -76,12 +77,15 @@ bool PyramidToSphereApp::Init()
 	MapUniform uniformMap;
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_TESSLEVEL] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_GEOMCOLORMULT] = eZGLtypeUniform::ZGL_FVEC1;
 	GraphicPipelineType shaderType;
 	shaderType.tesCtrl = true;
 	shaderType.tesEval = true;
+	shaderType.geometry = true;
 	m_shader.Init("pyramid2sphere", uniformMap, shaderType);
 	m_shader.Enable();
 	m_shader.updateUniform(SHADER_TESSLEVEL, &m_tessLevel);
+	m_shader.updateUniform(SHADER_GEOMCOLORMULT, &m_multColor);
 
 	return true;
 }
@@ -112,5 +116,12 @@ void PyramidToSphereApp::ImguiDraw()
 		m_shader.Enable();
 		m_shader.updateUniform(SHADER_TESSLEVEL, &m_tessLevel);
 	}
+
+	if (ImGui::SliderFloat("colorfactor", &m_multColor, 0.0, 1.))
+	{
+		m_shader.Enable();
+		m_shader.updateUniform(SHADER_GEOMCOLORMULT, &m_multColor);
+	}
+
 	ImGui::End();
 }

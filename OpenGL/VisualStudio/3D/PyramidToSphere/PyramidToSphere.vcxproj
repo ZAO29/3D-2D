@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="pyramid2sphere.frag" />
+    <None Include="pyramid2sphere.geom" />
     <None Include="pyramid2sphere.tesc" />
     <None Include="pyramid2sphere.tese" />
     <None Include="pyramid2sphere.vert" />
