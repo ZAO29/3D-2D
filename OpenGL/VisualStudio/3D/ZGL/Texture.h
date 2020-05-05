@@ -53,11 +53,11 @@ public:
     
 
 	void Destroy();
-    bool Load();
+    virtual bool Load(std::string file);
 
     void Bind(unsigned int TextureUnit);
     
-private:
+	protected:
     std::string m_fileName = "";
 		
     unsigned int m_textureTarget = 0x0DE1; //GL_TEXTURE_2D

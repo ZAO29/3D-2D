@@ -1,6 +1,7 @@
 #pragma once
 #include  <RecordableApp/RecordableApp.h>
 #include <ZGL/ZGLDrawable.h>
+#include <RecordableApp/LoadableTexture.h>
 
 class PyramidToSphereApp : public RecordableApp
 {
@@ -19,5 +20,7 @@ private :
 	Shader m_shader;
 	float m_tessLevel = 1.0;
 	float m_multColor = 0.5;
+
+	LoadableTexture m_tex;
 };
 

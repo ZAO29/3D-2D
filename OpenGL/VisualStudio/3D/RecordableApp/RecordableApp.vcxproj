@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ImageCapture.h" />
+    <ClInclude Include="LoadableTexture.h" />
     <ClInclude Include="MyVideoCapture.h" />
     <ClInclude Include="RecordableApp.h" />
     <ClInclude Include="stdafx.h" />
@@ -157,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImageCapture.cpp" />
+    <ClCompile Include="LoadableTexture.cpp" />
     <ClCompile Include="MyVideoCapture.cpp" />
     <ClCompile Include="RecordableApp.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -10,10 +10,14 @@ layout (location = 0) in vec3 pos_in[];
 layout (location = 1) in flat float colorID_in[];                                                                       
                                                                        
                                                                                                 
-layout (location = 0) out vec3 color_out;                                                                        
+layout (location = 0) out vec3 color_out;
+layout (location = 1) out vec2 uv_out;  
                                                                          
                                                                                                 
 uniform float utessLevel;                                                                                           
+
+
+float PI = 3.14159265359f;  
                                                                                                 
 void main()                                                                                     
 {                                                                                               
@@ -24,6 +28,10 @@ void main()
     vec3 posN = normalize(pos);
 	float P = atan(posN.z,length(posN.xy));
 	float H = atan(posN.y,posN.x);
+	if (abs(posN.x) < 0.001)
+	{
+		H = sign(posN.y)*PI/2.;
+	}
 	// Set the control points of the output patch   
 	vec3 x1=vec3(1.,0.,0.);
 	vec3 x2=vec3(0.,1.,0.);
@@ -42,4 +50,5 @@ void main()
 	vec3 colors[4] = vec3[4](vec3(1.,1.,0.), vec3(1.,0.,1.), vec3(0.,1.,1.), vec3(1.,1.,1.));
 	
 	color_out= colors[int(colorID_in[0])];
+	uv_out=vec2((P+PI/2.)/PI, (H+PI)/(2.*PI));
 }                                                                                               

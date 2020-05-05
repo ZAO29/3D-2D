@@ -157,4 +157,10 @@ void Texture::Bind(unsigned int TextureUnit)
 }
 
 
+bool Texture::Load(std::string file)
+{
+	INTERNALERROR(" not implemented in mother class");
+	return false;
+}
+
 

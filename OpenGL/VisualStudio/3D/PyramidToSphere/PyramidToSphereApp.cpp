@@ -87,6 +87,10 @@ bool PyramidToSphereApp::Init()
 	m_shader.updateUniform(SHADER_TESSLEVEL, &m_tessLevel);
 	m_shader.updateUniform(SHADER_GEOMCOLORMULT, &m_multColor);
 
+
+	m_tex.Load("D://Textures//2k_mercury.jpg");
+	//m_tex.Load("D://Textures//degrade.jpg");
+
 	return true;
 }
 
@@ -96,10 +100,14 @@ void PyramidToSphereApp::OpenGLRender()
 	m_shader.Enable();
 	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView();
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
+	
+	m_tex.Bind(GL_TEXTURE0);
+	
 	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	m_pyramid.Render(GL_PATCHES);
+
 }
 
 void PyramidToSphereApp::Destroy()
