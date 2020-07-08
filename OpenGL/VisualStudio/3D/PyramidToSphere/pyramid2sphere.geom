@@ -16,14 +16,14 @@ struct TriData
 };
 
 layout (triangles) in;
-layout (triangle_strip, max_vertices = 114) out; //HARDWARE LIMITATION reached, can obly emit 113 vertices of this size
+layout (triangle_strip, max_vertices = 204) out; //WARNING HARDWARE LIMITATION reached, can only emit n vertices of this size
 
 
 
 layout(location = 0) in flat vec3 fragColor_in[];
 layout(location = 1) in vec2 uv_in[];
-layout(location = 0) out vec3 fragColor_out;
-layout(location = 1) out vec2 uv_out;
+layout(location = 0) out flat int fragColor_out;
+//layout(location = 1) out vec2 uv_out;
 
 
 
@@ -43,18 +43,7 @@ vec4 colorW = vec4(1.,1.,1.,1);
 //uniform vec4 uMultiUse;
 uniform float umult;
 
-vec4 colorsPerLevel[7] = 
-{
-vec4(1.,0.,0.,1.),
-vec4(0.,1.,0.,1.),
-vec4(0.,0.,1.,1.),
-vec4(0.,1.,1.,1.),
-vec4(1.,0.,1.,1.),
-vec4(1.,1.,0.,1.),
-vec4(1.,1.,1.,1.),
 
-
-};
 
 
 
@@ -67,15 +56,15 @@ void generateTri(Data vert1,Data vert2,Data vert3);
 void generateTri(Data vert1,Data vert2,Data vert3)
 {
 	gl_Position = vert1.pos; 
-	uv_out = vert1.uv;
+	//uv_out = vert1.uv;
     EmitVertex();
 
     gl_Position = vert2.pos;
-	uv_out = vert2.uv;
+	//uv_out = vert2.uv;
     EmitVertex();
 
     gl_Position = vert3.pos;
-	uv_out = vert3.uv;
+	//uv_out = vert3.uv;
     EmitVertex();
     EndPrimitive();    
 }
@@ -84,7 +73,7 @@ void generateTri(Data vert1,Data vert2,Data vert3)
 void generateTri(TriData tri);
 void generateTri(TriData tri)
 {
-	fragColor_out =(colorsPerLevel[tri.colorID].xyz)*clamp(umult,1.,1.);
+	fragColor_out = tri.colorID*int(clamp(umult,1.,1.));
 	generateTri(tri.pts[0],tri.pts[1],tri.pts[2]);
 }
 
@@ -92,15 +81,15 @@ void generateTri(TriData tri)
 
 int getSumOf4(int i)
 {
-	//return int(pow(4,float(i))-1)/3;
-	if(i==0)
-	return 0;
-	if(i==1)
-	return 1;
-	if(i==2)
-	return 5;
-	if(i==3)
-	return 21;
+	return int(pow(4,float(i))-1)/3;
+	//if(i==0)
+	//return 0;
+	//if(i==1)
+	//return 1;
+	//if(i==2)
+	//return 5;
+	//if(i==3)
+	//return 21;
 
 }
 
@@ -153,24 +142,24 @@ void Subdivide(int level,Data tri[3])
 		   TriData1.pts[1] = middles[0];
 		   TriData1.pts[2] = middles[2];
 		   TriData1.level = currentLevel;
-		   TriData1.colorID = currentLevel+1;
-		   TriData1.colorID = 0;
+		   TriData1.colorID = 3*currentLevel+1;
+		   //TriData1.colorID = 0;
 		   listTri[kfin+(k-kdep)*4]=TriData1;
 
 		   TriData2.pts[0] = TriDataToSub.pts[1];
 		   TriData2.pts[1] = middles[0];
 		   TriData2.pts[2] = middles[1];
 		   TriData2.level = currentLevel;
-		   TriData2.colorID = currentLevel+1;
-		   TriData2.colorID = 1;
+		   TriData2.colorID = 3*currentLevel+2;
+		   //TriData2.colorID = 1;
 		   listTri[kfin+(k-kdep)*4+1]=TriData2;
  
 		   TriData3.pts[0] = TriDataToSub.pts[2];
 		   TriData3.pts[1] = middles[2];
 		   TriData3.pts[2] = middles[1];
 		   TriData3.level = currentLevel;
-		   TriData3.colorID = currentLevel+1;
-		   TriData3.colorID = 2;
+		   TriData3.colorID = 3*currentLevel+3;
+		   //TriData3.colorID = 2;
 		   listTri[kfin+(k-kdep)*4+2]=TriData3;
 
 		   TriData4.pts[0] = middles[0];
@@ -178,7 +167,7 @@ void Subdivide(int level,Data tri[3])
 		   TriData4.pts[2] = middles[2];
 		   TriData4.level = currentLevel;
 		   TriData4.colorID = TriDataToSub.colorID;
-		   TriData4.colorID = 3;
+		   //TriData4.colorID = 3;
 		   listTri[kfin+(k-kdep)*4+3]=TriData4;
 
 		   //if(currentLevel == (level-1))
@@ -218,7 +207,7 @@ void main() {
 	}
 
 
-	Subdivide(2,pts);
+	Subdivide(3,pts);
 	
 	//float coeff = 0.2f;
     //middle01.pos = coeff*gl_in[0].gl_Position + (1.f-coeff)*gl_in[1].gl_Position;
