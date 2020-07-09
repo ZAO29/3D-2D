@@ -7,7 +7,7 @@
 
 
 #define SHADER_TESSLEVEL "utessLevel"
-#define SHADER_GEOMCOLORMULT "umult"
+#define SHADER_SUBDIV "usubdiv"
 
 struct VertexPyrData
 {
@@ -77,7 +77,7 @@ bool PyramidToSphereApp::Init()
 	MapUniform uniformMap;
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_TESSLEVEL] = eZGLtypeUniform::ZGL_FVEC1;
-	uniformMap[SHADER_GEOMCOLORMULT] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_SUBDIV] = eZGLtypeUniform::ZGL_FVEC1;
 	GraphicPipelineType shaderType;
 	shaderType.tesCtrl = true;
 	shaderType.tesEval = true;
@@ -85,7 +85,7 @@ bool PyramidToSphereApp::Init()
 	m_shader.Init("pyramid2sphere", uniformMap, shaderType);
 	m_shader.Enable();
 	m_shader.updateUniform(SHADER_TESSLEVEL, &m_tessLevel);
-	m_shader.updateUniform(SHADER_GEOMCOLORMULT, &m_multColor);
+	m_shader.updateUniform(SHADER_SUBDIV, &m_subdiv);
 
 
 	m_tex.Load("D://Textures//2k_mercury.jpg");
@@ -125,10 +125,10 @@ void PyramidToSphereApp::ImguiDraw()
 		m_shader.updateUniform(SHADER_TESSLEVEL, &m_tessLevel);
 	}
 
-	if (ImGui::SliderFloat("colorfactor", &m_multColor, 0.0, 1.))
+	if (ImGui::SliderFloat("subdiv (manual tessellation) ", &m_subdiv, 0.0, 3.))
 	{
 		m_shader.Enable();
-		m_shader.updateUniform(SHADER_GEOMCOLORMULT, &m_multColor);
+		m_shader.updateUniform(SHADER_SUBDIV, &m_subdiv);
 	}
 
 	ImGui::End();

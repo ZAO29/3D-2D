@@ -39,9 +39,8 @@ vec4 colorB = vec4(0.,0.,0.,1);
 
 vec4 colorW = vec4(1.,1.,1.,1);
 
-//uniform float uTime;
-//uniform vec4 uMultiUse;
-uniform float umult;
+
+uniform float usubdiv;
 
 
 
@@ -73,7 +72,7 @@ void generateTri(Data vert1,Data vert2,Data vert3)
 void generateTri(TriData tri);
 void generateTri(TriData tri)
 {
-	fragColor_out = tri.colorID*int(clamp(umult,1.,1.));
+	fragColor_out = tri.colorID;
 	generateTri(tri.pts[0],tri.pts[1],tri.pts[2]);
 }
 
@@ -82,18 +81,9 @@ void generateTri(TriData tri)
 int getSumOf4(int i)
 {
 	return int(pow(4,float(i))-1)/3;
-	//if(i==0)
-	//return 0;
-	//if(i==1)
-	//return 1;
-	//if(i==2)
-	//return 5;
-	//if(i==3)
-	//return 21;
-
 }
 
-void Subdivide(int level,Data tri[3])
+void Subdivide(float level,Data tri[3])
 {
 	TriData listTri[500];
 	TriData dataBegin;
@@ -110,12 +100,22 @@ void Subdivide(int level,Data tri[3])
 
 	listTri[0] = dataBegin;
 
-	for (int currentLevel=0;currentLevel<level;currentLevel++)
+	int ceillevel = int(ceil(level));
+	float coefFinal = (level - floor(level))/2.;
+	if(float(ceillevel) == level)
+	{
+	coefFinal = 0.5;
+	}
+
+	for (int currentLevel=0;currentLevel<ceillevel;currentLevel++)
 	{
 		int kdep = getSumOf4(currentLevel);
 		int kfin = getSumOf4(currentLevel+1);
 
-
+		if(currentLevel == ceillevel - 1)
+		{
+			coeff = coefFinal;
+		}
 
 		TriData TriDataToSub;
 
@@ -184,7 +184,7 @@ void Subdivide(int level,Data tri[3])
 
 	}
 
-		for (int k=getSumOf4(level);k< getSumOf4(level+1);k++)
+		for (int k=getSumOf4(ceillevel);k< getSumOf4(ceillevel+1);k++)
 		{
 			generateTri(listTri[k]);
 		}
@@ -207,7 +207,7 @@ void main() {
 	}
 
 
-	Subdivide(3,pts);
+	Subdivide(usubdiv,pts);
 	
 	//float coeff = 0.2f;
     //middle01.pos = coeff*gl_in[0].gl_Position + (1.f-coeff)*gl_in[1].gl_Position;
