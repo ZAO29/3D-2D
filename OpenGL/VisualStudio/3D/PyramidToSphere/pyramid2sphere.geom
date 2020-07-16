@@ -29,6 +29,7 @@ layout(location = 0) out flat int fragColor_out;
 
 
 
+float PI = 3.14159265359f;  
 
 
 vec4 colorR = vec4(0.,0.,0.,1);
@@ -51,29 +52,30 @@ uniform mat4 uMVP;
 
 
 
-void generateTri(Data vert1,Data vert2,Data vert3);
-void generateTri(Data vert1,Data vert2,Data vert3)
+void generateTri(Data vert1,Data vert2,Data vert3,float level);
+void generateTri(Data vert1,Data vert2,Data vert3,float level)
 {
-	gl_Position = vert1.pos; 
+	float coeff = (level)/3;
+	gl_Position = uMVP*vec4(coeff* normalize(vert1.pos.xyz) + (1.-coeff) * vert1.pos.xyz,1.0); 
 	//uv_out = vert1.uv;
     EmitVertex();
 
-    gl_Position = vert2.pos;
+    gl_Position = uMVP*vec4(coeff* normalize(vert2.pos.xyz) + (1.-coeff) * vert2.pos.xyz,1.0); 
 	//uv_out = vert2.uv;
     EmitVertex();
 
-    gl_Position = vert3.pos;
+    gl_Position =  uMVP*vec4(coeff* normalize(vert3.pos.xyz) + (1.-coeff) * vert3.pos.xyz,1.0); 
 	//uv_out = vert3.uv;
     EmitVertex();
     EndPrimitive();    
 }
 
 
-void generateTri(TriData tri);
-void generateTri(TriData tri)
+void generateTri(TriData tri,float level);
+void generateTri(TriData tri,float level)
 {
 	fragColor_out = tri.colorID;
-	generateTri(tri.pts[0],tri.pts[1],tri.pts[2]);
+	generateTri(tri.pts[0],tri.pts[1],tri.pts[2],level);
 }
 
 
@@ -186,12 +188,33 @@ void Subdivide(float level,Data tri[3])
 
 		for (int k=getSumOf4(ceillevel);k< getSumOf4(ceillevel+1);k++)
 		{
-			generateTri(listTri[k]);
+			generateTri(listTri[k],level);
 		}
 }
 
 
+void pos2Sphere()
+{
 
+
+		//vec3 posN = normalize(pos);
+		//float P = atan(posN.z,length(posN.xy));
+		//float H = atan(posN.y,posN.x);
+		//if (abs(posN.x) < 0.001)
+		//{
+		//H = sign(posN.y)*PI/2.;
+		//}
+		// Set the control points of the output patch   
+		//vec3 x1=vec3(1.,0.,0.);
+		//vec3 x2=vec3(0.,1.,0.);
+		//vec3 x3=vec3(0.,0.,1.);	
+
+		//vec3 dirProj = cos(H)*x1+sin(H)*x2; 
+		//vec3 posSphere = cos(P)*dirProj+sin(P)*x3;
+		
+		//pts[i].pos = uMVP * vec4(posSphere,1.0);
+		
+}
 
 
 
@@ -201,7 +224,7 @@ void main() {
 	Data pts[3];
 	for(int i=0;i<3;i++)
 	{
-		pts[i].pos = uMVP * gl_in[i].gl_Position;
+		pts[i].pos = gl_in[i].gl_Position;
 		pts[i].uv = uv_in[i];
     
 	}
