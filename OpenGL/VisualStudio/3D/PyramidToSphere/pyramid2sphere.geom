@@ -41,7 +41,7 @@ vec4 colorW = vec4(1.,1.,1.,1);
 
 
 uniform float usubdiv;
-
+uniform mat4 uMVP;
 
 
 
@@ -201,7 +201,7 @@ void main() {
 	Data pts[3];
 	for(int i=0;i<3;i++)
 	{
-		pts[i].pos = gl_in[i].gl_Position;
+		pts[i].pos = uMVP * gl_in[i].gl_Position;
 		pts[i].uv = uv_in[i];
     
 	}

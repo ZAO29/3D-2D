@@ -3,7 +3,7 @@
                                                                                                 
 layout(triangles, equal_spacing, ccw) in;                                                       
                                                                                                 
-uniform mat4 uMVP;                                                                               
+                                                                               
                                                                    
                                                                                                 
 layout (location = 0) in vec3 pos_in[];                                                                       
@@ -45,7 +45,7 @@ void main()
 	vec3 Posmean = (1.-t)*posSphere+t*pos;   
 
 	
-	gl_Position = uMVP * vec4(Posmean, 1.0);
+	gl_Position = vec4(Posmean, 1.0);
 	
 	vec3 colors[4] = vec3[4](vec3(1.,1.,0.), vec3(1.,0.,1.), vec3(0.,1.,1.), vec3(1.,1.,1.));
 	
