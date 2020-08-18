@@ -2,7 +2,7 @@ function [curveSample,ts] = sampleSpline(ctrlPt,degre,step)
 
 knotVector = 0:(degre + size(ctrlPt,2));
 
-ts= degre:step:(knotVector(size(knotVector,2)) - degre-0.001);
+ts= degre:step:(knotVector(size(knotVector,2)) - degre -step);
 
 curveSample = zeros(1,length(ts));
 i=1;
