@@ -83,7 +83,7 @@ def computeNewEdgePt(vertx,verty):
 
 
 # Get the active mesh
-me = bpy.context.object.data
+me = bpy.context.selected_objects[0].data
 
 bpy.ops.object.duplicate(linked=0,mode='TRANSLATION')
 
@@ -100,7 +100,7 @@ bmInit = bmesh.new()
 
 
 #
-initPyramid = True;
+initPyramid = False;
 
 if(initPyramid):
     vZ  = bmInit.verts.new((0.,0.,1.));
@@ -121,8 +121,8 @@ if(initPyramid):
 else:
     bmInit.from_mesh(me)
 
-n_subdiv = 0
-beta = 0.0
+n_subdiv = 3
+beta = 0.1
 
 
 for i in range(0,n_subdiv):
@@ -271,7 +271,7 @@ for i in range(nbMaterial):
     mat = bpy.data.materials.new("mat"+str(i));
     byteRandom = os.urandom(3)
     #mat.diffuse_color = (i/nbMaterial, 1-i/nbMaterial, i/nbMaterial)
-    color=[0,0,0];
+    color=[0,0,0,0];
     #color[i % 3] = byteRandom[0]/255
     #color[int(i/2) % 3] = byteRandom[1]/255
     color[i%3]=1
