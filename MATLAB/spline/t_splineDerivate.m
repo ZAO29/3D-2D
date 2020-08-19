@@ -148,6 +148,10 @@ for i=1:(degreMax+1)
 end
 
 
+
+
+
+
 %namefile = [outputFolder  'tab_spline_deg_' int2str(degreMax) '.png'];
 %print -r2048 -RGBImage;
 %saveas(f,[outputFolder  'tab_spline_deg_' int2str(degreMax) '.png']);
