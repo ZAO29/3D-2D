@@ -71,6 +71,15 @@ struct ZGLVAODrawableParam
 };
 
 
+struct ZGLVAOIndexedDrawableParam 
+{	
+	unsigned int m_nbIndices;
+	unsigned int* m_pIndices;
+	ZGLVAODrawableParam m_param;
+
+};
+
+
 
 class ZGLVAODrawable {
 public:
@@ -78,18 +87,32 @@ public:
 	ZGLVAODrawable(const ZGLVAODrawable& orig) { INTERNALERROR("not implemented"); }
     virtual ~ZGLVAODrawable();
     
-    void Init(ZGLVAODrawableParam init);
+    void Init(ZGLVAODrawableParam const & init);
     
     void Render(int method);
 
 	void Destroy();
     
-private:
+protected:
 	unsigned int m_VAO;
 	unsigned int m_VBO;
     unsigned int m_nbVertex;
 	std::vector<ZGLStride> m_strides;
 	unsigned int m_stride;
+};
+
+
+
+class ZGLIndexedVAODrawable : public ZGLVAODrawable
+{
+public:
+	void Init(ZGLVAOIndexedDrawableParam const & init);
+	void Render(int method);
+	void Destroy();
+private :
+	unsigned int m_IBO;
+	unsigned int m_nbIndices;
+
 };
 
 
