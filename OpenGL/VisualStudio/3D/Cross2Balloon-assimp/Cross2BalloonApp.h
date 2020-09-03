@@ -3,6 +3,7 @@
 #include <ZGL/ZGLDrawable.h>
 #include <RecordableApp/LoadableTexture.h>
 
+#include "SceneGraph.h"
 
 class Cross2BalloonApp : public RecordableApp
 {
@@ -17,6 +18,8 @@ public:
 
 private :
 	ZGLIndexedVAODrawable m_pyramid;
+	SceneGraph m_sgraph;
 	Shader m_shader;
+	float m_scale = 0.2;
 };
 

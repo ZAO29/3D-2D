@@ -3,6 +3,9 @@
 
 #include <gtc/type_ptr.hpp>
 
+#include <ZGL/imgui/imgui.h>
+#include <gtx/transform.hpp>
+
 Cross2BalloonApp::Cross2BalloonApp()
 {
 }
@@ -73,6 +76,9 @@ bool Cross2BalloonApp::Init()
 	m_shader.Init("shader", uniformMap, shaderType);
 	m_shader.Enable();
 	
+
+	m_sgraph.loadModel("D:/Repos/2D-3D/blender/blender_script/UnikCross.fbx");
+
 	return true;
 }
 
@@ -81,6 +87,8 @@ void Cross2BalloonApp::OpenGLRender()
 	RecordableApp::setTargetRender();
 	m_shader.Enable();
 	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView();
+	glm::mat4 scale = glm::scale(glm::vec3(m_scale, m_scale, m_scale));
+	mvp = mvp * scale;
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 
 	//m_tex.Bind(GL_TEXTURE0);
@@ -88,7 +96,8 @@ void Cross2BalloonApp::OpenGLRender()
 	//glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
-	m_pyramid.Render(GL_TRIANGLES);
+	//m_pyramid.Render(GL_TRIANGLES);
+	m_sgraph.Render();
 }
 
 void Cross2BalloonApp::Destroy()
@@ -97,4 +106,9 @@ void Cross2BalloonApp::Destroy()
 
 void Cross2BalloonApp::ImguiDraw()
 {
+	RecordableApp::ImguiDraw();
+	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SliderFloat("scale", &m_scale, 0.1f, 10.f);
+	
+	ImGui::End();
 }

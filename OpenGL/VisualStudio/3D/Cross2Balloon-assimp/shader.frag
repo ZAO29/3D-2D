@@ -11,4 +11,5 @@ layout(location = 0) in float z;
 void main() {
 
 	outColor = vec4(z,z,z,z);
+	outColor = vec4(0.,0.,1.,1.);
 }
