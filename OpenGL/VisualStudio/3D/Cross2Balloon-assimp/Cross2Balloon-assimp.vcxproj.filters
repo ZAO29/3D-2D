@@ -70,5 +70,11 @@
     <None Include="Skybox.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="Skybox.tesc">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Skybox.tese">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 
 layout (location = 0) in vec2 HeadingPitch;
 
-layout (location = 0) out vec3 pos;
+layout (location = 0) out vec2 hpOut;
 
 
 
@@ -18,9 +18,6 @@ uniform mat4 uMVP;
 	 vec3 x3=vec3(0.,0.,1.);
 
 void main() {
-     float H = HeadingPitch.x;
-	 float P = HeadingPitch.y;
-	 vec3 dirProj = cos(H)*x1+sin(H)*x2; 
-	 pos = cos(P)*dirProj+sin(P)*x3;
-    gl_Position = uMVP * vec4(5.*pos, 1.0);
+	hpOut = HeadingPitch;
+    //gl_Position = uMVP * vec4(5.*pos, 1.0);
 }

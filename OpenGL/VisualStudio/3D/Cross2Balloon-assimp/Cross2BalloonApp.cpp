@@ -10,6 +10,9 @@
 #define SHADER_CAMPOS "uCamPos"
 #define SHADER_SPECPOW "uSpecularPow"
 #define SHADER_SPECINTENSITY "uSpecularIntensity"
+#define SHADER_DIRLIGHT "uLightDir"
+
+#define SHADER_TESS "utessLevel"
 
 Cross2BalloonApp::Cross2BalloonApp()
 {
@@ -55,6 +58,7 @@ bool Cross2BalloonApp::Init()
 	glm::vec2 pos1(0, PitchBase);
 	glm::vec2 pos2(2.*PI / 3., PitchBase);
 	glm::vec2 pos3(4.*PI / 3., PitchBase);
+
 				
 
 	std::vector<VerticeData> vertices =
@@ -82,19 +86,23 @@ bool Cross2BalloonApp::Init()
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_MODEL] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
+	uniformMap[SHADER_DIRLIGHT] = eZGLtypeUniform::ZGL_FVEC3;
 	uniformMap[SHADER_SPECPOW] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_SPECINTENSITY] = eZGLtypeUniform::ZGL_FVEC1;
 	GraphicPipelineType shaderType;
-	/*shaderType.tesCtrl = true;
-	shaderType.tesEval = true;
-	shaderType.geometry = true;*/
 	m_shader.Init("shader", uniformMap, shaderType);
 	m_shader.Enable();
 	
 
 	MapUniform uniformMapSkybox;
+	GraphicPipelineType shaderTypeSkybox;
+	shaderTypeSkybox.tesCtrl = true;
+	shaderTypeSkybox.tesEval = true;
+	
 	uniformMapSkybox[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
-	m_shaderSkyBox.Init("Skybox", uniformMapSkybox);
+	uniformMapSkybox[SHADER_TESS] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMapSkybox[SHADER_DIRLIGHT] = eZGLtypeUniform::ZGL_FVEC3;
+	m_shaderSkyBox.Init("Skybox", uniformMapSkybox,shaderTypeSkybox);
 
 
 	m_psgraph = new SceneGraph();
@@ -113,11 +121,13 @@ void Cross2BalloonApp::OpenGLRender()
 	
 	{
 		m_shaderSkyBox.Enable();
-		glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView() * glm::translate(m_pCam->getEyePos());
+		glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView()*glm::translate(m_pCam->getEyePos());
 		m_shaderSkyBox.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
-		
+		m_shaderSkyBox.updateUniform(SHADER_TESS, &m_tessSkybox);
+		m_shaderSkyBox.updateUniform(SHADER_DIRLIGHT, &m_dirLight);
 
-		m_ppyramid->Render(GL_TRIANGLES);
+		glPatchParameteri(GL_PATCH_VERTICES, 3);
+		m_ppyramid->Render(GL_PATCHES);
 	}
 
 
@@ -136,6 +146,7 @@ void Cross2BalloonApp::OpenGLRender()
 	m_shader.updateUniform(SHADER_CAMPOS, &eyepos);
 	m_shader.updateUniform(SHADER_SPECPOW, &m_specPow);
 	m_shader.updateUniform(SHADER_SPECINTENSITY, &m_specIntensity);
+	m_shader.updateUniform(SHADER_DIRLIGHT, &m_dirLight);
 	m_psgraph->Render();
 }
 
@@ -153,6 +164,11 @@ void Cross2BalloonApp::ImguiDraw()
 	ImGui::SliderFloat("scale", &m_scale, 0.1f, 10.f);
 	ImGui::SliderFloat("specular power", &m_specPow, 0.1f, 10.f);
 	ImGui::SliderFloat("specular intensity", &m_specIntensity, 0.0f, 1.f);
+	ImGui::SliderFloat("tesselation skybox", &m_tessSkybox, 0.0f, 10.f);
+	if (ImGui::SliderFloat3("dir light", &m_dirLight[0], -1.f, 1.f))
+	{
+		m_dirLight=glm::normalize(m_dirLight);
+	}
 	m_psgraph->ImguiDraw();
 	ImGui::End();
 	

@@ -18,7 +18,7 @@ uniform mat4 uModel;
 void main() {
      
     gl_Position = uMVP * vec4(position, 1.0);
-	normalWorld = (uModel * vec4(normal, 1.0)).xyz;
+	normalWorld = normalize((uModel * vec4(normal, 1.0)).xyz);
 	posWorld = (uModel * vec4(position, 1.0)).xyz;
 	z = position.z; 
 }

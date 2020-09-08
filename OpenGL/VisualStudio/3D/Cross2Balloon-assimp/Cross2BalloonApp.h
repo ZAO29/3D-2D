@@ -24,5 +24,7 @@ private :
 	float m_scale = 0.2;
 	float m_specPow = 1.0;
 	float m_specIntensity = 1.0;
+	float m_tessSkybox = 50.0;
+	glm::vec3 m_dirLight = glm::vec3(1., 1., 1.);
 };
 
