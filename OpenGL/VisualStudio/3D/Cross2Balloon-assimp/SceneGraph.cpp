@@ -21,15 +21,14 @@ void SceneGraph::loadModel(std::string filename)
 {
 	m_name = filename;
 	Assimp::Importer importer;
-	const aiScene* pmodelScene = importer.ReadFile(filename, aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
+	unsigned int flag = aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
 		aiProcess_CalcTangentSpace |
 		aiProcess_GenSmoothNormals |
 		aiProcess_Triangulate |
 		aiProcess_FixInfacingNormals |
 		aiProcess_FindInvalidData |
-		aiProcess_ValidateDataStructure | 0
-
-	);
+		aiProcess_ValidateDataStructure | 0;
+	const aiScene* pmodelScene = importer.ReadFile(filename, flag);
 
 	if (!pmodelScene)
 	{
@@ -65,9 +64,12 @@ void SceneGraph::loadModel(std::string filename)
 
 struct SGVertex
 {
+
 	SGVertex(float x,float y, float z): m_pos(x,y,z){}
+	SGVertex(glm::vec3 pos, glm::vec3 normal) : m_pos(pos), m_normal(normal) {}
 	SGVertex() :m_pos(0.) {}
 	glm::vec3 m_pos;
+	glm::vec3 m_normal;
 };
 
 void SceneGraph::InitMesh(aiMesh * paiMesh, LoadableMesh * myMesh)
@@ -77,10 +79,13 @@ void SceneGraph::InitMesh(aiMesh * paiMesh, LoadableMesh * myMesh)
 
 	for (unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
 		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
-		//const aiVector3D* pNormal = &(paiMesh->mNormals[i]) : &Zero3D;
+		const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
 		//const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 
-		vertices[i] = SGVertex(pPos->x/100, pPos->y/100, pPos->z/100);
+		//vertices[i] = SGVertex(pPos->x/100, pPos->y/100, pPos->z/100);
+		vertices[i] = SGVertex(glm::vec3(pPos->x/100,pPos->y/100,pPos->z/100),
+							   glm::vec3(pNormal->x,pNormal->y,pNormal->z));
+
 
 	}
 	
@@ -118,10 +123,15 @@ void SceneGraph::InitMesh(aiMesh * paiMesh, LoadableMesh * myMesh)
 	stride1.m_type = GL_FLOAT;
 	stride1.m_size = 3;
 
+	ZGLStride stride2;
+	stride2.m_offset = sizeof(glm::vec3),
+	stride2.m_type = GL_FLOAT;
+	stride2.m_size = 3;
+
 	paramDrawable.m_param.m_stride = sizeof(SGVertex);
 	paramDrawable.m_param.m_nbVertex = vertices.size();
 	paramDrawable.m_param.m_pVertices = (void *)&vertices[0];
-	paramDrawable.m_param.m_strides = { stride1 };
+	paramDrawable.m_param.m_strides = { stride1, stride2 };
 	paramDrawable.m_nbIndices = indices.size();
 	paramDrawable.m_pIndices = &indices[0];
 

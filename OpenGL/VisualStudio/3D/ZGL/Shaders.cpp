@@ -307,6 +307,10 @@ void UniformVar::update(const void * pdata)
 			pdataf = reinterpret_cast<const GLfloat*>(pdata);
 			glUniform2fv(m_ID, 1, pdataf);
 			break;
+		case  eZGLtypeUniform::ZGL_FVEC3:
+			pdataf = reinterpret_cast<const GLfloat*>(pdata);
+			glUniform3fv(m_ID, 1, pdataf);
+			break;
 		case  eZGLtypeUniform::ZGL_FVEC4:
 			pdataf = reinterpret_cast<const GLfloat*>(pdata);
 			glUniform4fv(m_ID, 1, pdataf);

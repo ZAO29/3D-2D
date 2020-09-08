@@ -5,6 +5,11 @@
 
 #include <ZGL/imgui/imgui.h>
 #include <gtx/transform.hpp>
+#define SHADER_MV "uModelView"
+#define SHADER_MODEL "uModel"
+#define SHADER_CAMPOS "uCamPos"
+#define SHADER_SPECPOW "uSpecularPow"
+#define SHADER_SPECINTENSITY "uSpecularIntensity"
 
 Cross2BalloonApp::Cross2BalloonApp()
 {
@@ -70,6 +75,10 @@ bool Cross2BalloonApp::Init()
 
 	MapUniform uniformMap;
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
+	uniformMap[SHADER_MODEL] = eZGLtypeUniform::ZGL_FMAT4;
+	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
+	uniformMap[SHADER_SPECPOW] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_SPECINTENSITY] = eZGLtypeUniform::ZGL_FVEC1;
 	GraphicPipelineType shaderType;
 	/*shaderType.tesCtrl = true;
 	shaderType.tesEval = true;
@@ -87,10 +96,17 @@ void Cross2BalloonApp::OpenGLRender()
 {
 	RecordableApp::setTargetRender();
 	m_shader.Enable();
-	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView();
 	glm::mat4 scale = glm::scale(glm::vec3(m_scale, m_scale, m_scale));
-	mvp = mvp * scale;
+
+	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView() * scale;
+	
+	glm::vec3 eyepos = m_pCam->getEyePos();
+
+	m_shader.updateUniform(SHADER_MODEL, glm::value_ptr(scale));
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
+	m_shader.updateUniform(SHADER_CAMPOS, &eyepos);
+	m_shader.updateUniform(SHADER_SPECPOW, &m_specPow);
+	m_shader.updateUniform(SHADER_SPECINTENSITY, &m_specIntensity);
 
 	//m_tex.Bind(GL_TEXTURE0);
 
@@ -113,6 +129,10 @@ void Cross2BalloonApp::ImguiDraw()
 	RecordableApp::ImguiDraw();
 	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::SliderFloat("scale", &m_scale, 0.1f, 10.f);
+	ImGui::SliderFloat("specular power", &m_specPow, 0.1f, 10.f);
+	ImGui::SliderFloat("specular intensity", &m_specIntensity, 0.0f, 1.f);
 	m_psgraph->ImguiDraw();
 	ImGui::End();
+	
+
 }
