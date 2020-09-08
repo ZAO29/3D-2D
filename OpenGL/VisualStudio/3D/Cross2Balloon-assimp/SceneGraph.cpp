@@ -5,7 +5,7 @@
 #include <ZGL/GLGLEW.h>
 
 
-
+#include <ZGL/imgui/imgui.h>
 
 
 SceneGraph::SceneGraph()
@@ -19,6 +19,7 @@ SceneGraph::~SceneGraph()
 
 void SceneGraph::loadModel(std::string filename)
 {
+	m_name = filename;
 	Assimp::Importer importer;
 	const aiScene* pmodelScene = importer.ReadFile(filename, aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
 		aiProcess_CalcTangentSpace |
@@ -35,7 +36,7 @@ void SceneGraph::loadModel(std::string filename)
 		INTERNALERROR("empty scene");
 	}
 
-
+	
 	m_pmeshs.resize(pmodelScene->mNumMeshes);
 	m_pmaterials.resize(pmodelScene->mNumMaterials);
 
@@ -45,6 +46,15 @@ void SceneGraph::loadModel(std::string filename)
 		aiMesh* mesh = pmodelScene->mMeshes[i];
 		InitMesh(mesh, pmymesh);
 		m_pmeshs[i] = pmymesh;
+
+	}
+
+	for (int i = 0; i < m_pmaterials.size(); i++)
+	{
+		Material* pmaterial = new Material();
+		aiMaterial* aimat = pmodelScene->mMaterials[i];
+		InitMaterial(aimat, pmaterial);
+		m_pmaterials[i] = pmaterial;
 
 	}
 
@@ -120,12 +130,75 @@ void SceneGraph::InitMesh(aiMesh * paiMesh, LoadableMesh * myMesh)
 	
 }
 
+void SceneGraph::InitMaterial(aiMaterial * aimaterial, Material * mymat)
+{
+	aiColor3D color;
+	if (AI_SUCCESS == aimaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
+	{
+		mymat->InitDiffuse(color.r, color.g, color.b);
+	}
+}
+
 void SceneGraph::Render()
 {
 	for (auto & pmesh : m_pmeshs)
 	{
-		pmesh->Render();
+		pmesh->Render(m_pmaterials);
 	}
+}
+
+void SceneGraph::Destroy()
+{
+	for (auto & pmesh : m_pmeshs)
+	{
+		pmesh->Destroy();
+		pmesh = nullptr;
+	}
+	m_pmeshs.resize(0);
+
+	for (auto & pmat : m_pmaterials)
+	{
+		pmat->Destroy();
+		pmat = nullptr;
+	}
+	m_pmaterials.resize(0);
+}
+
+void SceneGraph::ImguiDraw()
+{
+	int id = 0;
+
+	if(ImGui::TreeNode(m_name.c_str()))
+	{
+		if (ImGui::TreeNode("meshs"))
+		{
+			ImGui::Text(" nb meshs : %d", m_pmeshs.size());
+			ImGui::TreePop();
+
+			for (auto &pmesh : m_pmeshs)
+			{
+				
+				std::string meshName = "mesh " + std::to_string(id);
+				id++;
+				if (ImGui::TreeNode(meshName.c_str()))
+				{
+					pmesh->ImGuiDraw();
+					ImGui::TreePop();
+				}
+			}
+		}
+
+		if (ImGui::TreeNode("materials"))
+		{
+			ImGui::Text(" nb materials : %d", m_pmaterials.size());
+			ImGui::TreePop();
+		}
+
+
+
+		ImGui::TreePop();
+	}
+	
 }
 
 

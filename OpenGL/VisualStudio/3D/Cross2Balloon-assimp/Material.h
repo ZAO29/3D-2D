@@ -9,6 +9,8 @@ public:
 	~Material();
 
 	void InitDiffuse(float r, float g, float b);
+	void Bind();
+	void Destroy();
 
 private:
 	Texture * m_pDiffuseTex;

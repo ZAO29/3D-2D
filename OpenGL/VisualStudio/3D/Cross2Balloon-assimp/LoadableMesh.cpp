@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "LoadableMesh.h"
 #include "ZGL/GLGLEW.h"
+#include "ZGL/Debugging.h"
+#include <ZGL/imgui/imgui.h>
 
 LoadableMesh::LoadableMesh()
 {
@@ -15,10 +17,31 @@ LoadableMesh::~LoadableMesh()
 void LoadableMesh::Init(ZGLVAOIndexedDrawableParam const & init, unsigned int materialId)
 {
 	m_pdrawable->Init(init);
-	m_materialId = m_materialId;
+	m_materialId = materialId;
 }
 
-void LoadableMesh::Render()
+void LoadableMesh::Render(std::vector<Material*> & materials)
 {
+	if (m_materialId > materials.size() ||
+		materials[m_materialId] == NULL)
+	{
+		INTERNALERROR("invalid material id");
+	}
+	materials[m_materialId]->Bind();
 	m_pdrawable->Render(GL_TRIANGLES);
+}
+
+void LoadableMesh::Destroy()
+{
+	m_pdrawable->Destroy();
+	m_pdrawable = nullptr;
+}
+
+void LoadableMesh::ImGuiDraw()
+{
+	int nbid = m_pdrawable->getNbIndices();
+	int nb_vertices = m_pdrawable->getNbVertices();
+	ImGui::Text("nb vertices : %d", nb_vertices);
+	ImGui::Text("nb  indices: %d", nbid);
+	ImGui::Text("material id: %u", m_materialId);
 }

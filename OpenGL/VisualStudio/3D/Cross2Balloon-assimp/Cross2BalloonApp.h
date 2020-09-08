@@ -17,8 +17,8 @@ public:
 	virtual void ImguiDraw() override;
 
 private :
-	ZGLIndexedVAODrawable m_pyramid;
-	SceneGraph m_sgraph;
+	ZGLIndexedVAODrawable* m_ppyramid;
+	SceneGraph* m_psgraph;
 	Shader m_shader;
 	float m_scale = 0.2;
 };

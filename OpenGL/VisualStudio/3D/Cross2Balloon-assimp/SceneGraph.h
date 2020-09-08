@@ -21,12 +21,17 @@ public:
 
 	void loadModel(std::string filename);
 	void InitMesh(aiMesh* aimesh, LoadableMesh * myMesh);
+	void InitMaterial(aiMaterial* aimaterial, Material * mymaterial);
 	void Render();
-
+	void Destroy();
+	void ImguiDraw();
 
 private :
 	std::vector<LoadableMesh*> m_pmeshs;
 	std::vector<Material*> m_pmaterials;
+	std::string m_name;
+	bool m_bshawMesh;
+	bool m_bshawMat;
 };
 
 

@@ -6,10 +6,10 @@ layout(location = 0) out vec4 outColor;
 layout(location = 0) in float z;
 
 
-
+layout(binding =0) uniform sampler2D tex;
 
 void main() {
 
-	outColor = vec4(z,z,z,z);
-	outColor = vec4(0.,0.,1.,1.);
+	outColor = texture(tex,vec2(0.,0.));
+
 }

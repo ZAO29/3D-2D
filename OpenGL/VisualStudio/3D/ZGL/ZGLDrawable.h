@@ -92,6 +92,8 @@ public:
     void Render(int method);
 
 	void Destroy();
+
+	unsigned int getNbVertices() const { return m_nbVertex; }
     
 protected:
 	unsigned int m_VAO;
@@ -109,6 +111,8 @@ public:
 	void Init(ZGLVAOIndexedDrawableParam const & init);
 	void Render(int method);
 	void Destroy();
+
+	unsigned int getNbIndices() const { return m_nbIndices; };
 private :
 	unsigned int m_IBO;
 	unsigned int m_nbIndices;
