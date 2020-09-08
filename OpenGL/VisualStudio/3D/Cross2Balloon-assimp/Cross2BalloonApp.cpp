@@ -23,9 +23,9 @@ Cross2BalloonApp::~Cross2BalloonApp()
 
 struct VerticeData
 {
-	VerticeData(glm::vec3 pos) :m_pos(pos) {}
+	VerticeData(glm::vec2 hp) :m_headingPitch(hp) {}
 
-	glm::vec3 m_pos;
+	glm::vec2 m_headingPitch;
 };
 
 bool Cross2BalloonApp::Init()
@@ -42,24 +42,29 @@ bool Cross2BalloonApp::Init()
 	m_pCam->setEyePos(glm::vec3(5.0, 0., 0.));
 
 	ZGLStride stride1;
-	stride1.m_offset = sizeof(glm::vec3);
+	stride1.m_offset = sizeof(glm::vec2);
 	stride1.m_type = GL_FLOAT;
-	stride1.m_size = 3;
+	stride1.m_size = 2;
 
 	float scale = 1.0f;
-	std::vector<VerticeData> vertices = { glm::vec3(-scale,-scale,0),
-								 glm::vec3(scale,-scale,0),
-								 glm::vec3(scale,scale,0),
-								 glm::vec3(-scale,scale,0),
-								 glm::vec3(0,0,scale) };
-							   
+
+	float PitchBase = PI / 2. - acos(-1. / 3.);
+
+
+	glm::vec2 pos0(0, PI / 2.);
+	glm::vec2 pos1(0, PitchBase);
+	glm::vec2 pos2(2.*PI / 3., PitchBase);
+	glm::vec2 pos3(4.*PI / 3., PitchBase);
+				
+
+	std::vector<VerticeData> vertices =
+	{ VerticeData(pos1),VerticeData(pos2),VerticeData(pos3),VerticeData(pos0)
+	};
 
 	std::vector<unsigned int> indices = { 0,1,2,
-						   0,2,3,
-						   0,1,4,
-						   1,2,4,
-						   2,3,4,
-						   3,0,4 };
+						   0,1,3,
+						   1,2,3,
+						   2,0,3};
 
 	ZGLVAOIndexedDrawableParam paramDrawable;
 
@@ -86,6 +91,12 @@ bool Cross2BalloonApp::Init()
 	m_shader.Init("shader", uniformMap, shaderType);
 	m_shader.Enable();
 	
+
+	MapUniform uniformMapSkybox;
+	uniformMapSkybox[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
+	m_shaderSkyBox.Init("Skybox", uniformMapSkybox);
+
+
 	m_psgraph = new SceneGraph();
 	m_psgraph->loadModel("D:/Repos/2D-3D/blender/blender_script/UnikCross.fbx");
 
@@ -95,11 +106,29 @@ bool Cross2BalloonApp::Init()
 void Cross2BalloonApp::OpenGLRender()
 {
 	RecordableApp::setTargetRender();
+
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+
+	
+	{
+		m_shaderSkyBox.Enable();
+		glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView() * glm::translate(m_pCam->getEyePos());
+		m_shaderSkyBox.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
+		
+
+		m_ppyramid->Render(GL_TRIANGLES);
+	}
+
+
+
+
+	glEnable(GL_DEPTH_TEST);
 	m_shader.Enable();
 	glm::mat4 scale = glm::scale(glm::vec3(m_scale, m_scale, m_scale));
 
 	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView() * scale;
-	
+
 	glm::vec3 eyepos = m_pCam->getEyePos();
 
 	m_shader.updateUniform(SHADER_MODEL, glm::value_ptr(scale));
@@ -107,13 +136,6 @@ void Cross2BalloonApp::OpenGLRender()
 	m_shader.updateUniform(SHADER_CAMPOS, &eyepos);
 	m_shader.updateUniform(SHADER_SPECPOW, &m_specPow);
 	m_shader.updateUniform(SHADER_SPECINTENSITY, &m_specIntensity);
-
-	//m_tex.Bind(GL_TEXTURE0);
-
-	//glPatchParameteri(GL_PATCH_VERTICES, 3);
-	glDisable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	//m_pyramid.Render(GL_TRIANGLES);
 	m_psgraph->Render();
 }
 

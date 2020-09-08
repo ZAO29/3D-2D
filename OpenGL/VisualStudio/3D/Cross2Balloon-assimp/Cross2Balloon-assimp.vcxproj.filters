@@ -64,5 +64,11 @@
     <None Include="shader.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="Skybox.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Skybox.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

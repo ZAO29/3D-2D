@@ -20,6 +20,7 @@ private :
 	ZGLIndexedVAODrawable* m_ppyramid;
 	SceneGraph* m_psgraph;
 	Shader m_shader;
+	Shader m_shaderSkyBox;
 	float m_scale = 0.2;
 	float m_specPow = 1.0;
 	float m_specIntensity = 1.0;
