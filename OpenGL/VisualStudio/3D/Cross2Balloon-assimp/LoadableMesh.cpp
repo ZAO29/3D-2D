@@ -20,7 +20,7 @@ void LoadableMesh::Init(ZGLVAOIndexedDrawableParam const & init, unsigned int ma
 	m_materialId = materialId;
 }
 
-void LoadableMesh::Render(std::vector<Material*> & materials)
+void LoadableMesh::Render(std::vector<Material*> & materials, unsigned int method)
 {
 	if (m_materialId > materials.size() ||
 		materials[m_materialId] == NULL)
@@ -28,7 +28,7 @@ void LoadableMesh::Render(std::vector<Material*> & materials)
 		INTERNALERROR("invalid material id");
 	}
 	materials[m_materialId]->Bind();
-	m_pdrawable->Render(GL_TRIANGLES);
+	m_pdrawable->Render(method);
 }
 
 void LoadableMesh::Destroy()

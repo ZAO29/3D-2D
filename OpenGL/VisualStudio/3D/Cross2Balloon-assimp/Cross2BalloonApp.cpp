@@ -11,8 +11,10 @@
 #define SHADER_SPECPOW "uSpecularPow"
 #define SHADER_SPECINTENSITY "uSpecularIntensity"
 #define SHADER_DIRLIGHT "uLightDir"
+#define SHADER_CENTERRADIUS "uCenterRadius"
 
 #define SHADER_TESS "utessLevel"
+#define SHADER_TESSMAX "utessLevelMax"
 
 Cross2BalloonApp::Cross2BalloonApp()
 {
@@ -89,10 +91,33 @@ bool Cross2BalloonApp::Init()
 	uniformMap[SHADER_DIRLIGHT] = eZGLtypeUniform::ZGL_FVEC3;
 	uniformMap[SHADER_SPECPOW] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_SPECINTENSITY] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_TESS] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_TESSMAX] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_CENTERRADIUS] = eZGLtypeUniform::ZGL_FVEC4;
 	GraphicPipelineType shaderType;
+	shaderType.tesCtrl = true;
+	shaderType.tesEval = true;
 	m_shader.Init("shader", uniformMap, shaderType);
 	m_shader.Enable();
 	
+
+	//boundingBox
+	m_psgraph = new SceneGraph();
+	m_psgraph->loadModel("D:/Repos/2D-3D/blender/blender_script/UnikCross.fbx");
+	auto bb = m_psgraph->m_bbox;
+	std::cout << " **** Bounding Box center " << bb.getCenter<float>().x << "|"
+		<< bb.getCenter<float>().y << "|"
+		<< bb.getCenter<float>().z << "|" << std::endl;
+	glm::vec3 s = bb.getSize();
+	std::cout << " Bounding Box size **** " << s.x << "|"
+		<< s.y << "|"
+		<< s.z << "|" << std::endl;
+	glm::vec3 center = bb.getCenter<float>();
+	float size = std::max(s.x, std::max(s.y, s.z));
+	glm::vec4 centerRadius = glm::vec4(center.x, center.y, center.z, size);
+	m_shader.updateUniform(SHADER_CENTERRADIUS, &centerRadius);
+
+
 
 	MapUniform uniformMapSkybox;
 	GraphicPipelineType shaderTypeSkybox;
@@ -104,9 +129,8 @@ bool Cross2BalloonApp::Init()
 	uniformMapSkybox[SHADER_DIRLIGHT] = eZGLtypeUniform::ZGL_FVEC3;
 	m_shaderSkyBox.Init("Skybox", uniformMapSkybox,shaderTypeSkybox);
 
-
-	m_psgraph = new SceneGraph();
-	m_psgraph->loadModel("D:/Repos/2D-3D/blender/blender_script/UnikCross.fbx");
+	SceneGraph::sInitBoundingBoxCube();
+	
 
 	return true;
 }
@@ -147,7 +171,14 @@ void Cross2BalloonApp::OpenGLRender()
 	m_shader.updateUniform(SHADER_SPECPOW, &m_specPow);
 	m_shader.updateUniform(SHADER_SPECINTENSITY, &m_specIntensity);
 	m_shader.updateUniform(SHADER_DIRLIGHT, &m_dirLight);
-	m_psgraph->Render();
+	m_shader.updateUniform(SHADER_TESS,&m_tessCross);
+	m_shader.updateUniform(SHADER_TESSMAX, &m_tessCrossMax);
+
+	glPatchParameteri(GL_PATCH_VERTICES, 3);
+	m_psgraph->Render(GL_PATCHES);
+
+	// bounding box
+	m_psgraph->RenderBoundingBox(mvp);
 }
 
 void Cross2BalloonApp::Destroy()
@@ -165,6 +196,8 @@ void Cross2BalloonApp::ImguiDraw()
 	ImGui::SliderFloat("specular power", &m_specPow, 0.1f, 10.f);
 	ImGui::SliderFloat("specular intensity", &m_specIntensity, 0.0f, 1.f);
 	ImGui::SliderFloat("tesselation skybox", &m_tessSkybox, 0.0f, 10.f);
+	ImGui::SliderFloat("tesselation cross", &m_tessCross, 1.f, m_tessCrossMax);
+	ImGui::SliderFloat("tesselation cross max", &m_tessCrossMax, 1.f, 1000.f);
 	if (ImGui::SliderFloat3("dir light", &m_dirLight[0], -1.f, 1.f))
 	{
 		m_dirLight=glm::normalize(m_dirLight);

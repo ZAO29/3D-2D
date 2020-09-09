@@ -9,7 +9,7 @@ public:
 	~LoadableMesh();
 
 	void Init(ZGLVAOIndexedDrawableParam const & init, unsigned int materialId);
-	void Render(std::vector<Material*> & materials);
+	void Render(std::vector<Material*> & materials,unsigned int method);
 	void Destroy();
 	void ImGuiDraw();
 	ZGLIndexedVAODrawable* m_pdrawable;

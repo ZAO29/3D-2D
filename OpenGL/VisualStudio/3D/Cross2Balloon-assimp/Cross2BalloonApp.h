@@ -25,6 +25,8 @@ private :
 	float m_specPow = 1.0;
 	float m_specIntensity = 1.0;
 	float m_tessSkybox = 50.0;
+	float m_tessCross= 1.0;
+	float m_tessCrossMax = 1000.f;
 	glm::vec3 m_dirLight = glm::vec3(1., 1., 1.);
 };
 

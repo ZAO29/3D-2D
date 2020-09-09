@@ -6,7 +6,16 @@
 
 
 #include <ZGL/imgui/imgui.h>
+#include <algorithm>
 
+#include <gtc/type_ptr.hpp>
+
+
+#define SHADER_BB_POS "uBoundingBoxPos"
+#define SHADER_BB_SIZE "uBoundingBoxSize"
+
+ZGLVAODrawable* SceneGraph::s_pbbCube = nullptr;
+Shader* SceneGraph::s_pbbShader = nullptr;
 
 SceneGraph::SceneGraph()
 {
@@ -88,7 +97,32 @@ void SceneGraph::InitMesh(aiMesh * paiMesh, LoadableMesh * myMesh)
 
 
 	}
-	
+
+
+	// BOUNDING BOX CALCULUS
+	glm::vec3 minimum,maximum;
+	for (int i = 0; i < 3; i++)
+	{
+		
+		auto min_sgv = std::min_element(vertices.begin(),
+						 vertices.end(), 
+						 [i](const SGVertex & l, const SGVertex & r) {
+							return l.m_pos[i] < r.m_pos[i]; 
+						  });
+		auto max_sgv = std::min_element(vertices.begin(),
+			vertices.end(),
+			[i](const SGVertex & l, const SGVertex & r) {
+			return l.m_pos[i] > r.m_pos[i];
+		});
+
+		minimum[i] = min_sgv->m_pos[i];
+		maximum[i] = max_sgv->m_pos[i];
+	}
+
+	BoundingBox<glm::vec3> bb(minimum, maximum);
+	m_bbox.Union(bb);
+
+
 	std::vector<unsigned int> indices;
 	indices.resize(paiMesh->mNumFaces*3);
 	for (unsigned int i = 0; i < paiMesh->mNumFaces; i++)
@@ -149,11 +183,11 @@ void SceneGraph::InitMaterial(aiMaterial * aimaterial, Material * mymat)
 	}
 }
 
-void SceneGraph::Render()
+void SceneGraph::Render(unsigned int method)
 {
 	for (auto & pmesh : m_pmeshs)
 	{
-		pmesh->Render(m_pmaterials);
+		pmesh->Render(m_pmaterials, method);
 	}
 }
 
@@ -209,6 +243,103 @@ void SceneGraph::ImguiDraw()
 		ImGui::TreePop();
 	}
 	
+}
+
+void SceneGraph::RenderBoundingBox(glm::mat4 MVP)
+{
+	if (s_pbbCube == nullptr | s_pbbShader == nullptr)
+	{
+		sInitBoundingBoxCube();
+	}
+
+
+	glm::vec3 pos = m_bbox.getCenter<float>();
+	glm::vec3 size = m_bbox.getSize();
+
+	s_pbbShader->Enable();
+	s_pbbShader->updateUniform(SHADER_MVP, glm::value_ptr(MVP));
+	s_pbbShader->updateUniform(SHADER_BB_POS, &pos);
+	s_pbbShader->updateUniform(SHADER_BB_SIZE, &size);
+
+	s_pbbCube->Render(GL_LINES);
+}
+
+void SceneGraph::sInitBoundingBoxCube()
+{
+	if (s_pbbCube == nullptr)
+	{
+
+		s_pbbCube = new ZGLVAODrawable();
+
+		float a = 0.5f;
+		glm::mat3 permutation(0.);
+		permutation[1][0] = 1.;
+		permutation[2][1] = 1;
+		permutation[0][2] = 1;
+		// Set up vertex data (and buffer(s)) and attribute pointers
+		std::vector<glm::vec3> verticesInit =
+		{
+			glm::vec3(a, a, a), // Left
+			glm::vec3(-a,-a, a),// Right
+			glm::vec3(a, -a, a), // Top
+			glm::vec3(a, a, a), // Left
+			glm::vec3(-a,-a, a),// Right
+			glm::vec3(-a, a, a),// Top
+
+			glm::vec3(a, a, -a), // Left
+			glm::vec3(-a,-a, -a),// Right
+			glm::vec3(a, -a, -a),// Top
+			glm::vec3(a, a, -a),// Left
+			glm::vec3(-a,-a, -a),// Right
+			glm::vec3(-a, a, -a),// Top
+
+		};
+
+		std::vector<glm::vec3> vertices(verticesInit);
+
+		for (int i = 0; i < 2; i++)
+		{
+			auto vInit = verticesInit;
+
+			for (auto& vert : vInit)
+			{
+				vert = permutation * vert;
+			}
+
+			std::move(vInit.begin(), vInit.end(), std::back_inserter(vertices));
+
+			permutation = glm::transpose(permutation);
+		}
+
+		// pos
+		ZGLStride stride1;
+		stride1.m_offset = sizeof(glm::vec3),
+			stride1.m_type = GL_FLOAT;
+		stride1.m_size = 3;
+
+		ZGLVAODrawableParam paramDrawable;
+
+		paramDrawable.m_stride = sizeof(glm::vec3);
+		paramDrawable.m_nbVertex = vertices.size();
+		paramDrawable.m_pVertices = (void *)&vertices[0];
+		paramDrawable.m_strides = { stride1 };
+
+		s_pbbCube->Init(paramDrawable);
+	}
+	
+
+	if (s_pbbShader == nullptr)
+	{
+		s_pbbShader = new Shader();
+		MapUniform uniformMap;
+		GraphicPipelineType shaderType;
+
+
+		uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
+		uniformMap[SHADER_BB_POS] = eZGLtypeUniform::ZGL_FVEC3;
+		uniformMap[SHADER_BB_SIZE] = eZGLtypeUniform::ZGL_FVEC3;
+		s_pbbShader->Init("shaderBBox", uniformMap, shaderType);
+	}
 }
 
 

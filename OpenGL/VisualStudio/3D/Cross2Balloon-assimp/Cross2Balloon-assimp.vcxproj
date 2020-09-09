@@ -175,7 +175,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
+    <None Include="shader.tesc" />
+    <None Include="shader.tese" />
     <None Include="shader.vert" />
+    <None Include="shaderBBox.frag" />
+    <None Include="shaderBBox.vert" />
     <None Include="Skybox.frag" />
     <None Include="Skybox.tesc" />
     <None Include="Skybox.tese" />
