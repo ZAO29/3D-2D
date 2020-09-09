@@ -198,7 +198,7 @@ void Cross2BalloonApp::ImguiDraw()
 	RecordableApp::ImguiDraw();
 	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::SliderFloat("scale", &m_scale, 0.1f, 10.f);
-	ImGui::SliderFloat("specular power", &m_specPow, 0.1f, 10.f);
+	ImGui::SliderFloat("specular power", &m_specPow, 0.1f, 100.f);
 	ImGui::SliderFloat("specular intensity", &m_specIntensity, 0.0f, 1.f);
 	ImGui::SliderFloat("tesselation skybox", &m_tessSkybox, 0.0f, 10.f);
 	ImGui::SliderFloat("tesselation cross", &m_tessCross, 1.f, m_tessCrossMax);

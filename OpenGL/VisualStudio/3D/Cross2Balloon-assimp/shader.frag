@@ -20,7 +20,7 @@ void main() {
 	float diffuse = max(0.,dot(uLightDir,-normalWorld));
 	vec3 reflection = reflect(uLightDir,normalWorld);
 	vec3 pos2Cam  = uCamPos - posWorld;
-	float specular = uSpecularIntensity * pow(max(0.,dot(pos2Cam,-reflection)),uSpecularPow);
+	float specular = uSpecularIntensity * pow(max(0.,dot(pos2Cam,reflection)),uSpecularPow);
 	outColor = diffuse*texture(tex,vec2(0.,0.)) + specular * vec4(1.,1.,1.,1.);
 
 }
