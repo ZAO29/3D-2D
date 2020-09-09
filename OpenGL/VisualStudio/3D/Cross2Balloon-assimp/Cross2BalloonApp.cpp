@@ -113,8 +113,13 @@ bool Cross2BalloonApp::Init()
 		<< s.y << "|"
 		<< s.z << "|" << std::endl;
 	glm::vec3 center = bb.getCenter<float>();
+
+
 	float size = std::max(s.x, std::max(s.y, s.z));
 	glm::vec4 centerRadius = glm::vec4(center.x, center.y, center.z, size);
+	
+	// leger shift pour que la croix soit etoilee autour de son centre
+	centerRadius.y += s.y / 8.0;
 	m_shader.updateUniform(SHADER_CENTERRADIUS, &centerRadius);
 
 
