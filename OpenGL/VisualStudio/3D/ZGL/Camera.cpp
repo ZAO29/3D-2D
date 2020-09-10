@@ -156,10 +156,10 @@ void Camera::Update(float elapsedTime)
 
 		}
 
-		//if (Listener::sgetKeyState(GLFW_KEY_W))
-		//{
+		if(Listener::sgetKeyState(GLFW_KEY_W))
+		{
 			m_deltaDegR += elapsedTime * m_speed/2.;
-		//}
+		}
 
 		if (Listener::sgetKeyState(GLFW_KEY_X))
 		{
@@ -266,6 +266,7 @@ void Camera::ImguiDraw()
 		getDirection().y,
 		getDirection().z);
 	ImGui::LabelText("speed ", " %f", m_speed);
+	ImGui::SliderFloat("speed cam ", &m_speed, 0., 100.);
 
 }
 
