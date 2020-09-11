@@ -106,7 +106,7 @@ void ZGLApp::Run()
 		if (!m_bImguiRender)
 			m_pCam->Update(m_elapsedTime);
 
-		m_FPSs[m_idFPS] = 1. / m_elapsedTime;
+		m_FPSs[m_idFPS] = 1.f / m_elapsedTime;
 		m_idFPS++;
 		m_idFPS = m_idFPS % m_FPSs.size();
 
@@ -200,7 +200,7 @@ void ZGLApp::ImguiDraw()
 	}
 	m_pCam->ImguiDraw();
 
-	ImGui::PlotLines("FPS", &m_FPSs[0], m_FPSs.size());
+	ImGui::PlotLines("FPS", &m_FPSs[0], static_cast<int>(m_FPSs.size()));
 	ImGui::Text("FPS max : %f", *std::max_element(m_FPSs.begin(),m_FPSs.end()));
 	ImGui::Text("FPS min : %f", *std::min_element(m_FPSs.begin(), m_FPSs.end()));
 	ImGui::Checkbox("Fixed Time", &m_bfixedTime);

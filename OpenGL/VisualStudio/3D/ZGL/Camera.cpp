@@ -158,12 +158,12 @@ void Camera::Update(float elapsedTime)
 
 		if(Listener::sgetKeyState(GLFW_KEY_W))
 		{
-			m_deltaDegR += elapsedTime * m_speed/2.;
+			m_deltaDegR += elapsedTime * m_speed/2.f;
 		}
 
 		if (Listener::sgetKeyState(GLFW_KEY_X))
 		{
-			m_deltaDegR -= elapsedTime * m_speed/2.;
+			m_deltaDegR -= elapsedTime * m_speed/2.f;
 		}
 
 
@@ -216,11 +216,11 @@ void Camera::Update(float elapsedTime)
 		}
 		if (Listener::sgetKeyState(GLFW_KEY_F))
 		{
-			m_speed *= 1.01;
+			m_speed *= 1.01f;
 		}
 		if (Listener::sgetKeyState(GLFW_KEY_G))
 		{
-			m_speed /= 1.01;
+			m_speed /= 1.01f;
 		}
 
 		bool buttonPressed = Listener::sgetMouseButtonState(GLFW_MOUSE_BUTTON_LEFT) ||
@@ -238,6 +238,7 @@ void Camera::Update(float elapsedTime)
 
 		double xpos, ypos;
 		glfwGetCursorPos(m_pwindow, &xpos, &ypos);
+		glm::vec2 currentPos(static_cast<float>(xpos), static_cast<float>(ypos));
 
 		if (buttonPressed)
 		{
@@ -245,13 +246,11 @@ void Camera::Update(float elapsedTime)
 			int width, height;
 			glfwGetWindowSize(m_pwindow, &width, &height);
 
-			m_deltaDegP = (ypos - m_mousePos.y) / float(height)*m_projPerspective.m_degVerticalFOV*0.05;
-			m_deltaDegH = (xpos - m_mousePos.x) / float(width)*m_projPerspective.m_degVerticalFOV*m_projPerspective.m_ratio*0.05;
+			m_deltaDegP = (currentPos.y - m_mousePos.y) / float(height)*m_projPerspective.m_degVerticalFOV*0.05f;
+			m_deltaDegH = (currentPos.x - m_mousePos.x) / float(width)*m_projPerspective.m_degVerticalFOV*m_projPerspective.m_ratio*0.05f;
 		}
 
-		m_mousePos.x = xpos;
-		m_mousePos.y = ypos;
-	
+		m_mousePos = currentPos;
 }
 
 void Camera::ImguiDraw()

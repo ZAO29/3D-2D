@@ -35,9 +35,9 @@ m_fileName(FileName),m_textureTarget(TextureTarget)
 
 Texture::Texture(float r,float g, float b)
 {
-    uint8_t ri = std::round(r*255.f);
-    uint8_t gi = std::round(g*255.f);
-    uint8_t bi = std::round(b*255.f);
+    uint8_t ri = static_cast<uint8_t>(std::round(r*255.f));
+    uint8_t gi = static_cast<uint8_t>(std::round(g*255.f));
+    uint8_t bi = static_cast<uint8_t>(std::round(b*255.f));
     
     
     std::vector<unsigned char> data = {ri,gi,bi};

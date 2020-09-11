@@ -5,6 +5,26 @@
 
 #include "SceneGraph.h"
 
+
+struct CrossParam
+{
+	float m_scale = 0.2f;
+	float m_specPow = 1.0f;
+	float m_specIntensity = 0.0f;
+	float m_tessCross = 1.0f;
+	float m_tessCrossMax = 1000.f;
+	float m_sizeCross = 0.0f;
+	float m_reflectWeight = 0.5f;
+};
+
+
+struct CrossFieldParam
+{
+	float step = 0.0f;
+    int nb = 3;
+};
+
+
 class Cross2BalloonApp : public RecordableApp
 {
 public:
@@ -21,14 +41,11 @@ private :
 	SceneGraph* m_psgraph;
 	Shader m_shader;
 	Shader m_shaderSkyBox;
-	float m_scale = 0.2;
-	float m_specPow = 1.0;
-	float m_specIntensity = 0.0;
-	float m_tessSkybox = 50.0;
-	float m_tessCross= 1.0;
-	float m_tessCrossMax = 1000.f;
-	glm::vec3 m_dirLight = glm::vec3(1., 1., 1.);
-	float m_sizeCross = 0.0;
-	float m_reflectWeight = 0.5;
+	CrossParam m_crossParam;
+	CrossFieldParam m_crossFieldParam;
+	float m_tessSkybox = 50.0f;
+
+	glm::vec3 m_dirLight = glm::vec3(1.f, 1.f, 1.f);
+
 };
 

@@ -4,6 +4,8 @@
 
 #include <GL/glew.h>
 
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 ZGLVAODrawable::ZGLVAODrawable()
 {
 	 
@@ -42,7 +44,7 @@ void ZGLVAODrawable::Render(int method)
 	for (auto& stride : m_strides)
 	{
 		glEnableVertexAttribArray(i);
-		glVertexAttribPointer(i, stride.m_size, stride.m_type, GL_FALSE,m_stride, (const GLvoid*) offsetCumul);
+		glVertexAttribPointer(i, stride.m_size, stride.m_type, GL_FALSE,m_stride, BUFFER_OFFSET(offsetCumul));
 
 		i++;
 		offsetCumul += stride.m_offset;
@@ -90,7 +92,7 @@ void ZGLIndexedVAODrawable::Render(int method)
 	for (auto& stride : m_strides)
 	{
 		glEnableVertexAttribArray(i);
-		glVertexAttribPointer(i, stride.m_size, stride.m_type, GL_FALSE, m_stride, (const GLvoid*)offsetCumul);
+		glVertexAttribPointer(i, stride.m_size, stride.m_type, GL_FALSE, m_stride, BUFFER_OFFSET(offsetCumul));
 
 		i++;
 		offsetCumul += stride.m_offset;

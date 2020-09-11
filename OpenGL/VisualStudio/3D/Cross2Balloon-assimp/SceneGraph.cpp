@@ -163,10 +163,10 @@ void SceneGraph::InitMesh(aiMesh * paiMesh, LoadableMesh * myMesh)
 	stride2.m_size = 3;
 
 	paramDrawable.m_param.m_stride = sizeof(SGVertex);
-	paramDrawable.m_param.m_nbVertex = vertices.size();
+	paramDrawable.m_param.m_nbVertex = static_cast<unsigned int>( vertices.size());
 	paramDrawable.m_param.m_pVertices = (void *)&vertices[0];
 	paramDrawable.m_param.m_strides = { stride1, stride2 };
-	paramDrawable.m_nbIndices = indices.size();
+	paramDrawable.m_nbIndices = static_cast<unsigned int>( indices.size());
 	paramDrawable.m_pIndices = &indices[0];
 
 	myMesh->Init(paramDrawable, paiMesh->mMaterialIndex);
@@ -247,7 +247,7 @@ void SceneGraph::ImguiDraw()
 
 void SceneGraph::RenderBoundingBox(glm::mat4 MVP)
 {
-	if (s_pbbCube == nullptr | s_pbbShader == nullptr)
+	if ((s_pbbCube == nullptr) | (s_pbbShader == nullptr))
 	{
 		sInitBoundingBoxCube();
 	}
@@ -320,7 +320,7 @@ void SceneGraph::sInitBoundingBoxCube()
 		ZGLVAODrawableParam paramDrawable;
 
 		paramDrawable.m_stride = sizeof(glm::vec3);
-		paramDrawable.m_nbVertex = vertices.size();
+		paramDrawable.m_nbVertex = static_cast<unsigned int>( vertices.size());
 		paramDrawable.m_pVertices = (void *)&vertices[0];
 		paramDrawable.m_strides = { stride1 };
 

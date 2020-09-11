@@ -45,6 +45,8 @@ bool Cross2BalloonApp::Init()
 	//m_width = 1920;
 	//m_height = 1080;
 	m_typeCamera = eCameraType::FREECAMERA;
+	m_bfixedTime = false;
+
 
 	RecordableApp::Init();
 
@@ -59,7 +61,7 @@ bool Cross2BalloonApp::Init()
 
 	float scale = 1.0f;
 
-	float PitchBase = PI / 2. - acos(-1. / 3.);
+	float PitchBase = PI / 2.f - acos(-1.f / 3.f);
 
 
 	glm::vec2 pos0(0, PI / 2.);
@@ -81,10 +83,10 @@ bool Cross2BalloonApp::Init()
 	ZGLVAOIndexedDrawableParam paramDrawable;
 
 	paramDrawable.m_param.m_stride = sizeof(VerticeData);
-	paramDrawable.m_param.m_nbVertex = vertices.size();
+	paramDrawable.m_param.m_nbVertex = static_cast<unsigned int>( vertices.size());
 	paramDrawable.m_param.m_pVertices = (void *)&vertices[0];
 	paramDrawable.m_param.m_strides = { stride1};
-	paramDrawable.m_nbIndices = indices.size();
+	paramDrawable.m_nbIndices = static_cast<unsigned int>( indices.size());
 	paramDrawable.m_pIndices = &indices[0];
 
 	m_ppyramid = new ZGLIndexedVAODrawable();
@@ -122,12 +124,15 @@ bool Cross2BalloonApp::Init()
 	glm::vec3 center = bb.getCenter<float>();
 
 
-	float size = std::max(s.x, std::max(s.y, s.z));
-	m_sizeCross = size;
-	glm::vec4 centerRadius = glm::vec4(center.x, center.y, center.z, size);
+	
+	m_crossParam.m_sizeCross = std::max(s.x, std::max(s.y, s.z));
+
+	
+	m_crossFieldParam.step = 5 * m_crossParam.m_sizeCross;
+	glm::vec4 centerRadius = glm::vec4(center.x, center.y, center.z, m_crossParam.m_sizeCross);
 	
 	// leger shift pour que la croix soit etoilee autour de son centre
-	centerRadius.y += s.y / 8.0;
+	centerRadius.y += s.y / 8.0f;
 	m_shader.updateUniform(SHADER_CENTERRADIUS, &centerRadius);
 
 
@@ -172,7 +177,7 @@ void Cross2BalloonApp::OpenGLRender()
 
 	glEnable(GL_DEPTH_TEST);
 	m_shader.Enable();
-	glm::mat4 scale = glm::scale(glm::vec3(m_scale, m_scale, m_scale));
+	glm::mat4 scale = glm::scale(m_crossParam.m_scale*glm::vec3(1.));
 
 	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView() * scale;
 
@@ -181,12 +186,12 @@ void Cross2BalloonApp::OpenGLRender()
 	m_shader.updateUniform(SHADER_MODEL, glm::value_ptr(scale));
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 	m_shader.updateUniform(SHADER_CAMPOS, &eyepos);
-	m_shader.updateUniform(SHADER_SPECPOW, &m_specPow);
-	m_shader.updateUniform(SHADER_SPECINTENSITY, &m_specIntensity);
+	m_shader.updateUniform(SHADER_SPECPOW, &m_crossParam.m_specPow);
+	m_shader.updateUniform(SHADER_SPECINTENSITY, &m_crossParam.m_specIntensity);
 	m_shader.updateUniform(SHADER_DIRLIGHT, &m_dirLight);
-	m_shader.updateUniform(SHADER_TESS,&m_tessCross);
-	m_shader.updateUniform(SHADER_TESSMAX, &m_tessCrossMax);
-	m_shader.updateUniform(SHADER_REFLECTIONWEIGHT, &m_reflectWeight);
+	m_shader.updateUniform(SHADER_TESS,&m_crossParam.m_tessCross);
+	m_shader.updateUniform(SHADER_TESSMAX, &m_crossParam.m_tessCrossMax);
+	m_shader.updateUniform(SHADER_REFLECTIONWEIGHT, &m_crossParam.m_reflectWeight);
 
 
 
@@ -194,39 +199,40 @@ void Cross2BalloonApp::OpenGLRender()
 
 
 	//LOOP : TODO should use innstancing instead
-	int nb_x = 21;
-	int nb_y = 21;
-	float step = 5*m_sizeCross;
-	glm::mat4  trans_x = glm::translate(glm::vec3(step, 0, 0));
-	glm::mat4  trans_y = glm::translate(glm::vec3(0, 0, step));
+
+	glm::mat4  trans_x = glm::translate(glm::vec3(m_crossFieldParam.step, 0, 0));
+	glm::mat4  trans_y = glm::translate(glm::vec3(0, 0, m_crossFieldParam.step));
 	glm::mat4 mvp_x = mvp;
 	glm::mat4 mvp_final;
 
 	float t = m_cumulTime;
 
 	glm::vec2 pos_grid(0.);
-	for (int j = 0; j < nb_y; j++)
+
+	glm::vec2 center = (m_crossFieldParam.step*((float(m_crossFieldParam.nb) - 1.f) / 2.f)) * glm::vec2(1.);
+
+	for (int j = 0; j < m_crossFieldParam.nb; j++)
 	{
 		
 		mvp_x = mvp;
 		pos_grid.x = 0.;
 
-		for (int i = 0; i < nb_x; i++)
+		for (int i = 0; i < m_crossFieldParam.nb; i++)
 		{
-			float dist = glm::distance(step*glm::vec2((float(nb_x) - 1.) / 2., (float(nb_y) - 1.) / 2.), pos_grid);
-			float y = std::max(3.*cos(dist/100.+t*0.8),0.)/(0.1+dist/100.);
-			mvp_final = mvp_x * glm::translate(glm::vec3(0., 5.*m_sizeCross * std::sqrt(y), 0.));
-			m_tessCross = y/3.0*(float(m_tessCrossMax) - 1.) + 1.;
-			m_tessCross = std::min(m_tessCross, m_tessCrossMax);
-			m_shader.updateUniform(SHADER_TESS, &m_tessCross);
+			float dist = glm::distance(center, pos_grid);
+			float y = std::max(3.f*cos(dist/100.f+t*0.8f),0.f)/(0.1f+dist/100.f);
+			mvp_final = mvp_x * glm::translate(glm::vec3(0.f, 5.f*m_crossParam.m_sizeCross * std::sqrt(y), 0.));
+			m_crossParam.m_tessCross = y/3.0f*(float(m_crossParam.m_tessCrossMax) - 1.f) + 1.f;
+			m_crossParam.m_tessCross = std::min(m_crossParam.m_tessCross, m_crossParam.m_tessCrossMax);
+			m_shader.updateUniform(SHADER_TESS, &m_crossParam.m_tessCross);
 			m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp_final));
 			m_psgraph->Render(GL_PATCHES);
 			mvp_x = mvp_x * trans_x;
-			pos_grid += glm::vec2(step, 0.);
+			pos_grid += glm::vec2(m_crossFieldParam.step, 0.);
 			
 		}
 		mvp = mvp * trans_y;
-		pos_grid += glm::vec2(0., step);
+		pos_grid += glm::vec2(0.,m_crossFieldParam.step);
 		
 	}
 
@@ -248,13 +254,22 @@ void Cross2BalloonApp::ImguiDraw()
 {
 	RecordableApp::ImguiDraw();
 	ImGui::Begin(m_name.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::SliderFloat("scale", &m_scale, 0.1f, 10.f);
-	ImGui::SliderFloat("specular power", &m_specPow, 0.1f, 100.f);
-	ImGui::SliderFloat("specular intensity", &m_specIntensity, 0.0f, 1.f);
-	//ImGui::SliderFloat("tesselation skybox", &m_tessSkybox, 0.0f, 10.f);
-	ImGui::SliderFloat("tesselation cross", &m_tessCross, 1.f, m_tessCrossMax);
-	ImGui::SliderFloat("tesselation cross max", &m_tessCrossMax, 1.f, 1000.f);
-	ImGui::SliderFloat(" reflection weight", &m_reflectWeight, 0., 1.);
+	if (ImGui::TreeNode("Cross"))
+	{
+		ImGui::SliderFloat("scale", &m_crossParam.m_scale, 0.1f, 10.f);
+		ImGui::SliderFloat("specular power", &m_crossParam.m_specPow, 0.1f, 100.f);
+		ImGui::SliderFloat("specular intensity", &m_crossParam.m_specIntensity, 0.0f, 1.f);
+		ImGui::SliderFloat("tesselation cross", &m_crossParam.m_tessCross, 1.f, m_crossParam.m_tessCrossMax);
+		ImGui::SliderFloat("tesselation cross max", &m_crossParam.m_tessCrossMax, 1.f, 1000.f);
+		ImGui::SliderFloat(" reflection weight", &m_crossParam.m_reflectWeight, 0., 1.);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("CrossField"))
+	{
+		ImGui::SliderFloat("step", &m_crossFieldParam.step, m_crossParam.m_sizeCross, 10.f*m_crossParam.m_sizeCross);
+		ImGui::SliderInt("number", &m_crossFieldParam.nb, 3,100);
+		ImGui::TreePop();
+	}
 	if (ImGui::SliderFloat3("dir light", &m_dirLight[0], -1.f, 1.f))
 	{
 		m_dirLight=glm::normalize(m_dirLight);
