@@ -37,6 +37,14 @@ public:
 	virtual void ImguiDraw() override;
 
 private :
+
+	void InitGround();
+	void RenderGround();
+	void DestroyGround();
+
+	Shader m_groundShader;
+	ZGLVAODrawable* m_pground;
+
 	ZGLIndexedVAODrawable* m_ppyramid;
 	SceneGraph* m_psgraph;
 	Shader m_shader;

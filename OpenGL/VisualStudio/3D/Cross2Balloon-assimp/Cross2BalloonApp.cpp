@@ -5,7 +5,7 @@
 
 #include <ZGL/imgui/imgui.h>
 #include <gtx/transform.hpp>
-#define SHADER_MV "uModelView"
+
 #define SHADER_MODEL "uModel"
 #define SHADER_CAMPOS "uCamPos"
 #define SHADER_SPECPOW "uSpecularPow"
@@ -149,6 +149,7 @@ bool Cross2BalloonApp::Init()
 
 	SceneGraph::sInitBoundingBoxCube();
 	
+	InitGround();
 
 	return true;
 }
@@ -163,7 +164,7 @@ void Cross2BalloonApp::OpenGLRender()
 	
 	{
 		m_shaderSkyBox.Enable();
-		glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView()*glm::translate(m_pCam->getEyePos());
+		glm::mat4 mvp = m_pCam->getProjectionAndView()*glm::translate(m_pCam->getEyePos());
 		m_shaderSkyBox.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 		m_shaderSkyBox.updateUniform(SHADER_TESS, &m_tessSkybox);
 		m_shaderSkyBox.updateUniform(SHADER_DIRLIGHT, &m_dirLight);
@@ -179,7 +180,7 @@ void Cross2BalloonApp::OpenGLRender()
 	m_shader.Enable();
 	glm::mat4 scale = glm::scale(m_crossParam.m_scale*glm::vec3(1.));
 
-	glm::mat4 mvp = m_pCam->getProjectionView() * m_pCam->getView() * scale;
+	glm::mat4 mvp = m_pCam->getProjectionAndView() * scale;
 
 	glm::vec3 eyepos = m_pCam->getEyePos();
 
@@ -226,7 +227,9 @@ void Cross2BalloonApp::OpenGLRender()
 			m_crossParam.m_tessCross = std::min(m_crossParam.m_tessCross, m_crossParam.m_tessCrossMax);
 			m_shader.updateUniform(SHADER_TESS, &m_crossParam.m_tessCross);
 			m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp_final));
+
 			m_psgraph->Render(GL_PATCHES);
+
 			mvp_x = mvp_x * trans_x;
 			pos_grid += glm::vec2(m_crossFieldParam.step, 0.);
 			
@@ -236,17 +239,18 @@ void Cross2BalloonApp::OpenGLRender()
 		
 	}
 
-	glPatchParameteri(GL_PATCH_VERTICES, 3);
-	m_psgraph->Render(GL_PATCHES);
+	RenderGround();
 
-	// bounding box
-	//m_psgraph->RenderBoundingBox(mvp);
+	
+
+
 }
 
 void Cross2BalloonApp::Destroy()
 {
 	m_ppyramid->Destroy();
 	m_psgraph-> Destroy();
+	DestroyGround();
 	m_pWindowEnv->destroy();
 }
 
@@ -278,4 +282,67 @@ void Cross2BalloonApp::ImguiDraw()
 	ImGui::End();
 	
 
+}
+
+void Cross2BalloonApp::InitGround()
+{
+	ZGLVAODrawableParam paramDrawable;
+
+	std::vector<glm::vec3> vertices =
+	{
+		glm::vec3(-0.5,0.,0.5),
+		glm::vec3(-0.5,0.,-0.5),
+		glm::vec3(0.5,0.,0.5),
+		glm::vec3(0.5,0.,-0.5)
+	};
+
+	ZGLStride stride1;
+	stride1.m_offset = sizeof(glm::vec3);
+	stride1.m_type = GL_FLOAT;
+	stride1.m_size = 3;
+
+	paramDrawable.m_stride = sizeof(glm::vec3);
+	paramDrawable.m_nbVertex = static_cast<unsigned int>(vertices.size());
+	paramDrawable.m_pVertices = (void *)&vertices[0];
+	paramDrawable.m_strides = { stride1 };
+
+
+	m_pground = new ZGLVAODrawable();
+	m_pground->Init(paramDrawable);
+
+
+	MapUniform uniformMap;
+	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
+	uniformMap[SHADER_MODEL] = eZGLtypeUniform::ZGL_FMAT4;
+	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
+
+	GraphicPipelineType shaderType;
+
+	m_groundShader.Init("Ground", uniformMap, shaderType);
+}
+
+void Cross2BalloonApp::RenderGround()
+{
+	m_groundShader.Enable();
+	
+	glm::mat4 model =  glm::translate(glm::vec3(0.5f, 0.f, 0.5f));
+	model = glm::scale(m_crossParam.m_scale*((m_crossFieldParam.nb - 1.f)*m_crossFieldParam.step)*glm::vec3(1.f)) * model;
+	
+	glm::mat4 mvp = m_pCam->getProjectionAndView()*model;
+	glm::vec3 eyePos = m_pCam->getEyePos();
+
+	m_groundShader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
+	m_groundShader.updateUniform(SHADER_MODEL, glm::value_ptr(model));
+	m_groundShader.updateUniform(SHADER_CAMPOS, &eyePos);
+
+	m_pground->Render(GL_TRIANGLE_STRIP);
+}
+
+void Cross2BalloonApp::DestroyGround()
+{
+	if (m_pground != nullptr)
+	{
+		m_pground->Destroy();
+		m_pground = nullptr;
+	}
 }

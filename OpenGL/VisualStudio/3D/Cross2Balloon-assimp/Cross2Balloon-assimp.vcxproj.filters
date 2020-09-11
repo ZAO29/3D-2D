@@ -88,5 +88,11 @@
     <None Include="shaderBBox.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="Ground.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="Ground.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

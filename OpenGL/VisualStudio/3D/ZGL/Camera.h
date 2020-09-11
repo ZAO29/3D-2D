@@ -111,6 +111,9 @@ public:
 
     virtual glm::mat4 getView() =0;
     
+
+
+	glm::mat4 getProjectionAndView() { return getProjectionView()*getView(); }
     
     float getScaleEye(){return glm::length(m_eye);}
     
