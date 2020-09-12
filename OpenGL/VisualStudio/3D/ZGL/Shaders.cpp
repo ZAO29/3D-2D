@@ -34,6 +34,9 @@
 #define TES_SHADER_EXT "tese" 
 
 
+
+std::map<std::string, std::string> Shader::s_headersMap;
+
 Shader::Shader() : m_shaderProg(0){
 }
 
@@ -172,8 +175,15 @@ bool Shader::LoadShader(const char * shader_file_path)
     if(ShaderStream.is_open()) 
     { 
         std::string Line = ""; 
-        while(getline(ShaderStream, Line)) 
-            ShaderCode += "\n" + Line; 
+		while (getline(ShaderStream, Line))
+		{
+			if (Line.find("#include") != std::string::npos)
+			{
+				Line = getHeaderContent(Line);
+			}
+				
+			ShaderCode += "\n" + Line;
+		}
         ShaderStream.close(); 
     } else
     {
@@ -267,6 +277,65 @@ void Shader::initUniforms(MapUniform uniforms)
 	}
 }
 
+std::string Shader::getHeaderContent(std::string includeLine)
+{
+	std::size_t firstQuote = includeLine.find("\"");
+	std::size_t lastQuote = includeLine.find_last_of("\"");
+	if ((firstQuote == std::string::npos) || (lastQuote == std::string::npos))
+	{
+		fprintf(stdout, "ERROR shader : impossible to open %s\n", includeLine.c_str());
+		INTERNALERROR(" shader parsing header impossible to find  quote ");
+	}
+
+	std::string preheaderFilename = includeLine.substr(firstQuote+1);
+	std::string ext = preheaderFilename.substr(preheaderFilename.find(".")+1);
+	std::string name = preheaderFilename.substr(0,preheaderFilename.find("."));
+	
+
+	// little trick to avoid the last anti-slash
+	if (ext != "header\"")
+	{
+		INTERNALERROR(" shader parsing header invalid extension ");
+	}
+
+	std::string headerFilename = name + ".header";
+
+	// if header already parsed
+	if (s_headersMap.find(headerFilename) != s_headersMap.end())
+	{
+		return s_headersMap[headerFilename];
+	}
+
+
+	std::string headerCode;
+	std::ifstream headerStream(headerFilename, std::ios::in);
+	if (headerStream.is_open())
+	{
+		std::string Line = "";
+		while (getline(headerStream, Line))
+		{
+			// WARNING check for circular definition befoe make it recursive
+			/*if (Line.find("#include") != std::string::npos)
+			{
+				Line = getHeaderContent(Line);
+			}*/
+
+			headerCode += "\n" + Line;
+		}
+		headerStream.close();
+	}
+	else
+	{
+		fprintf(stdout, "ERROR header shader : impossible to open %s\n", headerFilename.c_str());
+		INTERNALERROR("impossible to open file");
+	}
+
+	s_headersMap[headerFilename] = headerCode;
+
+	return headerCode;
+
+}
+
 void Shader::updateUniform(std::string name, const void * pdata)
 {
 	if (m_uniforms.find(name) != m_uniforms.end())
@@ -283,6 +352,11 @@ void Shader::updateUniform(std::string name, const void * pdata)
 void Shader::Enable()
 {
     glUseProgram(m_shaderProg);
+}
+
+void Shader::sCleanHeaderList()
+{
+	if (s_headersMap.size() != 0) s_headersMap.clear(); 
 }
 
 void UniformVar::update(const void * pdata)

@@ -94,5 +94,8 @@
     <None Include="Ground.vert">
       <Filter>shader</Filter>
     </None>
+    <None Include="SkyboxSample.header">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

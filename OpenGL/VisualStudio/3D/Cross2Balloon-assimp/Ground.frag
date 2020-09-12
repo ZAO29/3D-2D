@@ -1,6 +1,7 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 
+#include "SkyboxSample.header"
 
 layout(location = 0) in vec3 posWorld;
 
@@ -17,5 +18,5 @@ void main() {
 	vec3 reflection = normalize(reflect(pos2Cam,normal));
 	
 	//outColor = vec4(abs(reflection)/2.+color/2., 1.);
-	outColor = vec4(reflection.xzy,1.0);
+	outColor = SkyBoxSample(reflection.xzy);
 }

@@ -186,6 +186,7 @@
     <None Include="Skybox.tesc" />
     <None Include="Skybox.tese" />
     <None Include="Skybox.vert" />
+    <None Include="SkyboxSample.header" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -85,8 +85,7 @@ public:
 
     void Enable();
     
- 
-        
+	static void sCleanHeaderList();
 
     
 protected :
@@ -100,8 +99,7 @@ protected :
     bool SetUniformID(unsigned int& ID,std::string shader_var);
 
 	void initUniforms(MapUniform uniforms);
-    
-    
+  
 private:
     
     // classe mere
@@ -109,6 +107,14 @@ private:
     std::list<unsigned int> m_shaderObjList;
 
 	MapUniform m_uniforms;
+
+	// map of header : 
+	//	key filename, 
+	// value content
+	static std::map<std::string, std::string> s_headersMap;
+
+	static std::string getHeaderContent(std::string includeLine);
+
 };
 
 #endif /* SHADERS_H */

@@ -29,6 +29,7 @@
 
 #include "CameraTrackBall.h"
 #include "CameraFree.h"
+#include "Shaders.h"
 
 
 
@@ -83,6 +84,7 @@ ZGLApp::~ZGLApp()
 void ZGLApp::Run()
 {
 	bool bMustClose = false;
+	Shader::sCleanHeaderList();
 
 	while (m_pWindowEnv->IsRunning() && !bMustClose)
 	{
