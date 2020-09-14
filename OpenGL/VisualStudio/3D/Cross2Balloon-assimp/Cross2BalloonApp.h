@@ -24,7 +24,6 @@ struct CrossFieldParam
     int nb = 3;
 };
 
-
 class Cross2BalloonApp : public RecordableApp
 {
 public:
@@ -39,7 +38,13 @@ public:
 private :
 
 	void InitGround();
+	void InitSkyBox();
+	void InitCrossField();
+
 	void RenderGround();
+	void RenderSkybox();
+	void RenderCrossField();
+
 	void DestroyGround();
 
 	Shader m_groundShader;
