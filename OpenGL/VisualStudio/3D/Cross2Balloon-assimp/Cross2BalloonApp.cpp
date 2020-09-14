@@ -318,11 +318,12 @@ void Cross2BalloonApp::RenderCrossField()
 	m_shader.Enable();
 	glm::mat4 scale = glm::scale(m_crossParam.m_scale*glm::vec3(1.));
 
-	glm::mat4 mvp = m_pCam->getProjectionAndView() * scale;
-
+	glm::mat4 model = scale;
+	glm::mat4 vp = m_pCam->getProjectionAndView();
+	glm::mat4 mvp = vp * model;
 	glm::vec3 eyepos = m_pCam->getEyePos();
 
-	m_shader.updateUniform(SHADER_MODEL, glm::value_ptr(scale));
+	m_shader.updateUniform(SHADER_MODEL, glm::value_ptr(model));
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 	m_shader.updateUniform(SHADER_CAMPOS, &eyepos);
 	m_shader.updateUniform(SHADER_SPECPOW, &m_crossParam.m_specPow);
@@ -336,8 +337,9 @@ void Cross2BalloonApp::RenderCrossField()
 	
 	glm::mat4  trans_x = glm::translate(glm::vec3(m_crossFieldParam.step, 0, 0));
 	glm::mat4  trans_y = glm::translate(glm::vec3(0, 0, m_crossFieldParam.step));
-	glm::mat4 mvp_x = mvp;
+	glm::mat4 model_x = glm::mat4(1.);
 	glm::mat4 mvp_final;
+	glm::mat4 model_final;
 
 	float t = m_cumulTime;
 
@@ -349,26 +351,28 @@ void Cross2BalloonApp::RenderCrossField()
 	for (int j = 0; j < m_crossFieldParam.nb; j++)
 	{
 
-		mvp_x = mvp;
+		model_x = model;
 		pos_grid.x = 0.;
 
 		for (int i = 0; i < m_crossFieldParam.nb; i++)
 		{
 			float dist = glm::distance(center, pos_grid);
 			float y = std::max(3.f*cos(dist / 100.f + t * 0.8f), 0.f) / (0.1f + dist / 100.f);
-			mvp_final = mvp_x * glm::translate(glm::vec3(0.f, 5.f*m_crossParam.m_sizeCross * std::sqrt(y), 0.));
+			model_final = model_x * glm::translate(glm::vec3(0.f, 5.f*m_crossParam.m_sizeCross * std::sqrt(y), 0.));
+			mvp_final = vp * model_final;
 			m_crossParam.m_tessCross = y / 3.0f*(float(m_crossParam.m_tessCrossMax) - 1.f) + 1.f;
 			m_crossParam.m_tessCross = std::min(m_crossParam.m_tessCross, m_crossParam.m_tessCrossMax);
 			m_shader.updateUniform(SHADER_TESS, &m_crossParam.m_tessCross);
 			m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp_final));
+			m_shader.updateUniform(SHADER_MODEL, glm::value_ptr(model_final));
 
 			m_psgraph->Render(GL_PATCHES);
 
-			mvp_x = mvp_x * trans_x;
+			model_x = model_x * trans_x;
 			pos_grid += glm::vec2(m_crossFieldParam.step, 0.);
 
 		}
-		mvp = mvp * trans_y;
+		model = model * trans_y;
 		pos_grid += glm::vec2(0., m_crossFieldParam.step);
 
 	}
