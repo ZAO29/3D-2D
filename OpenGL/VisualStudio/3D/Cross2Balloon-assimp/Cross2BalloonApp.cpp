@@ -118,6 +118,14 @@ void Cross2BalloonApp::ImguiDraw()
 		ImGui::SliderInt("number", &m_crossFieldParam.nb, 3,100);
 		ImGui::TreePop();
 	}
+	if (ImGui::TreeNode("Fog"))
+	{
+		ImGui::SliderFloat("minimum altitude ", &m_fog.altmin, 0.0f, m_fog.altmax);
+		ImGui::SliderFloat("maximum altitude",  &m_fog.altmax, m_fog.altmin, 5.f);
+		ImGui::TreePop();
+	}
+
+
 	if (ImGui::SliderFloat3("dir light", &m_dirLight[0], -1.f, 1.f))
 	{
 		m_dirLight=glm::normalize(m_dirLight);
@@ -159,6 +167,8 @@ void Cross2BalloonApp::InitGround()
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_MODEL] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
+	uniformMap[SHADER_FOG_ALTMIN] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_FOG_ALTMAX] = eZGLtypeUniform::ZGL_FVEC1;
 
 	GraphicPipelineType shaderType;
 
@@ -234,6 +244,9 @@ void Cross2BalloonApp::InitCrossField()
 	uniformMap[SHADER_TESSMAX] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_CENTERRADIUS] = eZGLtypeUniform::ZGL_FVEC4;
 	uniformMap[SHADER_REFLECTIONWEIGHT] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_FOG_ALTMIN] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_FOG_ALTMAX] = eZGLtypeUniform::ZGL_FVEC1;
+
 	GraphicPipelineType shaderType;
 	shaderType.tesCtrl = true;
 	shaderType.tesEval = true;
@@ -281,6 +294,8 @@ void Cross2BalloonApp::RenderGround()
 	m_groundShader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 	m_groundShader.updateUniform(SHADER_MODEL, glm::value_ptr(model));
 	m_groundShader.updateUniform(SHADER_CAMPOS, &eyePos);
+	m_groundShader.updateUniform(SHADER_FOG_ALTMIN, &m_fog.altmin);
+	m_groundShader.updateUniform(SHADER_FOG_ALTMAX, &m_fog.altmax);
 
 	m_pground->Render(GL_TRIANGLE_STRIP);
 }
@@ -292,6 +307,7 @@ void Cross2BalloonApp::RenderSkybox()
 	m_shaderSkyBox.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 	m_shaderSkyBox.updateUniform(SHADER_TESS, &m_tessSkybox);
 	m_shaderSkyBox.updateUniform(SHADER_DIRLIGHT, &m_dirLight);
+
 
 	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	m_ppyramid->Render(GL_PATCHES);
@@ -315,7 +331,8 @@ void Cross2BalloonApp::RenderCrossField()
 	m_shader.updateUniform(SHADER_TESS, &m_crossParam.m_tessCross);
 	m_shader.updateUniform(SHADER_TESSMAX, &m_crossParam.m_tessCrossMax);
 	m_shader.updateUniform(SHADER_REFLECTIONWEIGHT, &m_crossParam.m_reflectWeight);
-
+	m_shader.updateUniform(SHADER_FOG_ALTMIN, &m_fog.altmin);
+	m_shader.updateUniform(SHADER_FOG_ALTMAX, &m_fog.altmax);
 	
 	glm::mat4  trans_x = glm::translate(glm::vec3(m_crossFieldParam.step, 0, 0));
 	glm::mat4  trans_y = glm::translate(glm::vec3(0, 0, m_crossFieldParam.step));

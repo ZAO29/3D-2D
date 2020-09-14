@@ -97,5 +97,8 @@
     <None Include="SkyboxSample.header">
       <Filter>shader</Filter>
     </None>
+    <None Include="Fog.header">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

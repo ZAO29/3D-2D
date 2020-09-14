@@ -24,6 +24,12 @@ struct CrossFieldParam
     int nb = 3;
 };
 
+struct FogParam
+{
+	float altmax = 10.0f;
+	float altmin = 0.0f;
+};
+
 class Cross2BalloonApp : public RecordableApp
 {
 public:
@@ -59,6 +65,8 @@ private :
 	float m_tessSkybox = 50.0f;
 
 	glm::vec3 m_dirLight = glm::vec3(1.f, 1.f, 1.f);
+
+	FogParam m_fog;
 
 };
 

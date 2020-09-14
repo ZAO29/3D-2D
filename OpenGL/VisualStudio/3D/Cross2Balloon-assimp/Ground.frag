@@ -2,6 +2,7 @@
 #extension GL_ARB_separate_shader_objects : enable
 
 #include "SkyboxSample.header"
+#include "Fog.header"
 
 layout(location = 0) in vec3 posWorld;
 
@@ -17,6 +18,10 @@ void main() {
 	vec3 pos2Cam  = posWorld - uCamPos;
 	vec3 reflection = normalize(reflect(pos2Cam,normal));
 	
+
+
 	//outColor = vec4(abs(reflection)/2.+color/2., 1.);
 	outColor = SkyBoxSample(reflection.xzy);
+
+	outColor = FogBlending(uCamPos,posWorld, outColor);
 }

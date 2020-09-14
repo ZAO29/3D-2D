@@ -1,6 +1,8 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 
+#include "Fog.header"
+
 layout(location = 0) out vec4 outColor;
 
 layout(location = 0) in float z;
@@ -29,6 +31,8 @@ void main() {
 
 	float specular = uSpecularIntensity * pow(max(0.,dot(pos2Cam,reflection)),uSpecularPow);
 
-	outColor = (colorDiffuse*(1.-uReflectWeight)+mirror*uReflectWeight) + specular * vec4(1.,1.,1.,1.);
+	vec4 color = (colorDiffuse*(1.-uReflectWeight)+mirror*uReflectWeight) + specular * vec4(1.,1.,1.,1.);
+
+	outColor = FogBlending(uCamPos,posWorld,color);
 
 }

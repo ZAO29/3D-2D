@@ -1,0 +1,95 @@
+uniform float uFogAltMin;
+uniform float uFogAltMax;
+
+vec3 normalFog = vec3(0.,1.,0.);
+
+
+struct sLine
+{
+	vec3 dir;
+	vec3 d0;
+};
+
+struct sPlan
+{
+	vec3 normal;
+	vec3 p0;
+};
+
+
+struct sIntersection
+{
+	bool isIntersect;
+	vec3 pos;
+};
+
+// input : plan P | v appartient a  P  <=> <v|P.xyz> = P.w
+// input : straight line S (parametric equation) 
+//        | v appartient a S <=> il existe t tq v = S.p0 + t * S.dir 
+
+sIntersection Intersect(sPlan P, sLine S)
+{
+	float a = dot(S.dir,P.normal);
+
+	sIntersection inter;
+
+	inter.isIntersect = (abs(a) > 0.01);
+	float t;
+	if(inter.isIntersect)
+	{
+		t = dot(P.p0 - S.d0,P.normal)/a;
+	}else
+	{
+		t = -1;
+	}
+
+	inter.pos = S.dir * t + S.d0;
+
+	return inter;
+}
+
+
+
+vec4 FogBlending(vec3 camPos, vec3 fragPos, vec4 color)
+{
+	
+
+	sLine line;
+	line.dir = normalize(fragPos - camPos);
+	line.d0 = camPos;
+
+	sPlan planInf;
+	sPlan planSup;
+
+	planInf.normal = vec3(0.,1.,0.);
+	planInf.p0 = uFogAltMin * planInf.normal;
+	planSup.normal = vec3(0.,1.,0.);
+	planSup.p0 = uFogAltMax * planSup.normal;
+
+
+	sIntersection inter1 = Intersect(planInf,line);
+	sIntersection inter2 = Intersect(planSup,line);
+
+	float dFrag2Cam = distance(fragPos,camPos);
+	float dzInf2cam = distance(inter1.pos,camPos);
+	float dzSup2cam = distance(inter2.pos,camPos);
+
+	float t = 0.0;
+	if(inter1.isIntersect)
+	{	
+		//t=1.-exp(-distance(inter1.pos,inter2.pos));
+
+		if((dFrag2Cam < dzInf2cam) && (dFrag2Cam < dzSup2cam))
+		{
+			t = 0.0f;
+		}else
+		{	
+			t = 1.0f;
+		}
+
+
+	}
+	vec4 colorOut = t * vec4(1.,0.,0.,1.) + (1.-t) * color;
+
+	return colorOut;
+}
