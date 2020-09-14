@@ -21,14 +21,14 @@ struct CrossParam
 struct CrossFieldParam
 {
 	float step = 0.0f;
-    int nb = 3;
+	int nb = 11;
 };
 
 struct FogParam
 {
 	float altmax = 10.0f;
 	float altmin = 0.0f;
-	float density = 1.0f;
+	float density = 0.1f;
 };
 
 class Cross2BalloonApp : public RecordableApp
