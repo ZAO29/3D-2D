@@ -20,6 +20,7 @@
 
 #define SHADER_FOG_ALTMIN "uFogAltMin"
 #define SHADER_FOG_ALTMAX "uFogAltMax"
+#define SHADER_FOG_DENSITY "uFogDensity"
 
 Cross2BalloonApp::Cross2BalloonApp()
 {
@@ -122,6 +123,7 @@ void Cross2BalloonApp::ImguiDraw()
 	{
 		ImGui::SliderFloat("minimum altitude ", &m_fog.altmin, 0.0f, m_fog.altmax);
 		ImGui::SliderFloat("maximum altitude",  &m_fog.altmax, m_fog.altmin, 5.f);
+		ImGui::SliderFloat("density", &m_fog.density, 0.01f, 1.f);
 		ImGui::TreePop();
 	}
 
@@ -169,6 +171,7 @@ void Cross2BalloonApp::InitGround()
 	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
 	uniformMap[SHADER_FOG_ALTMIN] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_FOG_ALTMAX] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_FOG_DENSITY] = eZGLtypeUniform::ZGL_FVEC1;
 
 	GraphicPipelineType shaderType;
 
@@ -246,6 +249,7 @@ void Cross2BalloonApp::InitCrossField()
 	uniformMap[SHADER_REFLECTIONWEIGHT] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_FOG_ALTMIN] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_FOG_ALTMAX] = eZGLtypeUniform::ZGL_FVEC1;
+	uniformMap[SHADER_FOG_DENSITY] = eZGLtypeUniform::ZGL_FVEC1;
 
 	GraphicPipelineType shaderType;
 	shaderType.tesCtrl = true;
@@ -296,6 +300,8 @@ void Cross2BalloonApp::RenderGround()
 	m_groundShader.updateUniform(SHADER_CAMPOS, &eyePos);
 	m_groundShader.updateUniform(SHADER_FOG_ALTMIN, &m_fog.altmin);
 	m_groundShader.updateUniform(SHADER_FOG_ALTMAX, &m_fog.altmax);
+	m_groundShader.updateUniform(SHADER_FOG_DENSITY, &m_fog.density);
+
 
 	m_pground->Render(GL_TRIANGLE_STRIP);
 }
@@ -334,6 +340,7 @@ void Cross2BalloonApp::RenderCrossField()
 	m_shader.updateUniform(SHADER_REFLECTIONWEIGHT, &m_crossParam.m_reflectWeight);
 	m_shader.updateUniform(SHADER_FOG_ALTMIN, &m_fog.altmin);
 	m_shader.updateUniform(SHADER_FOG_ALTMAX, &m_fog.altmax);
+	m_shader.updateUniform(SHADER_FOG_DENSITY, &m_fog.density);
 	
 	glm::mat4  trans_x = glm::translate(glm::vec3(m_crossFieldParam.step, 0, 0));
 	glm::mat4  trans_y = glm::translate(glm::vec3(0, 0, m_crossFieldParam.step));

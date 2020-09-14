@@ -1,5 +1,6 @@
 uniform float uFogAltMin;
 uniform float uFogAltMax;
+uniform float uFogDensity;
 
 vec3 normalFog = vec3(0.,1.,0.);
 
@@ -84,12 +85,12 @@ vec4 FogBlending(vec3 camPos, vec3 fragPos, vec4 color)
 			t = 0.0f;
 		}else
 		{	
-			t = 1.0f;
+			t=1.-exp(-distance(inter1.pos,inter2.pos)*uFogDensity);
 		}
 
 
 	}
-	vec4 colorOut = t * vec4(1.,0.,0.,1.) + (1.-t) * color;
+	vec4 colorOut = t * vec4(1.,1.,1.,1.) + (1.-t) * color;
 
 	return colorOut;
 }

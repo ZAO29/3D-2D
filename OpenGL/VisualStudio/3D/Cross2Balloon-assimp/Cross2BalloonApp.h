@@ -28,6 +28,7 @@ struct FogParam
 {
 	float altmax = 10.0f;
 	float altmin = 0.0f;
+	float density = 1.0f;
 };
 
 class Cross2BalloonApp : public RecordableApp
