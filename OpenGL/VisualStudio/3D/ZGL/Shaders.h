@@ -18,6 +18,7 @@
 #include <list>
 #include <string>
 #include <map>
+#include <vector>
 
 
 
@@ -33,8 +34,6 @@ enum eZGLtypeUniform
 	ZGL_FVEC4,
 	ZGL_FMAT4,
 };
-
-
 
 struct UniformVar
 {
@@ -79,13 +78,18 @@ public:
     static void setShaderPath(std::string path){s_path = path;}
     
     
-    virtual bool Init(std::string name, MapUniform uniforms=MapUniform(),GraphicPipelineType type=GraphicPipelineType());
+    virtual bool Init(std::string name, 
+		              MapUniform uniforms  =MapUniform(),
+			          GraphicPipelineType type  =GraphicPipelineType(), 
+					  std::vector<std::string> subscribedUniform  =std::vector<std::string>());
 
 	void updateUniform(std::string name, const void * pdata);
 
     void Enable();
     
 	static void sCleanHeaderList();
+
+	void Notify(std::string name);
 
     
 protected :
@@ -108,6 +112,9 @@ private:
 
 	MapUniform m_uniforms;
 
+	// key name of the UniformValueHolder, value boolean true : means value isDirty
+	std::map<std::string, bool> m_uniformVarNotification;
+
 	// map of header : 
 	//	key filename, 
 	// value content
@@ -115,6 +122,39 @@ private:
 
 	static std::string getHeaderContent(std::string includeLine);
 
+};
+
+
+struct UniformVarValueHolder
+{
+	static void sAdd(eZGLtypeUniform type, std::string name);
+	static void sUpdate(std::string name, const void* pdata);
+	static void sSubscribe(std::string name, Shader* psubscribedShader);
+	static const void* sgetValue(std::string name);
+	static bool sExist(std::string name);
+	static eZGLtypeUniform sgetType(std::string name);
+
+	eZGLtypeUniform getType() const { return m_type; }
+
+	const void* getValue() const { return m_pdata; }
+
+	UniformVarValueHolder() {};
+
+private:
+	UniformVarValueHolder(eZGLtypeUniform type, std::string name);
+	
+	void Update(const void* pdata);
+	void Subscribe(Shader* psubscribedShader);
+	void Destroy();
+	
+
+
+	eZGLtypeUniform m_type = eZGLtypeUniform::ZGL_UNDEFINED;
+	void* m_pdata = nullptr;
+	std::vector<Shader*> m_subscribedShaders;
+	std::string m_name;
+
+	static std::map<std::string, UniformVarValueHolder> s_list;
 };
 
 #endif /* SHADERS_H */

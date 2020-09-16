@@ -20,6 +20,7 @@
 #include <iostream>
 #include "GLGLEW.h"
 #include "Debugging.h"
+#include <glm.hpp>
 
 
 
@@ -58,7 +59,10 @@ Shader::~Shader() {
     }
 }
 
-bool Shader::Init(std::string name, MapUniform uniforms, GraphicPipelineType type)
+bool Shader::Init(std::string name,
+				  MapUniform uniforms,
+				  GraphicPipelineType type,
+				  std::vector<std::string> subscribedUniforms)
 {
    m_shaderProg = glCreateProgram(); 
    
@@ -110,6 +114,28 @@ bool Shader::Init(std::string name, MapUniform uniforms, GraphicPipelineType typ
 		INTERNALERROR(" error finalize shader");
     }
    
+	//add the subscribed uniform to the map of local uniform
+	for (auto& name : subscribedUniforms)
+	{
+		if (uniforms.find(name) != uniforms.end())
+		{
+			INTERNALERROR(" error local uniform and global have the same name ");
+		}
+
+		if (!UniformVarValueHolder::sExist(name))
+		{
+			INTERNALERROR(" error local uniform and global have the same name ");
+		}
+
+		uniforms[name] = UniformVarValueHolder::sgetType(name);
+		
+		// shader subscribe to uniformVar
+		UniformVarValueHolder::sSubscribe(name, this);
+
+		m_uniformVarNotification[name] = true;
+	}
+
+	
 
 	initUniforms(uniforms);
 
@@ -277,6 +303,16 @@ void Shader::initUniforms(MapUniform uniforms)
 	}
 }
 
+void Shader::Notify(std::string name)
+{
+	if (m_uniformVarNotification.find(name) == m_uniformVarNotification.end())
+	{
+		INTERNALERROR(" notification of a non present uniformVar");
+	}
+
+	m_uniformVarNotification[name] = true;
+}
+
 std::string Shader::getHeaderContent(std::string includeLine)
 {
 	std::size_t firstQuote = includeLine.find("\"");
@@ -352,6 +388,16 @@ void Shader::updateUniform(std::string name, const void * pdata)
 void Shader::Enable()
 {
     glUseProgram(m_shaderProg);
+
+	for (auto& pair : m_uniformVarNotification)
+	{
+		if (pair.second == true)
+		{
+			const void* pdata = UniformVarValueHolder::sgetValue(pair.first);
+			updateUniform(pair.first, pdata);
+			pair.second = false;
+		}
+	}
 }
 
 void Shader::sCleanHeaderList()
@@ -398,4 +444,236 @@ void UniformVar::update(const void * pdata)
 		default :
 			INTERNALERROR("unhandle type of uniform variable");
 	}
+}
+
+
+
+std::map<std::string, UniformVarValueHolder> UniformVarValueHolder::s_list;
+
+void UniformVarValueHolder::sAdd(eZGLtypeUniform type, std::string name)
+{
+	if (s_list.find(name) == s_list.end())
+	{
+		s_list[name] = UniformVarValueHolder(type, name);
+	}
+	else
+	{
+		if (s_list[name].getType() != type)
+		{
+			INTERNALERROR(" uniformVarValueHolder with same name but with different type already exists");
+		}
+	}
+
+}
+
+void UniformVarValueHolder::sUpdate(std::string name, const void * pdata)
+{
+	if (s_list.find(name) != s_list.end())
+	{
+		s_list[name].Update(pdata);
+	}
+	else
+	{
+		INTERNALERROR(" uniformVarValueHolder with this name doesn't exist");
+	}
+}
+
+void UniformVarValueHolder::sSubscribe(std::string name, Shader * psubscribedShader)
+{
+	if (s_list.find(name) != s_list.end())
+	{
+		s_list[name].Subscribe(psubscribedShader);
+	}
+	else
+	{
+		INTERNALERROR(" uniformVarValueHolder with this name doesn't exist");
+	}
+}
+
+const void * UniformVarValueHolder::sgetValue(std::string name)
+{
+	if (s_list.find(name) != s_list.end())
+	{
+		return s_list[name].getValue();
+	}
+	else
+	{
+		INTERNALERROR(" uniformVarValueHolder with this name doesn't exist");
+	}
+
+	return nullptr;
+}
+
+bool UniformVarValueHolder::sExist(std::string name)
+{
+	return (s_list.find(name) != s_list.end());
+}
+
+eZGLtypeUniform UniformVarValueHolder::sgetType(std::string name)
+{
+	return s_list[name].getType();
+}
+
+UniformVarValueHolder::UniformVarValueHolder(eZGLtypeUniform type, std::string name):m_type(type),m_name(name)
+{
+	switch (m_type)
+	{
+	case eZGLtypeUniform::ZGL_UNDEFINED:
+		INTERNALERROR("undefined type of uniform variable");
+		break;
+
+	case eZGLtypeUniform::ZGL_IVEC1:
+		m_pdata = new int();
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC1:
+		m_pdata = new float();
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC2:
+		m_pdata = new glm::vec2();
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC3:
+		m_pdata = new glm::vec3();
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC4:
+		m_pdata = new glm::vec4();
+		break;
+
+	case eZGLtypeUniform::ZGL_FMAT4:
+		m_pdata = new glm::mat4();
+		break;
+
+	default:
+		INTERNALERROR("unhandle type of uniform variable");
+	}
+}
+
+void UniformVarValueHolder::Update(const void * pdata)
+{
+	if (m_pdata == nullptr)
+	{
+		INTERNALERROR(" cannot update UniformVarValueHolder with nullptr data");
+	}
+
+	switch (m_type)
+	{
+	case eZGLtypeUniform::ZGL_UNDEFINED:
+		INTERNALERROR("undefined type of uniform variable");
+		break;
+
+	case eZGLtypeUniform::ZGL_IVEC1:
+		memcpy(m_pdata,pdata,sizeof(int));
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC1:
+		memcpy(m_pdata, pdata, sizeof(float));
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC2:
+		memcpy(m_pdata, pdata, sizeof(glm::vec2));
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC3:
+		memcpy(m_pdata, pdata, sizeof(glm::vec3));
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC4:
+		memcpy(m_pdata, pdata, sizeof(glm::vec4));
+		break;
+
+	case eZGLtypeUniform::ZGL_FMAT4:
+		memcpy(m_pdata, pdata, sizeof(glm::mat4));
+		break;
+
+	default:
+		INTERNALERROR("unhandle type of uniform variable");
+	}
+
+	for (auto & pshader : m_subscribedShaders)
+	{
+		pshader->Notify(m_name);
+	}
+}
+
+
+void UniformVarValueHolder::Subscribe(Shader * psubscribedShader)
+{
+	if (psubscribedShader == nullptr)
+	{
+		INTERNALERROR("a nullptr shader pointer can't subscribed");
+	}
+
+	if (std::find(m_subscribedShaders.begin(),m_subscribedShaders.end(),psubscribedShader) == m_subscribedShaders.end())
+	{
+		m_subscribedShaders.push_back(psubscribedShader);
+	}
+	else
+	{
+		INTERNALERROR("shader already subscribed");
+	}
+}
+
+void UniformVarValueHolder::Destroy()
+{
+	if (m_pdata = nullptr)
+	{
+		return;
+	}
+
+	switch (m_type)
+	{
+	case eZGLtypeUniform::ZGL_UNDEFINED:
+		INTERNALERROR("undefined type of uniform variable");
+		break;
+
+	case eZGLtypeUniform::ZGL_IVEC1:
+	{
+		int* pdata = reinterpret_cast<int *>(m_pdata);
+		delete pdata;
+	}
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC1:
+	{
+		float* pdata = reinterpret_cast<float *>(m_pdata);
+		delete pdata;
+	}
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC2:
+	{
+		glm::vec2* pdata = reinterpret_cast<glm::vec2*>(m_pdata);
+		delete pdata;
+	}
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC3:
+	{
+		glm::vec3* pdata = reinterpret_cast<glm::vec3*>(m_pdata);
+		delete pdata;
+	}
+		break;
+
+	case  eZGLtypeUniform::ZGL_FVEC4:
+	{
+		glm::vec4* pdata = reinterpret_cast<glm::vec4*>(m_pdata);
+		delete pdata;
+	}
+		break;
+
+	case eZGLtypeUniform::ZGL_FMAT4:
+	{
+		glm::mat4* pdata = reinterpret_cast<glm::mat4*>(m_pdata);
+		delete pdata;
+	}
+		break;
+
+	default:
+		INTERNALERROR("unhandle type of uniform variable");
+	}
+
+	m_pdata = nullptr;
 }

@@ -62,6 +62,14 @@ bool Cross2BalloonApp::Init()
 
 	SceneGraph::sInitBoundingBoxCube();
 
+	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_ALTMAX);
+	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_ALTMIN);
+	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_DENSITY);
+
+	UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMAX, &m_fog.altmax);
+	UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMIN, &m_fog.altmin);
+	UniformVarValueHolder::sUpdate(SHADER_FOG_DENSITY, &m_fog.density);
+
 	InitCrossField();
 
 	InitSkyBox();
@@ -121,12 +129,20 @@ void Cross2BalloonApp::ImguiDraw()
 	}
 	if (ImGui::TreeNode("Fog"))
 	{
-		ImGui::SliderFloat("minimum altitude ", &m_fog.altmin, 0.0f, m_fog.altmax);
-		ImGui::SliderFloat("maximum altitude",  &m_fog.altmax, m_fog.altmin, 5.f);
-		ImGui::SliderFloat("density", &m_fog.density, 0.01f, 1.f);
+		if (ImGui::SliderFloat("minimum altitude ", &m_fog.altmin, 0.0f, m_fog.altmax))
+		{
+			UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMIN, &m_fog.altmin);
+		}
+		if (ImGui::SliderFloat("maximum altitude", &m_fog.altmax, m_fog.altmin, 5.f))
+		{
+			UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMAX, &m_fog.altmax);
+		}
+		if (ImGui::SliderFloat("density", &m_fog.density, 0.01f, 1.f))
+		{
+			UniformVarValueHolder::sUpdate(SHADER_FOG_DENSITY, &m_fog.density);
+		}
 		ImGui::TreePop();
 	}
-
 
 	if (ImGui::SliderFloat3("dir light", &m_dirLight[0], -1.f, 1.f))
 	{
@@ -169,13 +185,13 @@ void Cross2BalloonApp::InitGround()
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_MODEL] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
-	uniformMap[SHADER_FOG_ALTMIN] = eZGLtypeUniform::ZGL_FVEC1;
-	uniformMap[SHADER_FOG_ALTMAX] = eZGLtypeUniform::ZGL_FVEC1;
-	uniformMap[SHADER_FOG_DENSITY] = eZGLtypeUniform::ZGL_FVEC1;
+
 
 	GraphicPipelineType shaderType;
 
-	m_groundShader.Init("Ground", uniformMap, shaderType);
+	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX, SHADER_FOG_ALTMIN, SHADER_FOG_DENSITY };
+
+	m_groundShader.Init("Ground", uniformMap, shaderType, subscribedUniformNames);
 }
 
 void Cross2BalloonApp::InitSkyBox()
@@ -247,14 +263,16 @@ void Cross2BalloonApp::InitCrossField()
 	uniformMap[SHADER_TESSMAX] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_CENTERRADIUS] = eZGLtypeUniform::ZGL_FVEC4;
 	uniformMap[SHADER_REFLECTIONWEIGHT] = eZGLtypeUniform::ZGL_FVEC1;
-	uniformMap[SHADER_FOG_ALTMIN] = eZGLtypeUniform::ZGL_FVEC1;
-	uniformMap[SHADER_FOG_ALTMAX] = eZGLtypeUniform::ZGL_FVEC1;
-	uniformMap[SHADER_FOG_DENSITY] = eZGLtypeUniform::ZGL_FVEC1;
+
+
 
 	GraphicPipelineType shaderType;
 	shaderType.tesCtrl = true;
 	shaderType.tesEval = true;
-	m_shader.Init("shader", uniformMap, shaderType);
+
+	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX, SHADER_FOG_ALTMIN, SHADER_FOG_DENSITY };
+
+	m_shader.Init("shader", uniformMap, shaderType, subscribedUniformNames);
 	m_shader.Enable();
 
 
@@ -298,10 +316,6 @@ void Cross2BalloonApp::RenderGround()
 	m_groundShader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 	m_groundShader.updateUniform(SHADER_MODEL, glm::value_ptr(model));
 	m_groundShader.updateUniform(SHADER_CAMPOS, &eyePos);
-	m_groundShader.updateUniform(SHADER_FOG_ALTMIN, &m_fog.altmin);
-	m_groundShader.updateUniform(SHADER_FOG_ALTMAX, &m_fog.altmax);
-	m_groundShader.updateUniform(SHADER_FOG_DENSITY, &m_fog.density);
-
 
 	m_pground->Render(GL_TRIANGLE_STRIP);
 }
@@ -338,9 +352,7 @@ void Cross2BalloonApp::RenderCrossField()
 	m_shader.updateUniform(SHADER_TESS, &m_crossParam.m_tessCross);
 	m_shader.updateUniform(SHADER_TESSMAX, &m_crossParam.m_tessCrossMax);
 	m_shader.updateUniform(SHADER_REFLECTIONWEIGHT, &m_crossParam.m_reflectWeight);
-	m_shader.updateUniform(SHADER_FOG_ALTMIN, &m_fog.altmin);
-	m_shader.updateUniform(SHADER_FOG_ALTMAX, &m_fog.altmax);
-	m_shader.updateUniform(SHADER_FOG_DENSITY, &m_fog.density);
+
 	
 	glm::mat4  trans_x = glm::translate(glm::vec3(m_crossFieldParam.step, 0, 0));
 	glm::mat4  trans_y = glm::translate(glm::vec3(0, 0, m_crossFieldParam.step));
