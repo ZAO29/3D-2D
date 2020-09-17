@@ -65,10 +65,14 @@ bool Cross2BalloonApp::Init()
 	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_ALTMAX);
 	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_ALTMIN);
 	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_DENSITY);
+	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC3, SHADER_CAMPOS);
 
 	UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMAX, &m_fog.altmax);
 	UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMIN, &m_fog.altmin);
 	UniformVarValueHolder::sUpdate(SHADER_FOG_DENSITY, &m_fog.density);
+	glm::vec3 posCam = m_pCam->getEyePos();
+	UniformVarValueHolder::sUpdate(SHADER_CAMPOS, &posCam);
+
 
 	InitCrossField();
 
@@ -82,6 +86,9 @@ bool Cross2BalloonApp::Init()
 void Cross2BalloonApp::OpenGLRender()
 {
 	RecordableApp::setTargetRender();
+
+	glm::vec3 eyePos = m_pCam->getEyePos();
+	UniformVarValueHolder::sUpdate(SHADER_CAMPOS, &eyePos);
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
@@ -184,12 +191,15 @@ void Cross2BalloonApp::InitGround()
 	MapUniform uniformMap;
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_MODEL] = eZGLtypeUniform::ZGL_FMAT4;
-	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
+	
 
 
 	GraphicPipelineType shaderType;
 
-	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX, SHADER_FOG_ALTMIN, SHADER_FOG_DENSITY };
+	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX, 
+														SHADER_FOG_ALTMIN, 
+														SHADER_FOG_DENSITY, 
+														SHADER_CAMPOS};
 
 	m_groundShader.Init("Ground", uniformMap, shaderType, subscribedUniformNames);
 }
@@ -255,7 +265,6 @@ void Cross2BalloonApp::InitCrossField()
 	MapUniform uniformMap;
 	uniformMap[SHADER_MVP] = eZGLtypeUniform::ZGL_FMAT4;
 	uniformMap[SHADER_MODEL] = eZGLtypeUniform::ZGL_FMAT4;
-	uniformMap[SHADER_CAMPOS] = eZGLtypeUniform::ZGL_FVEC3;
 	uniformMap[SHADER_DIRLIGHT] = eZGLtypeUniform::ZGL_FVEC3;
 	uniformMap[SHADER_SPECPOW] = eZGLtypeUniform::ZGL_FVEC1;
 	uniformMap[SHADER_SPECINTENSITY] = eZGLtypeUniform::ZGL_FVEC1;
@@ -270,7 +279,10 @@ void Cross2BalloonApp::InitCrossField()
 	shaderType.tesCtrl = true;
 	shaderType.tesEval = true;
 
-	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX, SHADER_FOG_ALTMIN, SHADER_FOG_DENSITY };
+	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX,
+														SHADER_FOG_ALTMIN, 
+														SHADER_FOG_DENSITY,
+														SHADER_CAMPOS};
 
 	m_shader.Init("shader", uniformMap, shaderType, subscribedUniformNames);
 	m_shader.Enable();
@@ -311,11 +323,10 @@ void Cross2BalloonApp::RenderGround()
 	model = glm::scale(m_crossParam.m_scale*((m_crossFieldParam.nb - 1.f)*m_crossFieldParam.step)*glm::vec3(1.f)) * model;
 	
 	glm::mat4 mvp = m_pCam->getProjectionAndView()*model;
-	glm::vec3 eyePos = m_pCam->getEyePos();
 
 	m_groundShader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
 	m_groundShader.updateUniform(SHADER_MODEL, glm::value_ptr(model));
-	m_groundShader.updateUniform(SHADER_CAMPOS, &eyePos);
+
 
 	m_pground->Render(GL_TRIANGLE_STRIP);
 }
@@ -341,11 +352,10 @@ void Cross2BalloonApp::RenderCrossField()
 	glm::mat4 model = scale;
 	glm::mat4 vp = m_pCam->getProjectionAndView();
 	glm::mat4 mvp = vp * model;
-	glm::vec3 eyepos = m_pCam->getEyePos();
+
 
 	m_shader.updateUniform(SHADER_MODEL, glm::value_ptr(model));
 	m_shader.updateUniform(SHADER_MVP, glm::value_ptr(mvp));
-	m_shader.updateUniform(SHADER_CAMPOS, &eyepos);
 	m_shader.updateUniform(SHADER_SPECPOW, &m_crossParam.m_specPow);
 	m_shader.updateUniform(SHADER_SPECINTENSITY, &m_crossParam.m_specIntensity);
 	m_shader.updateUniform(SHADER_DIRLIGHT, &m_dirLight);
