@@ -1,6 +1,7 @@
 uniform float uFogAltMin;
 uniform float uFogAltMax;
 uniform float uFogDensity;
+uniform vec3 uCamDir;
 
 vec3 normalFog = vec3(0.,1.,0.);
 
@@ -71,26 +72,32 @@ vec4 FogBlending(vec3 camPos, vec3 fragPos, vec4 color)
 	sIntersection inter1 = Intersect(planInf,line);
 	sIntersection inter2 = Intersect(planSup,line);
 
-	float dFrag2Cam = distance(fragPos,camPos);
-	float dzInf2cam = distance(inter1.pos,camPos);
-	float dzSup2cam = distance(inter2.pos,camPos);
+	vec3 p1;
+	vec3 p2;
 
-	float t = 0.0;
-	if(inter1.isIntersect)
-	{	
-		//t=1.-exp(-distance(inter1.pos,inter2.pos));
-
-		if((dFrag2Cam < dzInf2cam) && (dFrag2Cam < dzSup2cam))
-		{
-			t = 0.0f;
-		}else
-		{	
-			t=1.-exp(-distance(inter1.pos,inter2.pos)*uFogDensity);
-		}
-
-
+	if( (dot(inter1.pos-camPos,uCamDir) > 0.0)  && inter1.isIntersect )
+	{
+		p1 = inter1.pos;
+	}else
+	{
+		p1 = camPos;
 	}
-	vec4 colorOut = t * vec4(1.,1.,1.,1.) + (1.-t) * color;
 
+	if( (dot(inter2.pos-camPos,uCamDir) > 0.0) && inter2.isIntersect )
+	{
+		p2 = inter2.pos;
+	}else
+	{
+		p2 = camPos;
+	}
+
+	
+	
+	
+	float t=1.-exp(-distance(p1,p2)*uFogDensity);
+
+
+	vec4 colorOut = t * vec4(1.,1.,1.,1.) + (1.-t) * color;
+	colorOut =clamp(colorOut,0.0,0.0) + vec4(distance(p1,p2));
 	return colorOut;
 }

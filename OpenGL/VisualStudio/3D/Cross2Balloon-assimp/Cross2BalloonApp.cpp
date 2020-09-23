@@ -8,6 +8,7 @@
 
 #define SHADER_MODEL "uModel"
 #define SHADER_CAMPOS "uCamPos"
+#define SHADER_CAMDIR "uCamDir"
 #define SHADER_SPECPOW "uSpecularPow"
 #define SHADER_SPECINTENSITY "uSpecularIntensity"
 #define SHADER_DIRLIGHT "uLightDir"
@@ -66,12 +67,15 @@ bool Cross2BalloonApp::Init()
 	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_ALTMIN);
 	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC1, SHADER_FOG_DENSITY);
 	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC3, SHADER_CAMPOS);
+	UniformVarValueHolder::sAdd(eZGLtypeUniform::ZGL_FVEC3, SHADER_CAMDIR);
 
 	UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMAX, &m_fog.altmax);
 	UniformVarValueHolder::sUpdate(SHADER_FOG_ALTMIN, &m_fog.altmin);
 	UniformVarValueHolder::sUpdate(SHADER_FOG_DENSITY, &m_fog.density);
 	glm::vec3 posCam = m_pCam->getEyePos();
+	glm::vec3 dirCam = m_pCam->getDirection();
 	UniformVarValueHolder::sUpdate(SHADER_CAMPOS, &posCam);
+	UniformVarValueHolder::sUpdate(SHADER_CAMDIR, &dirCam);
 
 
 	InitCrossField();
@@ -88,7 +92,9 @@ void Cross2BalloonApp::OpenGLRender()
 	RecordableApp::setTargetRender();
 
 	glm::vec3 eyePos = m_pCam->getEyePos();
+	glm::vec3 dirCam = m_pCam->getDirection();
 	UniformVarValueHolder::sUpdate(SHADER_CAMPOS, &eyePos);
+	UniformVarValueHolder::sUpdate(SHADER_CAMPOS, &dirCam);
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
@@ -199,7 +205,8 @@ void Cross2BalloonApp::InitGround()
 	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX, 
 														SHADER_FOG_ALTMIN, 
 														SHADER_FOG_DENSITY, 
-														SHADER_CAMPOS};
+														SHADER_CAMPOS,
+														SHADER_CAMDIR};
 
 	m_groundShader.Init("Ground", uniformMap, shaderType, subscribedUniformNames);
 }
@@ -282,7 +289,8 @@ void Cross2BalloonApp::InitCrossField()
 	std::vector<std::string> subscribedUniformNames = { SHADER_FOG_ALTMAX,
 														SHADER_FOG_ALTMIN, 
 														SHADER_FOG_DENSITY,
-														SHADER_CAMPOS};
+														SHADER_CAMPOS,
+														SHADER_CAMDIR};
 
 	m_shader.Init("shader", uniformMap, shaderType, subscribedUniformNames);
 	m_shader.Enable();
