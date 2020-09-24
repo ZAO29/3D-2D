@@ -27,6 +27,9 @@
     <ClInclude Include="PyramidToSphereApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SubdivisionMethod2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PyramidToSphereApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SubdivisionMethod2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,6 +59,15 @@
       <Filter>shader</Filter>
     </None>
     <None Include="pyramid2sphere.geom">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="subdiv2.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="subdiv2.vert">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="subdiv2.geom">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
