@@ -19,6 +19,7 @@ public:
 	void Init();
 	void Render(Camera* pCam);
 	void ImguiDraw();
+	void Destroy();
 
 private:
 	float m_levelMax = 9;

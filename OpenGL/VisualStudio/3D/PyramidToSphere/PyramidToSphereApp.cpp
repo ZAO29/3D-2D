@@ -35,12 +35,17 @@ bool PyramidToSphereApp::Init()
 	m_bfullScreen = false;
 	m_width = 1280;
 	m_height = 720;
+
+	//m_bfullScreen = true;
+	//m_width = 1920;
+	//m_height = 1080;
+
 	m_typeCamera = eCameraType::TRACKBALLCAMERA;
 
 	RecordableApp::Init();
 
 	m_pCam->setEyePos(glm::vec3(5.0, 0., 0.));
-	m_method1.Init();
+	//m_method1.Init();
 	
 	m_method2.Init();
 
@@ -51,14 +56,16 @@ void PyramidToSphereApp::OpenGLRender()
 {
 	RecordableApp::setTargetRender();
 	//m_method1.Render(m_pCam);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	m_method2.Render(m_pCam);
 
 }
 
 void PyramidToSphereApp::Destroy()
 {
+	m_method2.Destroy();
+	m_pWindowEnv->destroy();
 }
 
 void PyramidToSphereApp::ImguiDraw()

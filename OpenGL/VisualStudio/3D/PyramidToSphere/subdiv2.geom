@@ -12,6 +12,7 @@ layout (triangle_strip, max_vertices = 12) out; //WARNING HARDWARE LIMITATION re
 layout(location = 0) in flat int colorID[];
 
 layout(location = 0) out flat int colorID_out;
+layout(location = 1) out flat vec3  normal_out;
 
 uniform mat4 uMVP;
 
@@ -21,15 +22,30 @@ uniform int uLevel;
 
 void generateTri(vec3 pos1, vec3 pos2, vec3 pos3, int colorId, float coeff)
 {
+	vec3 rpos1 = coeff* 3.*normalize(pos1) + (1.-coeff) * pos1;
+	vec3 rpos2 = coeff* 3.*normalize(pos2) + (1.-coeff) * pos2;
+	vec3 rpos3 = coeff* 3.*normalize(pos3) + (1.-coeff) * pos3;
+	
+	vec3 v1 = rpos2 - rpos1;
+	vec3 v2 = rpos3 - rpos1;
 
-	gl_Position = uMVP*vec4(coeff* 3.*normalize(pos1) + (1.-coeff) * pos1,1.0); 
+	vec3 n = normalize(cross(v1,v2));
+	if(dot(rpos1,n) < 0)
+	{	
+		n = -n;
+	}
+
+	gl_Position = uMVP*vec4(rpos1,1.0); 
 	colorID_out = colorId;
+	normal_out = n;
     EmitVertex();
 
-    gl_Position = uMVP*vec4(coeff* 3.*normalize(pos2) + (1.-coeff) * pos2,1.0); 
+    gl_Position = uMVP*vec4(rpos2,1.0); 
+	normal_out = n;
     EmitVertex();
 
-    gl_Position =  uMVP*vec4(coeff* 3.*normalize(pos3) + (1.-coeff) * pos3,1.0); 
+    gl_Position =  uMVP*vec4(rpos3,1.0);
+	normal_out = n;
     EmitVertex();
     EndPrimitive();    
 }

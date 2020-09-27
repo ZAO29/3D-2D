@@ -183,3 +183,11 @@ void SubdivisionMethod2::ImguiDraw()
 		
 	}
 }
+
+void SubdivisionMethod2::Destroy()
+{
+	for (auto & level : m_levelPyramids)
+	{
+		level.Destroy();
+	}
+}
