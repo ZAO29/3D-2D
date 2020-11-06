@@ -81,6 +81,8 @@ struct ZGLVAOIndexedDrawableParam
 
 
 
+
+
 class ZGLVAODrawable {
 public:
     ZGLVAODrawable();
@@ -93,6 +95,7 @@ public:
 
 	void Destroy();
 
+
 	unsigned int getNbVertices() const { return m_nbVertex; }
     
 protected:
@@ -104,6 +107,7 @@ protected:
 };
 
 
+void InitQuad(ZGLVAODrawable & quad);
 
 class ZGLIndexedVAODrawable : public ZGLVAODrawable
 {

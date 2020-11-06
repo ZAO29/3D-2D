@@ -114,3 +114,36 @@ void ZGLIndexedVAODrawable::Destroy()
 	glDeleteBuffers(1, &m_IBO);
 	
 }
+
+void InitQuad(ZGLVAODrawable & quad)
+{
+
+	std::vector<glm::vec2> quad_vertex_buffer_data = {
+		glm::vec2(-1.0f , -1.0f),
+		glm::vec2(1.0f , -1.0f),
+		glm::vec2(-1.0f ,  1.0f),
+		glm::vec2(-1.0f ,  1.0f),
+		glm::vec2(1.0f , -1.0f),
+		glm::vec2(1.0f ,  1.0f)
+	};
+
+
+
+
+	// pos
+	ZGLStride stride1;
+	stride1.m_offset = sizeof(glm::vec2),
+		stride1.m_type = GL_FLOAT;
+	stride1.m_size = 2;
+
+
+	ZGLVAODrawableParam paramDrawable;
+
+	paramDrawable.m_stride = sizeof(glm::vec2);
+	paramDrawable.m_nbVertex = quad_vertex_buffer_data.size();
+	paramDrawable.m_pVertices = (void *)&quad_vertex_buffer_data[0];
+	paramDrawable.m_strides = { stride1 };
+
+	quad.Init(paramDrawable);
+	
+}

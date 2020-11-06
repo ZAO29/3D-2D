@@ -41,6 +41,12 @@ private :
 	
 	SubdivisionMethod1 m_method1;
 	SubdivisionMethod2 m_method2;
+
+	LoadableTexture m_Tex;
+	ZGLVAODrawable m_quad;
+	Shader m_quadShader;
+
+	
 	
 };
 

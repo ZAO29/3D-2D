@@ -70,5 +70,11 @@
     <None Include="subdiv2.geom">
       <Filter>shader</Filter>
     </None>
+    <None Include="quad.frag">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="quad.vert">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

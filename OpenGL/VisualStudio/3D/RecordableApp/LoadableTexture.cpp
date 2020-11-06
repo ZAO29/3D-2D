@@ -2,6 +2,8 @@
 #include "LoadableTexture.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
 #include <ZGL/Debugging.h>
 #include <ZGL/GLGLEW.h>
 
@@ -31,7 +33,7 @@ bool LoadableTexture::Load(std::string file)
 	}
 	
 	int nbChannel = imageCV.channels();
-	
+
 	switch (nbChannel)
 	{
 		case 0:
@@ -45,6 +47,7 @@ bool LoadableTexture::Load(std::string file)
 			break;
 		case 3:
 			param.m_channel = GL_RGB;
+			cv::cvtColor(imageCV, imageCV, cv::COLOR_RGB2BGR);
 			break;
 		case 4:
 			param.m_channel = GL_RGBA;
@@ -55,33 +58,40 @@ bool LoadableTexture::Load(std::string file)
 
 	int type = imageCV.type()%8;
 	
+	//param.m_unpackAlignement = (imageCV.step & 3) ? 1 : 4;
+	param.m_unpackAlignement = 1;
 
-	void* data;
+
+	void* data = nullptr;
 
 	switch (type)
 	{
 		case CV_8U:
 			param.m_type = GL_UNSIGNED_BYTE;
+			data = imageCV.ptr<GLubyte>();
 			break;
 		case CV_8S:
 			param.m_type = GL_BYTE;
+			data = imageCV.ptr<GLbyte>();
 			break;
 		case CV_16F:
 			param.m_type = GL_SHORT;
+			data = imageCV.ptr<GLshort>();
 			break;
 		case CV_32F:
 			param.m_type = GL_FLOAT;
+			data = imageCV.ptr<GLfloat>();
 			break;
 		case CV_64F:
 			param.m_type = GL_DOUBLE;
+			data = imageCV.ptr<GLdouble>();
 			break;
 		default:
 			INTERNALERROR(" unhandle type of precision");
 
 	}
 
-	data = imageCV.ptr<float>();
-
+	
 	Init(param, data);
 
 	

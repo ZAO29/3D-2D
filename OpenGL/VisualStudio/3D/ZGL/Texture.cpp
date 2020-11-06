@@ -49,7 +49,7 @@ Texture::Texture(float r,float g, float b)
 	Init(param, &data[0]);
 }
 
-void Texture::Init(TexParam param,void* data)
+void Texture::Init(TexParam& param,void* data)
 {
 	m_param = param;
 
@@ -63,7 +63,8 @@ void Texture::Init(TexParam param,void* data)
 	glTexImage2D(m_textureTarget, levelmap, m_param.m_channel, m_param.m_width, m_param.m_height, 0, m_param.m_channel,
 		m_param.m_type, data);
 
-
+	glPixelStorei(GL_UNPACK_ALIGNMENT, m_param.m_unpackAlignement);
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	glTexParameterf(m_textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(m_textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

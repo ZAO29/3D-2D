@@ -1,0 +1,8 @@
+*** BLENDER SHORTCUT ****
+Camera view :
+0 : switch cam/world view
+1 : y view
+3 : x view
+7 : z view
+
+tab : switch Edit/Object mode

@@ -31,6 +31,7 @@ struct TexParam
 	int m_height = 0;
 	int m_channel = 0x1908; // GL_RBGA
 	int m_type = 0; // GL_UNSIGNED BYTE
+	int m_unpackAlignement = 4;
 
 };
 
@@ -41,7 +42,7 @@ public:
     Texture(){}
     Texture(float r,float g, float b);
 
-	void Init(TexParam param, void* data=NULL);
+	void Init(TexParam& param, void* data=NULL);
 
 	void update(void* data);
 

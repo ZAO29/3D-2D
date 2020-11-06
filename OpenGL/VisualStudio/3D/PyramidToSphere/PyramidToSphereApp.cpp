@@ -49,6 +49,10 @@ bool PyramidToSphereApp::Init()
 	
 	m_method2.Init();
 
+	m_Tex.Load("D:/Pictures/test/sky.jpg");
+	//m_Tex.Load("D:/OUTPUT/PyramidToSphereApp_2.jpg");
+	InitQuad(m_quad);
+	m_quadShader.Init("quad");
 	return true;
 }
 
@@ -58,6 +62,10 @@ void PyramidToSphereApp::OpenGLRender()
 	//m_method1.Render(m_pCam);
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	m_quadShader.Enable();
+	glDisable(GL_DEPTH_TEST);
+	m_quad.Render(GL_TRIANGLES);
+	m_Tex.Bind(GL_TEXTURE0);
 	m_method2.Render(m_pCam);
 
 }

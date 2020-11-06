@@ -1,28 +1,28 @@
 close all;
 clear all;
 
-C1.r = 10.;
+C1.r = 1.;
 C1.isInside = false;
 C1.color = 'b';
 
-C2.r = 5.0;
-C2.isInside = false;
+C2.r = 1/3;
+C2.isInside = true;
 C2.color = 'r';
 
-C3.r =0.25;
+C3.r =1/6;
 C3.isInside = false;
 C3.color = 'g';
 
-C4.r =0.125;
+C4.r =1/18;
 C4.isInside = false;
 C4.color = 'm';
 
-C5.r = 0.0625;
-C5.isInside = false;
+C5.r = 1.;
+C5.isInside = true;
 C5.color = 'y';
 
 
-listCircle = [C1,C2,C3,C4,C5];
+listCircle = [C1,C2,C3,C4];
 
 step = pi/1000;
 thetas = 0:step:2*pi*200;

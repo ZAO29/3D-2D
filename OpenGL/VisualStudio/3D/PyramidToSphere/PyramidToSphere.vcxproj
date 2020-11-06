@@ -175,6 +175,8 @@
     <None Include="pyramid2sphere.tesc" />
     <None Include="pyramid2sphere.tese" />
     <None Include="pyramid2sphere.vert" />
+    <None Include="quad.frag" />
+    <None Include="quad.vert" />
     <None Include="subdiv2.frag" />
     <None Include="subdiv2.geom" />
     <None Include="subdiv2.vert" />
