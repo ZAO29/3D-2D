@@ -1,0 +1,107 @@
+#define PI 3.141592653589793238462643
+#define TabSize 10
+
+
+
+//function invertedShape = circleInversion(circle,shape)
+
+//centers = repmat(circle.center,[1,size(shape,2)]);
+//OA = shape - centers;
+
+//lambdas = circle.radius^2./(vecnorm(OA).^2);
+
+//invertedShape = repmat(lambdas,[2,1]).*OA+centers;
+//end
+
+vec2 circleInversion(float radius, vec2 center, vec2 pt)
+{
+    vec2 dir = pt - center;
+    float lambda = (radius*radius)/(length(dir)*length(dir));
+    return lambda*dir + center;
+}
+
+float isInsideOrientedConvPolygon(vec2 polygon[TabSize],int size,vec2 pt)
+{
+    vec2 middle = (polygon[0]+polygon[1])/2.;
+    
+    float dist = distance(middle,pt);
+    float distmin = dist;
+    int idSeg = 0;
+    
+    for (int i=1;i<size;i++)
+    {
+        middle = (polygon[i]+polygon[(i+1)%size])/2.;
+        dist = distance(middle,pt);
+        
+        if (distmin > dist)
+        {
+            distmin = dist;
+            idSeg = i;
+        }
+    }
+    
+    vec2 p1 = polygon[idSeg];
+    vec2 vp = pt - p1;
+    vec2 vseg = polygon[(idSeg+1)%size]-p1;
+    float deter = vp.x*vseg.y - vp.y*vseg.x;
+    
+    return step(deter,0.);
+    
+}
+
+
+float isInsideCircle(float radius, vec2 center, vec2 pt)
+{
+    return step(length(pt-center),radius);
+}
+
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord/iResolution.xy-vec2(0.5);
+    uv.x *= iResolution.x/iResolution.y;
+	uv*=1.5;
+    // Time varying pixel color
+    vec3 col = 0.5 + 0.5*cos(iTime+uv.xyx+vec3(0,2,4));
+
+    // Output to screen
+    float radius = 0.3+0.1*cos(2.*iTime);
+    vec2 center = vec2(0.1*cos(iTime),0.0);
+    
+    
+    vec2 polygonCoord[TabSize]; //= vec2[5](vec2(3.4), vec2(4.2), vec2(5.0), vec2(5.2), vec2(1.1));
+    int size = 3;
+    
+    for (int i=0;i<size;i++)
+    {
+        polygonCoord[i]=radius*vec2(cos(2.*PI*float(i)/float(size)),
+                             sin(2.*PI*float(i)/float(size)));
+                             
+    }
+    
+    
+    
+    
+    
+    //fragColor = vec4(col,1.0)*isInsideCircle(radius,center,uv);
+    fragColor = vec4(col,1.0);
+    
+    if(isInsideCircle(radius,center,uv)> 0.)
+    {
+        fragColor = vec4(0.,1.,0.,1.);
+    }
+    
+    if(isInsideOrientedConvPolygon(polygonCoord,size,uv)> 0.)
+    {
+        fragColor = vec4(1.,0.,0.,1.);
+    }
+    
+    vec2 invUV=circleInversion(radius,center,uv);
+    
+    if(isInsideOrientedConvPolygon(polygonCoord,size,invUV)> 0.)
+    {
+        fragColor = vec4(0.,0.,1.,1.);
+    }
+    
+}
