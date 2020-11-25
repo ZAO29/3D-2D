@@ -22,6 +22,8 @@ ExportedObj/
 *.svd
 *.pdb
 *.opendb
+*.ipdb
+*.iobj
 
 
 *.obj
@@ -75,3 +77,4 @@ MATLAB/subdivision/output/*
 /OpenGL/VisualStudio/3D/BezierSurfaceTrack/glew32.dll
 /OpenGL/VisualStudio/3D/ZGL/x64/Debug/shaders.new.obj.enc
 /OpenGL/VisualStudio/3D/PyramidToSphere/x64/Debug/subdivisionmethod2.new.obj.enc
+
