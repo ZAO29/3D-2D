@@ -1,3 +1,8 @@
+TUTO BLENDER :
+tesla S :
+https://www.youtube.com/watch?v=VGPvxIrobFE&ab_channel=BlueInversion
+
+
 *** BLENDER SHORTCUT ****
 Camera view :
 0 : switch cam/world view
@@ -6,3 +11,18 @@ Camera view :
 7 : z view
 
 tab : switch Edit/Object mode
+
+
+Edit mode :
+
+ctrl + R : make a slice
+
+
+
+
+
+
+
+********* GIMP *******
+exporter les slice :
+Filtre > Web > Tranche
