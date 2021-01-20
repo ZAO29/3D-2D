@@ -24,6 +24,11 @@ class BBox:
         self._box = [mathutils.Vector((0,0,0))]*2;
         self._box[0] = co_min.copy();
         self._box[1] = co_max.copy();
+        self._matId = 0;
+      
+    def SetMatId(self,mat_id):  
+        self._matId = mat_id;
+        
         
     def Union(self,co):
         for i in range(3):
@@ -98,7 +103,9 @@ class BBox:
                 v3.co = v2.co.copy();
                 v3.co[(dir+1)%3] = self._box[(side)%2][(dir+1)%3];
     
-                bmesh.faces.new((v0,v1,v2,v3));
+                f=bmesh.faces.new((v0,v1,v2,v3));
+                f.material_index = self._matId;
+                
              
     def Subdivide(self):
         listSplitBox = [];
@@ -133,14 +140,43 @@ class BBox:
 ######################### CLASS StoppingCriteria ###################### 
 class StoppingCriteria:
     
-    def __init__(self,nbMinVertBox,nbMaxLevelTree):
+    def __init__(self,nbMinVertBox,nbMaxLevelTree,nbMaxMaterial):
         self._mVertBox = nbMinVertBox;
         self._MLevelTree = nbMaxLevelTree;
+        self._Mmaterials = nbMaxMaterial;
         
     def mustStop(self,idVertices,verts,level):
         crit = (len(idVertices) < self._mVertBox)
-        crit = crit | (level > self._MLevelTree);
-        return crit;    
+        MaxlevelReached = (level > self._MLevelTree);
+        
+        if (crit == False):
+            return False;
+        
+        if MaxlevelReached:
+            return True;
+        
+        ### nombre max de materials ###
+        idVert = 0;
+        nbVert = len(idVertices);
+        idMaterials = [];
+        
+        while((idVert < nbVert)):
+        
+            vert = verts[idVertices[idVert]];
+            
+            for face in vert.link_faces :
+                idMat = face.material_index;
+                if ((idMat in idMaterials) == False):
+                    idMaterials.append(idMat);
+                    if len(idMaterials) > self._Mmaterials:
+                        return False;
+                    
+            idVert = idVert + 1;
+        
+        
+        
+         
+        return True;    
         
         
         
@@ -148,6 +184,8 @@ class StoppingCriteria:
 def OctTree(bbox, idVertices, verts, stopCriteria,level):
     if stopCriteria.mustStop(idVertices,verts,level) :
         if len(idVertices) > 0 :
+            bbox.SetMatId(verts[idVertices[0]].link_faces[0].material_index)
+            #bbox.SetMatId(1);
             return [bbox];
         else:
             return [];
@@ -196,7 +234,7 @@ bbox.Squarified()
 bbox.Print()
    
    
-bm = bmesh.new();
+
 
 ###### test AddToMesh
 # bbox.AddToMesh(bm);
@@ -212,10 +250,17 @@ bm = bmesh.new();
 
 
 ######## test OctTree
-stopCrit = StoppingCriteria(25,7);
-idVert = [*range(0,len(me.vertices))];
-listBBox = OctTree(bbox,idVert,me.vertices,stopCrit,0);
+stopCrit = StoppingCriteria(10,11,1);
 
+idVert = [*range(0,len(me.vertices))];
+bm = bmesh.new();
+bm.from_mesh(me);
+bm.verts.ensure_lookup_table();
+listBBox = OctTree(bbox,idVert,bm.verts,stopCrit,0);
+bm.free();
+
+
+bm = bmesh.new();
 for bb in listBBox :
     bb.Scale(1.0);
     bb.AddToMesh(bm)
