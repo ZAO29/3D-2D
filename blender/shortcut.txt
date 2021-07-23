@@ -14,9 +14,24 @@ tab : switch Edit/Object mode
 
 
 Edit mode :
+make a slice in edit mode :
+ctrl + R : 
 
-ctrl + R : make a slice
 
+
+
+Object mode :
+Add precompute object (Mesh,Sphere Cube, Light ..):
+Shift + A
+
+Translate After Selecting the object : 
+G
+Translate along axis X/Y/Z :
+G + X/Y/Z
+
+Set multiple object as sons of one parent:
+with multiple selection of object (the last selected will be the parent):
+Ctrl + P
 
 
 
