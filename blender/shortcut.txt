@@ -41,3 +41,6 @@ Ctrl + P
 ********* GIMP *******
 exporter les slice :
 Filtre > Web > Tranche
+
+
+*****Pycharm**********
