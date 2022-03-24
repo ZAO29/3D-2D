@@ -12,6 +12,7 @@ NB_IMAGETTE_PER_SIZE_KEY = "NB_IMAGETTE_PER_SIDE"
 UPSCALE_FACTOR_KEY = "UPSCALE_FACTOR"
 IMAGES_KEY = "IMAGES"
 IMAGE_KEY = "IMAGE"
+RANDOMNESS_KEY = "RANDOM"
 
 class ConfigPixelisation:
 
@@ -48,7 +49,8 @@ class ConfigPixelisation:
         self.params = {IMAGES_FOLDER_KEY: "D:/NotSetPathFolder/",
                        IMAGE_FILEPATH_KEY: "D:/NotSetPath.jpeg",
                        NB_IMAGETTE_PER_SIZE_KEY: 10,
-                       UPSCALE_FACTOR_KEY: 1.0}
+                       UPSCALE_FACTOR_KEY: 1.0,
+                       RANDOMNESS_KEY: 0.0}
 
 
     def readFile(self, file_path : str):

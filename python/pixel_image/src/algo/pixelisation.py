@@ -43,6 +43,7 @@ def process(config: cplst.ConfigPixelisation) -> object:
     im_to_process = config.getParameter(cplst.IMAGE_KEY)
     list_imagette = config.getParameter(cplst.IMAGES_KEY)
     nb_imagette_per_side = config.getParameter(cplst.NB_IMAGETTE_PER_SIZE_KEY)
+    random_factor = config.getParameter(cplst.RANDOMNESS_KEY)
 
     if im_to_process.shape[0] != im_to_process.shape[1]:
         logging.error("input image must be squared ! ")
@@ -73,7 +74,7 @@ def process(config: cplst.ConfigPixelisation) -> object:
         for j in range(nb_imagette_per_side):
             im_to_compare = im_to_process[i * size_imagette:(i + 1) * size_imagette,
                             j * size_imagette:(j + 1) * size_imagette, :]
-            im_selected = select_best_imagette(im_to_compare, list_imagette)
+            im_selected = select_best_imagette(im_to_compare, list_imagette,random_factor)
             im_returned[i * size_imagette:(i + 1) * size_imagette,
             j * size_imagette:(j + 1) * size_imagette, :] = im_selected
 
@@ -84,11 +85,11 @@ def process(config: cplst.ConfigPixelisation) -> object:
     return im_returned
 
 
-def select_best_imagette(image_to_comp: np.ndarray, list_image):
+def select_best_imagette(image_to_comp: np.ndarray, list_image, random_factor: float):
     min_score = -1
     returned_im = None
     for im in list_image:
-        score = np.linalg.norm(image_to_comp - im)
+        score = np.linalg.norm(image_to_comp - im)*(1.0 + np.random.uniform(0.0, random_factor))
         if min_score < 0 or min_score > score:
             min_score = score
             returned_im = im

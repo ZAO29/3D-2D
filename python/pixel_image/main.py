@@ -13,7 +13,7 @@ import src.logging.logging_setting as log_setting
 import src.algo.pixelisation as pix
 import src.image_utils as imu
 import src.algo.ConfigPixelisation as cplst
-
+import random as rd
 from src.logging.CustomFormatter import CustomFormatter
 
 # Press the green button in the gutter to run the script.
