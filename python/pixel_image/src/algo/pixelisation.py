@@ -4,6 +4,8 @@ from typing import List
 import numpy as np
 import cv2
 import src.image_utils as imu
+import src.algo.ConfigPixelisation as cplst
+
 
 def gray_to_rgb(im: np.ndarray):
     im_3 = np.reshape(im, (im.shape[0], im.shape[1], 1))
@@ -31,16 +33,23 @@ def squarification(array: np.ndarray) -> np.ndarray:
 
     return square_array
 
-def resize(im: np.ndarray, new_shape):
-    return cv2.resize(im, dsize=(int(new_shape[0]),int(new_shape[1])), interpolation=cv2.INTER_AREA)
 
-def process(im_to_process: np.ndarray, list_imagette: List[np.ndarray], nb_imagette_per_side: int, upscale_factor : int) -> object:
+def resize(im: np.ndarray, new_shape):
+    return cv2.resize(im, dsize=(int(new_shape[0]), int(new_shape[1])), interpolation=cv2.INTER_AREA)
+
+
+def process(config: cplst.ConfigPixelisation) -> object:
+    upscale_factor = config.getParameter(cplst.UPSCALE_FACTOR_KEY)
+    im_to_process = config.getParameter(cplst.IMAGE_KEY)
+    list_imagette = config.getParameter(cplst.IMAGES_KEY)
+    nb_imagette_per_side = config.getParameter(cplst.NB_IMAGETTE_PER_SIZE_KEY)
 
     if im_to_process.shape[0] != im_to_process.shape[1]:
         logging.error("input image must be squared ! ")
         return None
 
-    im_to_process = resize(im_to_process, (upscale_factor * im_to_process.shape[0], upscale_factor * im_to_process.shape[1]))
+    im_to_process = resize(im_to_process,
+                           (upscale_factor * im_to_process.shape[0], upscale_factor * im_to_process.shape[1]))
 
     im_returned = np.zeros(im_to_process.shape, dtype=np.uint8)
 
@@ -60,18 +69,20 @@ def process(im_to_process: np.ndarray, list_imagette: List[np.ndarray], nb_image
         i = i + 1
 
     for i in range(nb_imagette_per_side):
-        logging.info(str(i)+'/'+str(nb_imagette_per_side))
+        logging.info(str(i) + '/' + str(nb_imagette_per_side))
         for j in range(nb_imagette_per_side):
             im_to_compare = im_to_process[i * size_imagette:(i + 1) * size_imagette,
                             j * size_imagette:(j + 1) * size_imagette, :]
             im_selected = select_best_imagette(im_to_compare, list_imagette)
             im_returned[i * size_imagette:(i + 1) * size_imagette,
-                            j * size_imagette:(j + 1) * size_imagette, :] = im_selected
+            j * size_imagette:(j + 1) * size_imagette, :] = im_selected
 
-            imu.save_im("D:\\Repos\\pythonProject\\data\\debug\\" + str(i) + "_" + str(j) + "selected.jpeg", im_selected)
+            imu.save_im("D:\\Repos\\pythonProject\\data\\debug\\" + str(i) + "_" + str(j) + "selected.jpeg",
+                        im_selected)
             imu.save_im("D:\\Repos\\pythonProject\\data\\debug\\" + str(i) + "_" + str(j) + ".jpeg", im_to_compare)
 
     return im_returned
+
 
 def select_best_imagette(image_to_comp: np.ndarray, list_image):
     min_score = -1
