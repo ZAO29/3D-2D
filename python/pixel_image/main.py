@@ -27,6 +27,7 @@ if __name__ == '__main__':
     config = cplst.ConfigPixelisation()
     # config.exportFile(config_file)
     config.readFile(config_file)
+    config.log()
     config.importData()
 
     im_process = pix.process(config)

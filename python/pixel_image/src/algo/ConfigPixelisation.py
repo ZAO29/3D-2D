@@ -13,6 +13,7 @@ UPSCALE_FACTOR_KEY = "UPSCALE_FACTOR"
 IMAGES_KEY = "IMAGES"
 IMAGE_KEY = "IMAGE"
 RANDOMNESS_KEY = "RANDOM"
+DISPLAY_TIME_STEP_KEY = "DISPLAY_TIME_STEP"
 
 class ConfigPixelisation:
 
@@ -50,7 +51,8 @@ class ConfigPixelisation:
                        IMAGE_FILEPATH_KEY: "D:/NotSetPath.jpeg",
                        NB_IMAGETTE_PER_SIZE_KEY: 10,
                        UPSCALE_FACTOR_KEY: 1.0,
-                       RANDOMNESS_KEY: 0.0}
+                       RANDOMNESS_KEY: 0.0,
+                       DISPLAY_TIME_STEP_KEY : -1.0}
 
 
     def readFile(self, file_path : str):
@@ -73,3 +75,9 @@ class ConfigPixelisation:
         else:
             logging.error(key + " key not present in the parameters")
             return None
+
+    def log(self):
+        logging.info("***** CONFIGURATION *****")
+        for key in self.params:
+            logging.info(key + ": " + str(self.params[key]))
+        logging.info("***** END CONFIGURATION *****")

@@ -3,5 +3,6 @@
     "IMAGE_FILEPATH": "D:/Repos/2D-3D/python/pixel_image/data/album/ride_the_lightning.jpeg",
     "NB_IMAGETTE_PER_SIDE": 213,
     "UPSCALE_FACTOR": 9.0,
-	 "RANDOM": 0.1
+	 "RANDOM": 0.1,
+     "DISPLAY_TIME_STEP": 5
 }

@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 import src.image_utils as imu
 import src.algo.ConfigPixelisation as cplst
+import time
 
 
 def gray_to_rgb(im: np.ndarray):
@@ -44,6 +45,7 @@ def process(config: cplst.ConfigPixelisation) -> object:
     list_imagette = config.getParameter(cplst.IMAGES_KEY)
     nb_imagette_per_side = config.getParameter(cplst.NB_IMAGETTE_PER_SIZE_KEY)
     random_factor = config.getParameter(cplst.RANDOMNESS_KEY)
+    step_time_display = config.getParameter(cplst.DISPLAY_TIME_STEP_KEY)
 
     if im_to_process.shape[0] != im_to_process.shape[1]:
         logging.error("input image must be squared ! ")
@@ -69,8 +71,11 @@ def process(config: cplst.ConfigPixelisation) -> object:
         list_imagette[i] = im
         i = i + 1
 
+    begin_time = time.time()
+    last_time = time.time()
+    nb_total_imagette= nb_imagette_per_side**2
     for i in range(nb_imagette_per_side):
-        logging.info(str(i) + '/' + str(nb_imagette_per_side))
+
         for j in range(nb_imagette_per_side):
             im_to_compare = im_to_process[i * size_imagette:(i + 1) * size_imagette,
                             j * size_imagette:(j + 1) * size_imagette, :]
@@ -78,10 +83,27 @@ def process(config: cplst.ConfigPixelisation) -> object:
             im_returned[i * size_imagette:(i + 1) * size_imagette,
             j * size_imagette:(j + 1) * size_imagette, :] = im_selected
 
-            imu.save_im("D:\\Repos\\pythonProject\\data\\debug\\" + str(i) + "_" + str(j) + "selected.jpeg",
-                        im_selected)
-            imu.save_im("D:\\Repos\\pythonProject\\data\\debug\\" + str(i) + "_" + str(j) + ".jpeg", im_to_compare)
+            current_time = time.time()
 
+            if (current_time - last_time)> step_time_display:
+                logging.info(str(i) + '/' + str(nb_imagette_per_side))
+                last_time = current_time
+                elapsed_time = current_time - begin_time
+                nb_imagette_treated = i*nb_imagette_per_side + j
+                speed = float(nb_imagette_treated) / float(elapsed_time)
+                remaining_time = float(nb_total_imagette - nb_imagette_treated)/float(speed)
+                percent = float(nb_imagette_treated)/float(nb_total_imagette)*100.0
+                logging.info("**********************")
+                logging.info("percent : " + str(percent))
+                logging.info("elapsed time : " + imu.time_sec_to_hms(elapsed_time))
+                logging.info("estimated remaining time : " + imu.time_sec_to_hms(remaining_time))
+
+            #imu.save_im("D:\\Repos\\pythonProject\\data\\debug\\" + str(i) + "_" + str(j) + "selected.jpeg",
+            #            im_selected)
+            #imu.save_im("D:\\Repos\\pythonProject\\data\\debug\\" + str(i) + "_" + str(j) + ".jpeg", im_to_compare)
+    total_time = time.time() - begin_time
+    logging.info("**********************")
+    logging.info("total compute time : " + imu.time_sec_to_hms(total_time))
     return im_returned
 
 
