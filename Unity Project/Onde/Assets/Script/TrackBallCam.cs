@@ -86,7 +86,6 @@ public class TrackBallCam : MonoBehaviour
 
         if(Math.Abs(Input.mouseScrollDelta.y) > 0)
         {
-            Debug.Log(Input.mouseScrollDelta.y);
             Camera.main.transform.transform.position = Camera.main.transform.transform.position / (1 + Input.mouseScrollDelta.y/10);
         }
     }
