@@ -86,7 +86,8 @@
 				//if (abs(p.x) < eps) 
 				//	v1 = half3(0., -p.z, p.y);
 
-				
+				float4 right_cam = mul(UNITY_MATRIX_T_MV,float4(1, 0, 0, 0));
+				v1 = normalize(cross(right_cam.xyz, p));
 
 				half3 v2 = normalize(cross(v1, p));
 				
