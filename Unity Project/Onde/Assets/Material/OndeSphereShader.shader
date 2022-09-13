@@ -9,7 +9,8 @@
 		_Shift("Shift", Vector) = (1,2,4,1)
 		_Shininess("Shininess", Float) = 10 //Shininess
 		_SpecColor("Specular Color", Color) = (1, 1, 1, 1) //Specular highlights color
-		_WireFrame("WireFrame > 0", int) = 0 
+		_Mode("Rainbow = 0  FixedColor = 1 WireFrame = 2", int) = 0
+		_FixedColor("FixedColor ", Color) = (1,0,0,1)
 	}
 	SubShader
 	{
@@ -20,6 +21,8 @@
 		{
 			Tags{ "LightMode" = "ForwardBase" }
 			CGPROGRAM
+
+
 			#pragma vertex vert
 			#pragma geometry geom
 			#pragma fragment frag
@@ -37,7 +40,9 @@
 			uniform float4 _Shift;
 			uniform float4 _SpecColor;
 			uniform float _Shininess;
-			uniform int _WireFrame;
+			uniform int _Mode;
+			uniform float4 _Sources[5];
+			uniform float4 _FixedColor;
 
 
 			struct appdata
@@ -81,10 +86,24 @@
 
 			}
 
+
+			half3 RGBondula(half3 pos)
+			{
+				half3 color = half3(0., 0., 0.);
+				for (int i = 0; i < _nbSource; i++)
+				{
+					color += RGBondula(pos, _Sources[i].xyz, _Shift.xyz);
+				}
+				//color /= half(_Sources.Length);
+				return color;
+			}
+
+
 			half3 CalculatePtPos(half3 pos)
 			{
 				half3 p = normalize(pos);
-				half3 color = RGBondula(pos, _Center.xyz, _Shift.xyz);
+				half3 color = RGBondula(p);
+				//color = RGBondula(pos, _Center.xyz, _Shift.xyz);
 				float offset = (color.x + 0.3*color.y + 0.1*color.z)*5. / 6.*0.1;
 				float3 v3 = (1. + offset) * pos;
 				return v3;
@@ -145,10 +164,14 @@
 			fixed4 frag(g2f f) : SV_Target{
 				fixed4 col = tex2D(_MainTex, f.uv);
 				half3 v = half3(f.localSpaceVert.x, f.localSpaceVert.y, f.localSpaceVert.z);
-				half3 waveColor = RGBondula(v, _Center.xyz, _Shift.xyz);
+				half3 waveColor = RGBondula(v);
 				half minVal = min(f.barycoord.x, min(f.barycoord.y, f.barycoord.z));
 				half3 otherColor = fmod(waveColor + half3(0.5, 0.5, 0.5), half3(1., 1., 1.));
-				if (_WireFrame > 0)
+				if (_Mode == 1)
+				{
+					waveColor = _FixedColor.xyz;
+				}
+				else if(_Mode == 2)
 				{
 					waveColor = lerp(half3(1., 1., 1), half3(0., 0., 0.), minVal / 0.1);
 				}
