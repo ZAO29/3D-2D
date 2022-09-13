@@ -9,6 +9,7 @@
 		_Shift("Shift", Vector) = (1,2,4,1)
 		_Shininess("Shininess", Float) = 10 //Shininess
 		_SpecColor("Specular Color", Color) = (1, 1, 1, 1) //Specular highlights color
+		_WireFrame("WireFrame > 0", int) = 0 
 	}
 	SubShader
 	{
@@ -20,6 +21,7 @@
 			Tags{ "LightMode" = "ForwardBase" }
 			CGPROGRAM
 			#pragma vertex vert
+			#pragma geometry geom
 			#pragma fragment frag
 			
 			#include "UnityCG.cginc"
@@ -35,6 +37,7 @@
 			uniform float4 _Shift;
 			uniform float4 _SpecColor;
 			uniform float _Shininess;
+			uniform int _WireFrame;
 
 
 			struct appdata
@@ -43,11 +46,19 @@
 				float2 uv : TEXCOORD0;
 			};
 
-			struct v2f
+			struct v2g
 			{
 				float2 uv : TEXCOORD0;
 				float4 vertex : SV_POSITION;
 				float3 localSpaceVert : TEXCOORD1;
+			};
+
+			struct g2f
+			{
+				float2 uv : TEXCOORD0;
+				float4 vertex : SV_POSITION;
+				float3 localSpaceVert : TEXCOORD1;
+				float3 barycoord : TEXCOORD2;
 			};
 
 
@@ -102,23 +113,47 @@
 				
 			}
 
-			v2f vert (appdata v)
+			v2g vert (appdata v)
 			{
-				v2f o;
+				v2g o;
 
 				half3 v3 = CalculatePtPos(v.vertex.xyz);
 				
 				o.vertex = UnityObjectToClipPos(float4(v3,1.));
-				o.uv = v.uv;
 				o.localSpaceVert = float3(v.vertex.x,v.vertex.y,v.vertex.z);
 				return o;
 			}
 			
-			fixed4 frag(v2f f) : SV_Target{
+			[maxvertexcount(3)]
+			void geom(triangle v2g input[3], inout TriangleStream<g2f> triStream)
+			{
+				g2f o;
+				float3 normal = normalize(cross(input[1].vertex - input[0].vertex, input[2].vertex - input[0].vertex));
+
+				for (int i = 0; i < 3; i++)
+				{
+					o.uv = input[i].uv;
+					o.vertex = input[i].vertex;
+					o.localSpaceVert = input[i].localSpaceVert;
+					o.barycoord = float3(0, 0, 0);
+					o.barycoord[i] = 1;
+					triStream.Append(o);
+				}
+			}
+
+
+			fixed4 frag(g2f f) : SV_Target{
 				fixed4 col = tex2D(_MainTex, f.uv);
 				half3 v = half3(f.localSpaceVert.x, f.localSpaceVert.y, f.localSpaceVert.z);
 				half3 waveColor = RGBondula(v, _Center.xyz, _Shift.xyz);
+				half minVal = min(f.barycoord.x, min(f.barycoord.y, f.barycoord.z));
+				half3 otherColor = fmod(waveColor + half3(0.5, 0.5, 0.5), half3(1., 1., 1.));
+				if (_WireFrame > 0)
+				{
+					waveColor = lerp(half3(1., 1., 1), half3(0., 0., 0.), minVal / 0.1);
+				}
 				
+			
 				half3 posWorld =normalize(mul(f.localSpaceVert, unity_WorldToObject).xyz);
 				half3 viewDirection = normalize(_WorldSpaceCameraPos - posWorld.xyz);
 
