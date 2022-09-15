@@ -15,6 +15,8 @@
 		_SpecColor("Specular Color", Color) = (1, 1, 1, 1) //Specular highlights color
 		_Mode("Rainbow = 0  FixedColor = 1 WireFrame = 2", int) = 0
 		_FixedColor("FixedColor ", Color) = (1,0,0,1)
+		_LerpSkyDiffuse("Lerp between sky and diffuse", Float) = 0.5
+		_SkyTex3D("Cubemap   (HDR)", Cube) = "grey" {}
 	}
 	SubShader
 	{
@@ -51,6 +53,11 @@
 			uniform int _Mode;
 			uniform float4 _Sources[20];
 			uniform float4 _FixedColor;
+			uniform float _LerpSkyDiffuse;
+			uniform samplerCUBE _SkyTex3D;
+
+			
+			half4 _Tex_HDR;
 
 
 			struct appdata
@@ -168,6 +175,17 @@
 			}
 
 
+			half3 SkyReflection(half3 normal, half3 viewDir)
+			{
+				half3 texCoord = normalize(reflect(-viewDir, normal));
+				half4 tex = texCUBE(_SkyTex3D, texCoord); 
+				//DecodeHDR semble pas fonctionner, peut être pas une cubemap hdr
+				//half3 c = DecodeHDR(tex, _Tex_HDR);
+
+				return tex.xyz;
+
+			}
+
 			fixed4 frag(g2f f) : SV_Target{
 				fixed4 col = tex2D(_MainTex, f.uv);
 				half3 v = half3(f.localSpaceVert.x, f.localSpaceVert.y, f.localSpaceVert.z);
@@ -212,8 +230,11 @@
 					specularReflection = attenuation * _LightColor0.rgb * _SpecColor.rgb * pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), _Shininess);
 				}
 
-				float3 color = (diffuseReflection)* waveColor  + specularReflection; //No ambient component this time
+				half3 sky_color = SkyReflection(normalDirection, viewDirection);
+				float3 color = (diffuseReflection)* lerp(waveColor,sky_color,_LerpSkyDiffuse)  + specularReflection; //No ambient component this time
 				
+				
+
 				col = half4(color, 1.0);
 				return col;
 			}

@@ -23,6 +23,11 @@ public class OndeSphereShaderInterface : MonoBehaviour {
         _mat = GetComponent<MeshRenderer>().material;
         Debug.Assert(_mat != null);
         Debug.Log("ID " + _sourcesID + " " + "_scriptTimeID " + _scriptTimeID);
+
+        // Skybox/Cubemap (Shader)
+        var tex = RenderSettings.skybox.GetTexture("_Tex");
+        _mat.SetTexture("_SkyTex3D", tex);
+
     }
 
     // Update is called once per frame
