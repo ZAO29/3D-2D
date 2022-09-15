@@ -4,6 +4,10 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_ScriptTime("Time", Float) = 0
+		_AmplitudeDeformation("AmplitudeDeformation", Float) = 1
+		_AmplitudeColor("AmplitudeColor", Float) = 1
+		_FreqTemporal("FreqTemporal", Float) = 10
+		_FreqSpatial("FreqSpatial", Float) = 10
 		_nbSource("nbSource", int) = 10
 		_Center("Center", Vector) = (1,1,1,1)
 		_Shift("Shift", Vector) = (1,2,4,1)
@@ -35,13 +39,17 @@
 
 			uniform sampler2D _MainTex;
 			uniform float _ScriptTime;
+			uniform float _AmplitudeDeformation;
+			uniform float _AmplitudeColor;
+			uniform float _FreqTemporal;
+			uniform float _FreqSpatial;
 			uniform int _nbSource;
 			uniform float4 _Center;
 			uniform float4 _Shift;
 			uniform float4 _SpecColor;
 			uniform float _Shininess;
 			uniform int _Mode;
-			uniform float4 _Sources[5];
+			uniform float4 _Sources[20];
 			uniform float4 _FixedColor;
 
 
@@ -70,14 +78,13 @@
 			half ondula(half3 st, half3 center, half shift, half period)
 			{
 				half r = dot(normalize(st), normalize(center));
-				half ondula = (1. + cos(period*r + 10 * _ScriptTime)) / 2.;
+				half ondula = (1. + cos(period*r + _FreqTemporal * _ScriptTime)) / 2.;
 				return ondula;
 			}
 
 			half3 RGBondula(half3 st, half3 center, half3 RGBshift)
 			{
-				float val = 50.0;
-				float period = 10;
+				float period = _FreqSpatial;
 				float ondeR = ondula(st, center, RGBshift.x, period);
 				float ondeG = ondula(st, center, RGBshift.y, 2.*period);
 				float ondeB = ondula(st, center, RGBshift.z, 3.*period);
@@ -94,7 +101,7 @@
 				{
 					color += RGBondula(pos, _Sources[i].xyz, _Shift.xyz);
 				}
-				//color /= half(_Sources.Length);
+				color /= half(_Sources.Length);
 				return color;
 			}
 
@@ -104,7 +111,7 @@
 				half3 p = normalize(pos);
 				half3 color = RGBondula(p);
 				//color = RGBondula(pos, _Center.xyz, _Shift.xyz);
-				float offset = (color.x + 0.3*color.y + 0.1*color.z)*5. / 6.*0.1;
+				float offset = _AmplitudeDeformation*(color.x + 0.3*color.y + 0.1*color.z)*5. / 6.*0.1;
 				float3 v3 = (1. + offset) * pos;
 				return v3;
 			}
@@ -164,7 +171,7 @@
 			fixed4 frag(g2f f) : SV_Target{
 				fixed4 col = tex2D(_MainTex, f.uv);
 				half3 v = half3(f.localSpaceVert.x, f.localSpaceVert.y, f.localSpaceVert.z);
-				half3 waveColor = RGBondula(v);
+				half3 waveColor = _AmplitudeColor*RGBondula(v);
 				half minVal = min(f.barycoord.x, min(f.barycoord.y, f.barycoord.z));
 				half3 otherColor = fmod(waveColor + half3(0.5, 0.5, 0.5), half3(1., 1., 1.));
 				if (_Mode == 1)
