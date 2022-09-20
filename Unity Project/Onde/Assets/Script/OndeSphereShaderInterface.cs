@@ -14,6 +14,8 @@ public class OndeSphereShaderInterface : MonoBehaviour {
     int _nbSourceID;
     int _sourcesID;
 
+    public Vector4[] Sources { get => _sources; set => _sources = value; }
+
     // Use this for initialization
     void Start()
     {
