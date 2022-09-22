@@ -1,5 +1,8 @@
 ﻿Shader "Mine/OndeSphereShader"
 {
+
+	// Link tessellation shader : Ned Makes Games https://nedmakesgames.medium.com/mastering-tessellation-shaders-and-their-many-uses-in-unity-9caeb760150e
+
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
@@ -28,8 +31,11 @@
 			Tags{ "LightMode" = "ForwardBase" }
 			CGPROGRAM
 
-
+			
+			#pragma target 5.0
 			#pragma vertex vert
+			#pragma hull hul
+			#pragma domain dom
 			#pragma geometry geom
 			#pragma fragment frag
 			
@@ -64,21 +70,36 @@
 			{
 				float4 vertex : POSITION;
 				float2 uv : TEXCOORD0;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
-			struct v2g
+			
+			struct v2h
 			{
-				float2 uv : TEXCOORD0;
+				float3 localSpaceVert : INTERNALTESSPOS;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
+			};
+
+
+			struct d2g
+			{
 				float4 vertex : SV_POSITION;
 				float3 localSpaceVert : TEXCOORD1;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
+				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			struct g2f
 			{
-				float2 uv : TEXCOORD0;
 				float4 vertex : SV_POSITION;
 				float3 localSpaceVert : TEXCOORD1;
 				float3 barycoord : TEXCOORD2;
+			};
+
+			struct TessellationFactors 
+			{
+				float edge[3] : SV_TessFactor;
+				float inside : SV_InsideTessFactor;
 			};
 
 
@@ -146,26 +167,104 @@
 				
 			}
 
-			v2g vert (appdata v)
+			v2h vert (appdata i)
 			{
-				v2g o;
+				v2h o;
 
-				half3 v3 = CalculatePtPos(v.vertex.xyz);
+				UNITY_SETUP_INSTANCE_ID(i);
+				UNITY_TRANSFER_INSTANCE_ID(i, o);
+
+
+				//half3 v3 = CalculatePtPos(i.vertex.xyz);
 				
-				o.vertex = UnityObjectToClipPos(float4(v3,1.));
-				o.localSpaceVert = float3(v.vertex.x,v.vertex.y,v.vertex.z);
+				//o.vertex = UnityObjectToClipPos(float4(v3,1.));
+				//o.localSpaceVert = float3(i.vertex.x,i.vertex.y,i.vertex.z);
+
+				o.localSpaceVert = i.vertex.xyz;
+
 				return o;
 			}
+
+
+			// The hull function runs once per vertex. You can use it to modify vertex
+			// data based on values in the entire triangle
+			[domain("tri")] // Signal we're inputting triangles
+			[outputcontrolpoints(3)] // Triangles have three points
+			[outputtopology("triangle_cw")] // Signal we're outputting triangles
+			[patchconstantfunc("PatchConstantFunction")] // Register the patch constant function
+			[partitioning("integer")] // Select a partitioning mode: integer, fractional_odd, fractional_even or pow2
+			v2h hul(
+				InputPatch<v2h, 3> patch, // Input triangle
+				uint id : SV_OutputControlPointID) 
+			{ // Vertex index on the triangle
+
+				return patch[id];
+			}
+
+			// The patch constant function runs once per triangle, or "patch"
+			// It runs in parallel to the hull function
+			TessellationFactors PatchConstantFunction(
+				InputPatch<v2h, 3> patch) 
+			{
+				UNITY_SETUP_INSTANCE_ID(patch[0]); // Set up instancing
+				// Calculate tessellation factors
+				TessellationFactors f;
+				f.edge[0] = 1;
+				f.edge[1] = 1;
+				f.edge[2] = 1;
+				f.inside = 2;
+				return f;
+			}
+
+
+			// Call this macro to interpolate between a triangle patch, passing the field name
+			#define BARYCENTRIC_INTERPOLATE(fieldName) \
+				patch[0].fieldName * barycentricCoordinates.x + \
+				patch[1].fieldName * barycentricCoordinates.y + \
+				patch[2].fieldName * barycentricCoordinates.z
+			
+
+
+
+
+		// The domain function runs once per vertex in the final, tessellated mesh
+			// Use it to reposition vertices and prepare for the fragment stage
+			[domain("tri")] // Signal we're inputting triangles
+			d2g dom(
+				TessellationFactors factors, // The output of the patch constant function
+				OutputPatch<v2h, 3> patch, // The Input triangle
+				float3 barycentricCoordinates : SV_DomainLocation) { // The barycentric coordinates of the vertex on the triangle
+
+				d2g o;
+
+				// Setup instancing and stereo support (for VR)
+				UNITY_SETUP_INSTANCE_ID(patch[0]);
+				UNITY_TRANSFER_INSTANCE_ID(patch[0], o);
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+
+				float3 positionOS = BARYCENTRIC_INTERPOLATE(localSpaceVert);
+
+
+				
+				half3 v3 = CalculatePtPos(positionOS.xyz);
+				
+				o.vertex = UnityObjectToClipPos(float4(v3,1.));
+				o.localSpaceVert = positionOS;
+
+				return o;
+			}
+
+
+
 			
 			[maxvertexcount(3)]
-			void geom(triangle v2g input[3], inout TriangleStream<g2f> triStream)
+			void geom(triangle d2g input[3], inout TriangleStream<g2f> triStream)
 			{
 				g2f o;
 				float3 normal = normalize(cross(input[1].vertex - input[0].vertex, input[2].vertex - input[0].vertex));
 
 				for (int i = 0; i < 3; i++)
 				{
-					o.uv = input[i].uv;
 					o.vertex = input[i].vertex;
 					o.localSpaceVert = input[i].localSpaceVert;
 					o.barycoord = float3(0, 0, 0);
@@ -187,7 +286,6 @@
 			}
 
 			fixed4 frag(g2f f) : SV_Target{
-				fixed4 col = tex2D(_MainTex, f.uv);
 				half3 v = half3(f.localSpaceVert.x, f.localSpaceVert.y, f.localSpaceVert.z);
 				half3 waveColor = _AmplitudeColor*RGBondula(v);
 				half minVal = min(f.barycoord.x, min(f.barycoord.y, f.barycoord.z));
@@ -235,7 +333,7 @@
 				
 				
 
-				col = half4(color, 1.0);
+				fixed4 col = half4(color, 1.0);
 				return col;
 			}
 
