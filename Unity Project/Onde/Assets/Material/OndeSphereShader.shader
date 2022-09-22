@@ -16,7 +16,10 @@
 		_Shift("Shift", Vector) = (1,2,4,1)
 		_Shininess("Shininess", Float) = 10 //Shininess
 		_SpecColor("Specular Color", Color) = (1, 1, 1, 1) //Specular highlights color
-		_Mode("Rainbow = 0  FixedColor = 1 WireFrame = 2", int) = 0
+		_Mode("Color : Rainbow = 0  FixedColor = 1 WireFrame = 2", int) = 0
+		_Shading("Shading : None = 0  Diffuse = 1 Specular = 2 All = 3", int) = 3
+		_Tessellate("Tessellate : No = 0  Yes = 1 ", int) = 1
+		_FactorTessellate("Factor Tessellate ", float) = 1.0
 		_FixedColor("FixedColor ", Color) = (1,0,0,1)
 		_LerpSkyDiffuse("Lerp between sky and diffuse", Float) = 0.5
 		_SkyTex3D("Cubemap   (HDR)", Cube) = "grey" {}
@@ -57,6 +60,9 @@
 			uniform float4 _SpecColor;
 			uniform float _Shininess;
 			uniform int _Mode;
+			uniform int _Shading;
+			uniform int _Tessellate;
+			uniform float _FactorTessellate;
 			uniform float4 _Sources[20];
 			uniform float4 _FixedColor;
 			uniform float _LerpSkyDiffuse;
@@ -167,6 +173,11 @@
 				
 			}
 
+			float TriangleArea(float3 v1,float v2, float v3)
+			{
+				return 0.5f * length(cross(v2 - v1,v3 - v1));
+			}
+
 			v2h vert (appdata i)
 			{
 				v2h o;
@@ -209,12 +220,45 @@
 				UNITY_SETUP_INSTANCE_ID(patch[0]); // Set up instancing
 				// Calculate tessellation factors
 				TessellationFactors f;
-				f.edge[0] = 1;
-				f.edge[1] = 1;
-				f.edge[2] = 1;
-				f.inside = 2;
+
+				float area_tri = TriangleArea(patch[0].localSpaceVert,
+											  patch[1].localSpaceVert,
+											  patch[2].localSpaceVert);
+				
+
+
+				float3 v0 = CalculatePtPos(patch[0].localSpaceVert);
+				float3 v1 = CalculatePtPos(patch[1].localSpaceVert);
+				float3 v2 = CalculatePtPos(patch[2].localSpaceVert);
+
+
+				float area_tri_deform = TriangleArea(v0,v1,v2);
+				if (_Tessellate == 1)
+				{
+					f.edge[0] = 1.0 + _FactorTessellate*abs(length(v2-v1));
+					f.edge[1] = 1.0 + _FactorTessellate*abs(length(v2-v0));
+					f.edge[2] = 1.0 + _FactorTessellate*abs(length(v0-v1));
+					f.inside = max(1.0,_FactorTessellate*area_tri_deform/area_tri);
+
+					/*f.edge[0] = 1.0 +abs(length(v2-v1));
+					f.edge[1] = 1.0 +abs(length(v2-v0));
+					f.edge[2] = 1.0 +abs(length(v0-v1));
+					f.inside = area_tri_deform/area_tri;*/
+				}else
+				{
+					f.edge[0] = 1.0;
+					f.edge[1] = 1.0;
+					f.edge[2] = 1.0;
+					f.inside = 1.0;
+				}
 				return f;
 			}
+
+
+		
+
+
+
 
 
 			// Call this macro to interpolate between a triangle patch, passing the field name
@@ -327,6 +371,19 @@
 					//Specular component
 					specularReflection = attenuation * _LightColor0.rgb * _SpecColor.rgb * pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), _Shininess);
 				}
+
+				if((_Shading == 0)||(_Shading == 1))
+				{
+					specularReflection = 0.0;
+				}
+
+				if((_Shading == 0)||(_Shading == 2))
+				{
+					diffuseReflection = 1.0;
+				}
+
+
+
 
 				half3 sky_color = SkyReflection(normalDirection, viewDirection);
 				float3 color = (diffuseReflection)* lerp(waveColor,sky_color,_LerpSkyDiffuse)  + specularReflection; //No ambient component this time
