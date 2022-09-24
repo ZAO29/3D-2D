@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using System.IO;
 using UnityEngine.WSA;
+using UnityEditor;
+using System.Transactions;
 
 [Serializable]
 public class JsonSerializer 
@@ -14,6 +16,19 @@ public class JsonSerializer
     
 
     static string Folder = "Config";
+
+    static string sMatFolder = "Material";
+
+    public static string sRelativeAssetMatFolder()
+    {
+        return Path.Combine("Assets", sMatFolder);
+    }
+
+    public static string sCompleteMatFolder()
+    {
+        return Path.Combine(UnityEngine.Application.dataPath, sMatFolder);
+    }
+
     [Serializable]
     public class Vec4
     {
@@ -71,22 +86,6 @@ public class JsonSerializer
         return Path.Combine(UnityEngine.Application.dataPath, Folder);
     }
 
-    static public List<string> GetFolderContent()
-    {
-        var list_string = Directory.GetFiles(sCompleteFolder());
-
-        var ret = new List<string>();
-
-        foreach(var file in list_string)
-        {
-            if(Path.GetExtension(file)==".json")
-            {
-                ret.Add(Path.GetFileNameWithoutExtension(file));
-            }
-        }
-
-        return ret;
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -98,5 +97,65 @@ public class JsonSerializer
     void Update()
     {
         
+    }
+
+    public void LoadMat(GameObject obj, string matName)
+    {
+        var matfilename = Path.Combine(sRelativeAssetMatFolder(), matName + ".mat");
+        var mat = (Material)AssetDatabase.LoadAssetAtPath<Material>(matfilename);
+        var newMat =  new Material(mat);
+        newMat.name = "current_"+newMat.name;
+        if (mat == null)
+        {
+            Debug.LogError("LoadMat failed : " + matfilename);
+            return;
+        }
+
+        if (UnityEngine.Application.isPlaying)
+        {
+            obj.gameObject.GetComponent<MeshRenderer>().material = newMat;
+        }else
+        {
+            obj.gameObject.GetComponent<MeshRenderer>().sharedMaterial = newMat;
+        }
+    }
+
+
+
+    public void SaveMat(GameObject obj, string matName)
+    {
+        var matfilename = Path.Combine(sRelativeAssetMatFolder(), matName + ".mat");
+
+        Material mat;
+
+        if(UnityEngine.Application.isPlaying)
+        {
+            mat = obj.GetComponent<MeshRenderer>().material;
+        }else
+        {
+            mat = obj.GetComponent<MeshRenderer>().sharedMaterial;
+        }
+
+        if (mat == null)
+        {
+            Debug.LogError("SaveMat failed : " + matName);
+            return;
+        }
+        Material newMat = new Material(mat);
+
+        newMat.name = matName;
+        if (AssetDatabase.Contains(newMat))
+        {
+            Debug.LogWarning("Material already exist, will be overwritten !!");
+
+        }
+
+        AssetDatabase.CreateAsset(newMat,matfilename);
+
+        if (AssetDatabase.Contains(newMat))
+            Debug.Log("Material asset created at "+matfilename);
+        mat.name = "current";
+
+
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.ComponentModel;
+using System.IO;
+using UnityEngine.WSA;
 
 public class OndeWindow : EditorWindow
 {
@@ -10,14 +12,38 @@ public class OndeWindow : EditorWindow
     string m_filename = "defaultConfig";
     JsonSerializer m_serializer = new JsonSerializer();
     List<string> m_savedFiles = new List<string>();
-    int m_selectedIdFiles = 0; 
+    List<string> m_savedMat = new List<string>();
+    int m_selectedIdFiles = 0;
+    int m_selectedIdMat = 0;
+
+    
 
 
     void Refresh()
     {
         m_savedFiles.Clear();
-        m_savedFiles = JsonSerializer.GetFolderContent();
+        m_savedFiles = GetFolderContent(JsonSerializer.sCompleteFolder(),".json");
         m_selectedIdFiles = 0;
+        m_savedMat.Clear();
+        m_savedMat = GetFolderContent(JsonSerializer.sCompleteMatFolder(), ".mat");
+        m_selectedIdMat = 0;
+    }
+
+    static List<string> GetFolderContent(string folder,string ext)
+    {
+        var list_string = Directory.GetFiles(folder);
+
+        var ret = new List<string>();
+
+        foreach (var file in list_string)
+        {
+            if (Path.GetExtension(file) == ext)
+            {
+                ret.Add(Path.GetFileNameWithoutExtension(file));
+            }
+        }
+
+        return ret;
     }
 
     [MenuItem("Tools/Onde")]
@@ -58,7 +84,23 @@ public class OndeWindow : EditorWindow
         }
 
 
-        if (GUILayout.Button("Refresh List"))
+        m_selectedIdMat = EditorGUILayout.Popup(m_selectedIdMat, m_savedMat.ToArray());
+
+
+
+        if (GUILayout.Button("LoadMat"))
+        {
+            m_serializer.LoadMat(obj.gameObject, m_savedMat[m_selectedIdMat]);
+        }
+
+        if (GUILayout.Button("SavedMat"))
+        {
+            m_serializer.SaveMat(obj.gameObject, m_filename);
+            Refresh();
+        }
+
+
+        if (GUILayout.Button("Refresh"))
         {
             Refresh();
         }
