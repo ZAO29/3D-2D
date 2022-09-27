@@ -18,6 +18,7 @@ public class OndeSphereShaderInterface : MonoBehaviour {
     int _scriptTimeID;
     int _nbSourceID;
     int _sourcesID;
+    bool _firstUpdate = true;
 
     public Vector4[] Sources { get => _sources; set => _sources = value; }
 
@@ -49,17 +50,18 @@ public class OndeSphereShaderInterface : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
         _mat.SetFloat(_scriptTimeID, Time.realtimeSinceStartup);
 
-        Vector4 central = Vector4.Normalize(new Vector4(1, 1, 1, 0));
+        Vector4 central = Vector4.Normalize(new Vector4(0, 1, 0, 0));
 
         Vector4[] listVec = new Vector4[_sources.Length];
 
-        float coeff = (1.0f + Mathf.Cos(Time.realtimeSinceStartup / 10.0f)) / 2.0f;
+        float coeff = (1.0f + Mathf.Cos(4.0f*Time.realtimeSinceStartup / 10.0f)) / 2.0f;
 
         for (int i=0;i<_sources.Length;i++)
         {
-            listVec[i] = Vector4.Normalize(Vector4.Lerp(central, _sources[i], coeff));
+            listVec[i] = Vector4.Normalize(Vector4.Lerp( _sources[i],central, coeff));
         }
 
         _mat.SetInt(_nbSourceID, _sources.Length);

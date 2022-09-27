@@ -9,6 +9,10 @@ public class TrackBallCam : MonoBehaviour
 
     [SerializeField]
     bool m_center = true;
+    
+    
+    public float m_speedW = 0;
+    public float m_speedH = 0;
 
     private void Start()
     {
@@ -56,6 +60,13 @@ public class TrackBallCam : MonoBehaviour
 
     }
 
+
+    void RotateAround(float angleW,float angleP)
+    {
+        Camera.main.transform.RotateAround(new Vector3(0, 0, 0), Camera.main.transform.right, angleP);
+        Camera.main.transform.RotateAround(new Vector3(0, 0, 0), Camera.main.transform.up, angleW);
+    }
+
 #if UNITY_STANDALONE
     private void Update()
     {
@@ -71,20 +82,21 @@ public class TrackBallCam : MonoBehaviour
             var mousePos = Input.mousePosition;
             var delta = mousePos - m_mouseLastPos;
             m_mouseLastPos = mousePos;
-            float angleW = (180 * delta.x) / screenWidth;
-            float angleP = (180 * delta.y) / screenHeight;
+            m_speedW = (180 * delta.x) / screenWidth;
+            m_speedH = (180 * delta.y) / screenHeight;
             //add the restrications of roation angle in y direction
 
 
             //Warning: the eulerAngles get from here may not the same with the value in inspector!
             //https://docs.unity3d.com/Manual/QuaternionAndEulerRotationsInUnity.html
             //var angle = new Vector3(Camera.main.transform.eulerAngles.x + angleP, Camera.main.transform.eulerAngles.y + angleW, 0);
-
-            Camera.main.transform.RotateAround(new Vector3(0, 0, 0), Camera.main.transform.right, angleP);
-            Camera.main.transform.RotateAround(new Vector3(0, 0, 0), Camera.main.transform.up, angleW);
+        
+           
         }
 
-        if(Math.Abs(Input.mouseScrollDelta.y) > 0)
+        RotateAround(m_speedW, m_speedH);
+
+        if (Math.Abs(Input.mouseScrollDelta.y) > 0)
         {
             Camera.main.transform.transform.position = Camera.main.transform.transform.position / (1 + Input.mouseScrollDelta.y/10);
         }
