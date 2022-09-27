@@ -1,8 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class OndeSphereShaderInterface : MonoBehaviour {
+
+
+
+
 
     Material _mat;
     int _nbSource = 2;
@@ -19,17 +24,27 @@ public class OndeSphereShaderInterface : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        var serializer = FindObjectOfType<JsonSerializer>();
+        Debug.Assert(serializer != null);
+        serializer.ChangeMat += OnChangeMat;
+        InitMat();
+    }
+
+    void OnChangeMat(System.Object sender, ChangeMatEventArgs e)
+    {
+        InitMat();
+    }
+
+    void InitMat()
+    {
         _scriptTimeID = Shader.PropertyToID("_ScriptTime");
         _nbSourceID = Shader.PropertyToID("_nbSource");
         _sourcesID = Shader.PropertyToID("_Sources");
         _mat = GetComponent<MeshRenderer>().material;
         Debug.Assert(_mat != null);
-        Debug.Log("ID " + _sourcesID + " " + "_scriptTimeID " + _scriptTimeID);
-
         // Skybox/Cubemap (Shader)
         var tex = RenderSettings.skybox.GetTexture("_Tex");
         _mat.SetTexture("_SkyTex3D", tex);
-
     }
 
     // Update is called once per frame

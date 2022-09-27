@@ -10,14 +10,25 @@ public class OndeWindow : EditorWindow
 {
    
     string m_filename = "defaultConfig";
-    JsonSerializer m_serializer = new JsonSerializer();
+    JsonSerializer m_serializer = null;
     List<string> m_savedFiles = new List<string>();
     List<string> m_savedMat = new List<string>();
     int m_selectedIdFiles = 0;
     int m_selectedIdMat = 0;
 
-    
+    public JsonSerializer Serializer
+    {
+        get
+        {
+            if (m_serializer == null)
+            {
+                m_serializer = FindObjectOfType<JsonSerializer>();
+            }
+            return m_serializer;
+        }
 
+        set { m_serializer = value; }
+    }
 
     void Refresh()
     {
@@ -70,7 +81,7 @@ public class OndeWindow : EditorWindow
 
         if (GUILayout.Button("SaveConfig"))
         {
-            m_serializer.SaveConfig(obj, m_filename);
+            Serializer.SaveConfig(obj, m_filename);
             Refresh();
         }
 
@@ -80,7 +91,7 @@ public class OndeWindow : EditorWindow
 
         if (GUILayout.Button("LoadConfig"))
         {
-            m_serializer.LoadConfig(obj, m_savedFiles[m_selectedIdFiles]);
+            Serializer.LoadConfig(obj, m_savedFiles[m_selectedIdFiles]);
         }
 
 
@@ -90,12 +101,12 @@ public class OndeWindow : EditorWindow
 
         if (GUILayout.Button("LoadMat"))
         {
-            m_serializer.LoadMat(obj.gameObject, m_savedMat[m_selectedIdMat]);
+            Serializer.LoadMat(obj.gameObject, m_savedMat[m_selectedIdMat]);
         }
 
         if (GUILayout.Button("SavedMat"))
         {
-            m_serializer.SaveMat(obj.gameObject, m_filename);
+            Serializer.SaveMat(obj.gameObject, m_filename);
             Refresh();
         }
 

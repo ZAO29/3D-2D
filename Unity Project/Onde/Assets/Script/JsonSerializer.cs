@@ -7,9 +7,23 @@ using UnityEngine.WSA;
 using UnityEditor;
 using System.Transactions;
 
-[Serializable]
-public class JsonSerializer 
+public class ChangeMatEventArgs : EventArgs
 {
+    public Material mat;
+
+    public ChangeMatEventArgs(Material mat)
+    {
+        this.mat = mat;
+    }
+ }
+
+public delegate void ChangeMatEventHandler(System.Object sender, ChangeMatEventArgs e);
+
+[Serializable]
+public class JsonSerializer  : MonoBehaviour
+{
+    public event ChangeMatEventHandler ChangeMat;
+
     // WARNING MUST BE PUBLIC TO SERIALIZED
     [SerializeField]
     public Vector4[] m_sources ;
@@ -114,10 +128,14 @@ public class JsonSerializer
         if (UnityEngine.Application.isPlaying)
         {
             obj.gameObject.GetComponent<MeshRenderer>().material = newMat;
-        }else
+            var e = new ChangeMatEventArgs(newMat);
+            OnChangeMat(e);
+        }
+        else
         {
             obj.gameObject.GetComponent<MeshRenderer>().sharedMaterial = newMat;
         }
+
     }
 
 
@@ -158,4 +176,18 @@ public class JsonSerializer
 
 
     }
+
+
+
+    protected virtual void OnChangeMat(ChangeMatEventArgs mat)
+    {
+        if(ChangeMat != null)
+        {
+            ChangeMat(this,mat);
+        }
+    }
+
+
 }
+
+
