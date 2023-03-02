@@ -14,7 +14,6 @@ public class OndeShaderInterface : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        _mat = this.GetComponent<MeshRenderer>().material;
         _scriptTimeID = Shader.PropertyToID("_ScriptTime");
         _nbSourceID = Shader.PropertyToID("_nbSource");
     }
