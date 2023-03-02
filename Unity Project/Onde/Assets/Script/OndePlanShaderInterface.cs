@@ -5,7 +5,7 @@ using UnityEngine;
 public class OndePlanShaderInterface : MonoBehaviour {
 
     [SerializeField] Material _mat;
-    int _nbSource = 2;
+    [SerializeField] int _nbSource = 2;
 
     //ShaderPropertyID
     int _scriptTimeID;

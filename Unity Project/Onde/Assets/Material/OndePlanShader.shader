@@ -96,18 +96,9 @@
 				half oscillation = pow(1. - abs(sin(_ScriptTime / 15.0)), 1.5);
 				//half oscillation = pow(mod(_ScriptTime,1.),2.0);
 
-				half2 center;
-				half ratio;
-				if (_ScreenParams.x <= _ScreenParams.y)
-				{
-					ratio = _ScreenParams.x / _ScreenParams.y / 2.0;
-					center = half2(ratio, 0.5);
-				}
-				else
-				{
-					ratio = _ScreenParams.y / _ScreenParams.x / 2.0;
-					center = half2(0.5, ratio);
-				}
+				half ratio = _ScreenParams.x / _ScreenParams.y / 2.0;
+				half2 center = half2(ratio, 0.5);
+				
 
 				half amplitude = ratio;
 
