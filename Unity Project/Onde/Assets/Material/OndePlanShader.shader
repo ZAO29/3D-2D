@@ -1,4 +1,4 @@
-﻿Shader "Mine/OndeShader"
+﻿Shader "Mine/OndePlanShader"
 {
 	Properties
 	{

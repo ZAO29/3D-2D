@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OndeShaderInterface : MonoBehaviour {
+public class OndePlanShaderInterface : MonoBehaviour {
 
     [SerializeField] Material _mat;
     int _nbSource = 2;
