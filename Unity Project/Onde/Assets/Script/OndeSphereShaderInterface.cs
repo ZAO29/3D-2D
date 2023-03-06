@@ -18,7 +18,7 @@ public class OndeSphereShaderInterface : MonoBehaviour {
     int _scriptTimeID;
     int _nbSourceID;
     int _sourcesID;
-    bool _firstUpdate = true;
+
 
     public Vector4[] Sources { get => _sources; set => _sources = value; }
 

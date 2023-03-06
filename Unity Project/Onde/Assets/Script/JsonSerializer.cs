@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
-using UnityEngine.WSA;
+//using UnityEngine.WSA;
 using UnityEditor;
 using System.Transactions;
 
@@ -113,8 +113,10 @@ public class JsonSerializer  : MonoBehaviour
         
     }
 
+
     public void LoadMat(GameObject obj, string matName)
     {
+#if UNITY_EDITOR
         var matfilename = Path.Combine(sRelativeAssetMatFolder(), matName + ".mat");
         var mat = (Material)AssetDatabase.LoadAssetAtPath<Material>(matfilename);
         var newMat =  new Material(mat);
@@ -135,13 +137,17 @@ public class JsonSerializer  : MonoBehaviour
         {
             obj.gameObject.GetComponent<MeshRenderer>().sharedMaterial = newMat;
         }
+#endif
 
+        throw new NotImplementedException("only available in unity editor function");
     }
+
 
 
 
     public void SaveMat(GameObject obj, string matName)
     {
+#if UNITY_EDITOR
         var matfilename = Path.Combine(sRelativeAssetMatFolder(), matName + ".mat");
 
         Material mat;
@@ -173,9 +179,10 @@ public class JsonSerializer  : MonoBehaviour
         if (AssetDatabase.Contains(newMat))
             Debug.Log("Material asset created at "+matfilename);
         mat.name = "current";
-
-
+#endif
+        throw new NotImplementedException("only available in unity editor function");
     }
+
 
 
 

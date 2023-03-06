@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scene/OndePlan.unity
+    guid: ba503ab2d898e8a40a86015217d6f09f
+  m_configObjects: {}
