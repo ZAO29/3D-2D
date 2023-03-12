@@ -6,6 +6,7 @@ public class OndePlanShaderInterface : MonoBehaviour {
 
     [SerializeField] Material _mat;
     [SerializeField] int _nbSource = 2;
+    [SerializeField] GameObject backgroundQuad;
 
     //ShaderPropertyID
     int _scriptTimeID;
@@ -16,10 +17,13 @@ public class OndePlanShaderInterface : MonoBehaviour {
     {
         _scriptTimeID = Shader.PropertyToID("_ScriptTime");
         _nbSourceID = Shader.PropertyToID("_nbSource");
+        backgroundQuad.transform.localScale = new Vector3(Camera.main.aspect, 1, 1);
     }
 
     // Update is called once per frame
     void Update () {
+        _mat.SetFloat(_scriptTimeID, Time.realtimeSinceStartup);
+        _mat.SetInt(_nbSourceID, _nbSource);
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
@@ -51,13 +55,13 @@ public class OndePlanShaderInterface : MonoBehaviour {
     }
 
 
-
+    /*
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        _mat.SetFloat(_scriptTimeID, Time.realtimeSinceStartup);
-        _mat.SetInt(_nbSourceID, _nbSource);
-        Graphics.Blit(source, destination, _mat);
+        //_mat.SetFloat(_scriptTimeID, Time.realtimeSinceStartup);
+        //_mat.SetInt(_nbSourceID, _nbSource);
+        //Graphics.Blit(source, destination, _mat);
 
 
-    }
+    }*/
 }

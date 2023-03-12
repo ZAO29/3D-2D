@@ -8,8 +8,7 @@
 	}
 	SubShader
 	{
-		// No culling or depth
-		Cull Off ZWrite Off ZTest Always
+
 
 		Pass
 		{
@@ -23,7 +22,6 @@
 			
 			#define PI 3.14159265359
 
-			sampler2D _MainTex;
 			float _ScriptTime;
 			int _nbSource;
 			
@@ -85,7 +83,7 @@
 
 
 			fixed4 frag(v2f f) : SV_Target{
-				fixed4 col = tex2D(_MainTex, f.uv);
+				fixed4 col;
 				
 				//half2 stTex = ratioCorrectedST(_MainTex.xy);
 				half2 st = ratioCorrectedST(f.uv);
