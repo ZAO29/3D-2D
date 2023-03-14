@@ -5,6 +5,7 @@
 		_MainTex ("Texture", 2D) = "white" {}
 		_ScriptTime("Time", Float) = 0
 		_nbSource("nbSource", int) = 10
+		_RGBShift("RGBShift", Vector) = (0,0,0,0)
 	}
 	SubShader
 	{
@@ -25,6 +26,7 @@
 			float _ScriptTime;
 			int _nbSource;
 			float _Sources[50];
+			float4 _RGBShift;
 			
 
 
@@ -89,7 +91,7 @@
 				//half2 stTex = ratioCorrectedST(_MainTex.xy);
 				half2 st = ratioCorrectedST(f.uv);
 				
-
+				 
 				//float amplitude = min(_ScreenParams.x, _ScreenParams.y)/2.;
 
 				half oscillation = pow(1. - abs(sin(_ScriptTime / 15.0)), 1.5);
@@ -106,9 +108,12 @@
 
 				half theta = 2. / half(_nbSource) *PI;
 				/*half theta = 2. / NB_SRC_MAXF * PI;*/
-				half3 RGBshift = half3(3.14 / 2.*cos(_ScriptTime),
-					3.14 / 4.*cos(_ScriptTime*2.0),
-					-3.14 / 4.*cos(_ScriptTime*4.0));
+
+
+				half3 RGBShift = half3(_RGBShift.x,
+									   _RGBShift.y,
+									   _RGBShift.z);
+
 
 
 				for (int i = 0;i < _nbSource;i++)
@@ -119,7 +124,7 @@
 						
 						half2 center1 = half2(_Sources[2 * i], _Sources[2 * i + 1]);
 
-						half3 color1 = RGBondula(st, center1, RGBshift);
+						half3 color1 = RGBondula(st, center1, RGBShift);
 						color += color1;
 					}
 

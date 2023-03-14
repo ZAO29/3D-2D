@@ -78,7 +78,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ScriptTime: 119.015564
+    - _ScriptTime: 52.1882
     - _Shading: 3
     - _Shininess: 5
     - _SmoothnessTextureChannel: 0
@@ -88,12 +88,13 @@ Material:
     - _UVSec: 0
     - _WireFrame: 0
     - _ZWrite: 1
-    - _nbSource: 4
+    - _nbSource: 3
     m_Colors:
     - _Center: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FixedColor: {r: 1, g: 0, b: 0, a: 1}
+    - _RGBShift: {r: -0.5414593, g: -0.5987552, b: 0.12753424, a: 0}
     - _Shift: {r: 1, g: 2, b: 4, a: 1}
     - _SpecColor: {r: 0.990566, g: 0.06074228, b: 0.06074228, a: 1}
   m_BuildTextureStacks: []

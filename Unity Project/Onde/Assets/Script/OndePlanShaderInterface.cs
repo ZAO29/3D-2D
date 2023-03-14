@@ -13,12 +13,21 @@ public class OndePlanShaderInterface : MonoBehaviour {
     [SerializeField] int _nbSource = 2;
     [SerializeField] GameObject backgroundQuad;
     float[] _sources = new float[2*MAX_NB_SOURCE];
+    [SerializeField] Vector4 _RGBShift = new Vector4(0, 0, 0, 1);
+    public Vector4 RGBShift { get => _RGBShift; private set => _RGBShift = value; }
+    public int NbSource { get => _nbSource; private set => _nbSource = value; }
+    public Vector2 Sources(int i)
+    {
+        return new Vector2(_sources[2 * i], _sources[2 * i + 1]);
+    }
 
     //ShaderPropertyID
     int _scriptTimeID;
     int _nbSourceID;
 
-  
+   
+
+
 
     // Use this for initialization
     void Start()
@@ -33,46 +42,56 @@ public class OndePlanShaderInterface : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
+       
+        var t = Time.realtimeSinceStartup;
+        RGBShift = new Vector4(MF.PI / 2.0f * MF.Cos(t),
+                               MF.PI / 4.0f * MF.Cos(t * 2.0f),
+                               MF.PI / 4.0f * MF.Cos(t * 4.0f),
+                               0.0f);
         UpdateSources();
 
-        _mat.SetFloat(_scriptTimeID, Time.realtimeSinceStartup);
-        _mat.SetInt(_nbSourceID, _nbSource);
+
+        _mat.SetVector("_RGBShift", RGBShift);
+        _mat.SetFloat(_scriptTimeID, t);
+        _mat.SetInt(_nbSourceID, NbSource);
         _mat.SetFloatArray("_Sources", _sources);
+
+       
 
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             if(pos.x > 0.5)
             {
-                _nbSource++;
+                NbSource++;
             }else
             {
-                _nbSource--;
+                NbSource--;
             }
            
         }
-         if(_nbSource <=0)
+         if(NbSource <=0)
         {
-            _nbSource = 1;
+            NbSource = 1;
         }
     }
     void UpdateNbSourceOnTouch(int addNumber, KeyCode key)
     {
         if (Input.GetKeyDown(key))
         {
-            _nbSource += addNumber;
+            NbSource += addNumber;
         }
 
-        if(_nbSource <= 0)
+        if(NbSource <= 0)
         {
-            _nbSource = 1;
+            NbSource = 1;
         }
     }
 
 
     void UpdateSources()
     {
-        if(_nbSource*2 > _sources.Length)
+        if(NbSource*2 > _sources.Length)
         {
             Debug.LogWarning("too much sources !!!");
             return;
@@ -82,9 +101,9 @@ public class OndePlanShaderInterface : MonoBehaviour {
         var ratio = Camera.main.aspect / 2.0f;
         var center = new Vector2(ratio, 0.5f);
         float amplitude = oscillation/2.0f;
-        var deltaTheta = 2.0f * MF.PI / ((float) _nbSource);
+        var deltaTheta = 2.0f * MF.PI / ((float) NbSource);
 
-        for (int i= 0; i < _nbSource; i++)
+        for (int i= 0; i < NbSource; i++)
         {
             var theta = ((float)i) * deltaTheta;
             var currentCenter = center + amplitude * new Vector2(MF.Sin(theta),MF.Cos(theta));
