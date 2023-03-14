@@ -785,7 +785,7 @@ MonoBehaviour:
   Ext2: {fileID: 714266447}
   ondeInterface: {fileID: 119855166}
   lr: {fileID: 0}
-  resolution: 100
+  resolution: 500
 --- !u!1 &714266446
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,7 +804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &714266447
 Transform:
   m_ObjectHideFlags: 0
@@ -1275,7 +1275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1497678551
 Transform:
   m_ObjectHideFlags: 0

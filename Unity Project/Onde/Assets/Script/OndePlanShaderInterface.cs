@@ -25,6 +25,7 @@ public class OndePlanShaderInterface : MonoBehaviour {
     int _scriptTimeID;
     int _nbSourceID;
 
+    public float t { get => Time.realtimeSinceStartup; }
    
 
 
@@ -43,7 +44,7 @@ public class OndePlanShaderInterface : MonoBehaviour {
     void Update () {
 
        
-        var t = Time.realtimeSinceStartup;
+       
         RGBShift = new Vector4(MF.PI / 2.0f * MF.Cos(t),
                                MF.PI / 4.0f * MF.Cos(t * 2.0f),
                                MF.PI / 4.0f * MF.Cos(t * 4.0f),

@@ -11,6 +11,8 @@ public class Onde1DPlan : MonoBehaviour
     [SerializeField] LineRenderer lr;
     [SerializeField] uint resolution = 100;
 
+    float arbitraryValue = 50.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +56,8 @@ public class Onde1DPlan : MonoBehaviour
             value /= (weights[0] + weights[1] + weights[2]);
 
             lr.SetPosition(i, new Vector3(2.0f * Camera.main.aspect * (coeff-0.5f), 2.0f * value, 1));
+
+             
         }
 
 
@@ -62,7 +66,7 @@ public class Onde1DPlan : MonoBehaviour
 
     float ondula(Vector2 st, Vector2 center, float shift, float period)
     {
-        float t = Time.realtimeSinceStartup;
+        float t = ondeInterface.t;
         float r = Vector2.Distance(st, center);
         float ondula = MF.Cos(r * period - 5.0f* t + shift) / 2.0f / (1.0f + 5.0f* r);
         return ondula;
@@ -71,15 +75,23 @@ public class Onde1DPlan : MonoBehaviour
 
     Vector3 RGBondula(Vector2 st, Vector2 center, Vector3 RGBshift)
     {
-        float val = 50.0f;
-        float t = Time.realtimeSinceStartup;
-        float period = val + (1.0f + MF.Cos(t)) / 2.0f* val;
+
+
+        float period = ComputePeriod();
         float ondeR = ondula(st, center, RGBshift.x, period);
         float ondeG = ondula(st, center, RGBshift.y, 2.0f* period);
         float ondeB = ondula(st, center, RGBshift.z, 3.0f* period);
 
         return new Vector3(ondeR, ondeG, ondeB);
 
+    }
+
+    float ComputePeriod()
+    {
+        float val = arbitraryValue;
+        float period = val + (1.0f + MF.Cos(ondeInterface.t)) / 2.0f * val;
+
+        return period;
     }
 
 }
