@@ -24,6 +24,7 @@
 
 			float _ScriptTime;
 			int _nbSource;
+			float _Sources[50];
 			
 
 
@@ -114,8 +115,10 @@
 				{
 					if (i < _nbSource)
 					{
-						half2 center1 = center + half2(amplitude*cos(half(i)*theta), amplitude*sin(half(i)*theta))*oscillation;
-						//half2 center1 = center + half2(amplitude*cos(theta), amplitude*sin(theta))*oscillation;
+						//half2 center1 = center + half2(amplitude*cos(half(i)*theta), amplitude*sin(half(i)*theta))*oscillation;
+						
+						half2 center1 = half2(_Sources[2 * i], _Sources[2 * i + 1]);
+
 						half3 color1 = RGBondula(st, center1, RGBshift);
 						color += color1;
 					}
