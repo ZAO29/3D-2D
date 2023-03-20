@@ -104,13 +104,21 @@ public class OndePlanShaderInterface : MonoBehaviour {
         float amplitude = oscillation/2.0f;
         var deltaTheta = 2.0f * MF.PI / ((float) NbSource);
 
-        for (int i= 0; i < NbSource; i++)
+        if (NbSource == 1)
         {
-            var theta = ((float)i) * deltaTheta;
-            var currentCenter = center + amplitude * new Vector2(MF.Sin(theta),MF.Cos(theta));
+            _sources[0] = center.x;
+            _sources[1] = center.y;
+        }
+        else
+        {
+            for (int i = 0; i < NbSource; i++)
+            {
+                var theta = ((float)i) * deltaTheta;
+                var currentCenter = center + amplitude * new Vector2(MF.Sin(theta), MF.Cos(theta));
 
-            _sources[i * 2] = currentCenter.x;
-            _sources[i * 2 + 1] = currentCenter.y;
+                _sources[i * 2] = currentCenter.x;
+                _sources[i * 2 + 1] = currentCenter.y;
+            }
         }
     }
 
