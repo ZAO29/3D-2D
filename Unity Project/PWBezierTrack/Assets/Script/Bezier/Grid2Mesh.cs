@@ -43,16 +43,30 @@ public class Grid2Mesh
                     triangles.Add(idi1j1);
                     triangles.Add(idi1j);
                     triangles.Add(idij);
-                    
+
+                //DUPLICATE
+                /*triangles.add(idij);
+                triangles.add(idi1j);
+                triangles.add(idi1j1);*/
+
+
+
                     // culling in the other side
                     triangles.Add(idi1j1);
                     triangles.Add(idij1);
                     triangles.Add(idij);
 
-                    //so we can always see half of the mesh
-                    //whatever the side of the camera from the mesh
+                //DUPLICATE
+                /*triangles.Add(idij);
+                triangles.Add(idij1);
+                triangles.Add(idi1j1);*/
 
-                }
+                    
+
+                //so we can always see half of the mesh
+                //whatever the side of the camera from the mesh
+
+            }
 
             }
 

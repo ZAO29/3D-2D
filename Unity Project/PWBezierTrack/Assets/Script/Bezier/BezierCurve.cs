@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ public class BezierCurve<Vec> where Vec : new()
     List<Vec> ctrlPts;
 
     public int degree { get => CtrlPts.Count - 1; }
+
+    public int nbCtrlPt { get => CtrlPts.Count; }
+
     public List<Vec> CtrlPts { get => ctrlPts; set => ctrlPts = value; }
 
     public BezierCurve(List<Vec> initCtrlPt)
@@ -65,6 +69,22 @@ public class BezierCurve<Vec> where Vec : new()
         }
 
         return sample;
+    }
+
+
+    public BezierCurve<Vec> Derivate()
+    {
+        List<Vec> derCtrlPts = new List<Vec>();
+
+        for (var i = 0; i < degree; i++)
+        {
+            var ctrlPtI = ctrlPts[i] as dynamic;
+            var ctrlPtI1 = ctrlPts[i+1] as dynamic;
+            var derCtrlPt = ((float) degree) * (ctrlPtI1 - ctrlPtI);
+            derCtrlPts.Add(derCtrlPt);
+        }
+
+        return new BezierCurve<Vec>(derCtrlPts);
     }
         
 
