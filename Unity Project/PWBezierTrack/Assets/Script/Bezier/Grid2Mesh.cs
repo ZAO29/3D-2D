@@ -78,4 +78,26 @@ public class Grid2Mesh
         return mesh;
 
     }
+
+
+
+    static public GameObject[,] Convert(Vector3[,][,] grid)
+    {
+        GameObject[,] objs = new GameObject[grid.GetLength(0),grid.GetLength(1)];
+        for (int i =0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                var obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                obj.name = "BS_" + i + "_" + j;
+                var m = Grid2Mesh.Convert(grid[i,j]);
+                obj.GetComponent<MeshFilter>().mesh = m;
+
+                objs[i,j] = obj;
+            }
+        }
+
+        return objs;
+    }
+
 }

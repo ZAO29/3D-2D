@@ -21,6 +21,8 @@ public class BezierCurve<Vec> where Vec : new()
     }
 
 
+
+
    public static float BinomialCoeff(int k, int n)
     {
         return ((float) factorial(n)) / ((float) factorial(k) * factorial(n - k));

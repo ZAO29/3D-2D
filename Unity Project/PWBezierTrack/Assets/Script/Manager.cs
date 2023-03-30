@@ -16,7 +16,8 @@ public class Manager : MonoBehaviour
     void Start()
     {
         //PWBezCurveTest();
-        BezierSurfaceTest();
+        //BezierSurfaceTest();
+        PWBezierSurfaceTest();
     }
 
 
@@ -189,6 +190,62 @@ public class Manager : MonoBehaviour
         }
 
     }
+
+
+    void PWBezierSurfaceTest()
+    {
+        var obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+
+        List<Vector2> trackCtrlPt = new List<Vector2>
+        {
+            new Vector2(0, 0), 
+            new Vector2(0, 1), 
+            new Vector2(0, 2), 
+            new Vector2(0, 3), 
+            new Vector2(0, 4), 
+            new Vector2(0, 5), 
+            new Vector2(0, 6),
+            new Vector2(0, 7),
+            new Vector2(0, 8),
+            new Vector2(0, 9),
+            new Vector2(0, 10),
+            new Vector2(0, 11),
+            new Vector2(0, 12),
+
+        };
+
+        var track = new PWBezierCurve2D(trackCtrlPt);
+        float d = 1.0f;
+        List<Vector2> sectionCtrlPt = new List<Vector2>
+        {
+            new Vector2(-d,-d),new Vector2(-d,0),new Vector2(-d,0),new Vector2(-d,d),
+            new Vector2(0, d / 2.0f),new Vector2(0, d / 2.0f),new Vector2(d, 0), 
+            new Vector2(0, -d / 2.0f),new Vector2(0, -d / 2.0f),new Vector2(-d, -d)
+        };
+
+        var section = new PWBezierCurve2D(sectionCtrlPt);
+
+        float angleDeg = 90;
+
+        var sections = new List<PWBezierCurve2D>();
+        var nbSec = track.nbPiece + 1;
+        var currentSection = section;
+        for (int iSec = 0; iSec < nbSec; iSec++)
+        {
+            currentSection = currentSection.Rotate(angleDeg);
+            sections.Add(currentSection);
+        }
+
+
+        PWBezierSurface3D pwbsurface = new PWBezierSurface3D(track, sections);
+        var sampledGrid = pwbsurface.Sample(10, 10);
+
+        var objs = Grid2Mesh.Convert(sampledGrid);
+
+    }
+
+
+
 
 
     struct PtDir
