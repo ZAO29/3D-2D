@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class Grid2Mesh 
+public class Grid2Mesh : MonoBehaviour 
 {
    
     static public Mesh Convert(Vector3[,] grid)
@@ -22,7 +22,6 @@ public class Grid2Mesh
                 {
 
                     var id = i * height + j;
-                    Debug.Log(" id " + id + " i " + i + " j " + j);
                     vertices[id] = grid[i,j];
                 }
             }
@@ -98,6 +97,39 @@ public class Grid2Mesh
         }
 
         return objs;
+    }
+
+
+
+
+    static public void DrawGridLR(Vector3[,] ctrlPtGrid, LineRenderer lrPrefab, Transform t)
+    {
+        for (int i = 0; i < ctrlPtGrid.GetLength(0); i++)
+        {
+            var lrBSurface = Instantiate(lrPrefab,t);
+
+            lrBSurface.positionCount = ctrlPtGrid.GetLength(1);
+            lrBSurface.name = "LR_PWBCtrlPt_w" + i;
+
+            for (int j = 0; j < ctrlPtGrid.GetLength(1); j++)
+            {
+                lrBSurface.SetPosition(j, ctrlPtGrid[i, j]);
+            }
+        }
+
+
+        for (int i = 0; i < ctrlPtGrid.GetLength(1); i++)
+        {
+            var lrBSurface = Instantiate(lrPrefab, t);
+
+            lrBSurface.positionCount = ctrlPtGrid.GetLength(0);
+            lrBSurface.name = "LR_PWBCtrlPt_" + i;
+
+            for (int j = 0; j < ctrlPtGrid.GetLength(0); j++)
+            {
+                lrBSurface.SetPosition(j, ctrlPtGrid[j, i]);
+            }
+        }
     }
 
 }

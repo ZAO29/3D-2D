@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,36 @@ public class PWBezierSurface3D
 
         return sampled;
     }
+
+
+    public PWBezierSurface3D DerivateU() { return IterateGrid(x => x.DerivateU()); }
+    public PWBezierSurface3D DerivateV() { return IterateGrid(x => x.DerivateV()); }
+
+    public PWBezierSurface3D IterateGrid(Func<BezierSurface<Vector3>, BezierSurface<Vector3>> op)
+    {
+        BezierSurface<Vector3>[,] opGridBSurface = new BezierSurface<Vector3>[NbPieceU, NbPieceV];
+        for (int iu = 0; iu < NbPieceU; iu++)
+        {
+            for (int iv = 0; iv < NbPieceV; iv++)
+            {
+                opGridBSurface[iu, iv] = op(GridBSurface[iu, iv]);
+            }
+        }
+
+        return new PWBezierSurface3D(opGridBSurface);
+    }
+
+    public Vector3 Eval(Vector2 uv)
+    {
+        
+        var uvMod = new Vector2(uv.x % (NbPieceU), uv.y % (NbPieceV));
+        var idPiece = new Vector2(Mathf.Floor(uvMod.x), Mathf.Floor(uvMod.y));
+        var uvBS = uvMod - idPiece;
+
+        
+        return GridBSurface[(int)idPiece.x, (int)idPiece.y].Eval(uvBS);
+    }
+
 
 
     public PWBezierSurface3D(PWBezierCurve2D track, List<PWBezierCurve2D> sections)

@@ -19,6 +19,18 @@ public static class AlgebraExtension
     }
 
 
+    public static int IdOne(this Vector2 v)
+    {
+        if(v == Vector2.right)
+            return 0;
+
+        if(v == Vector2.up)
+            return 1;
+
+        return -1;
+    }
+
+
 
     public static Vector3 Vec3Z0(this Vector2 vector2)
     {

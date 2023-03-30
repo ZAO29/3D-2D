@@ -210,7 +210,7 @@ public class Manager : MonoBehaviour
             new Vector2(0, 9),
             new Vector2(0, 10),
             new Vector2(0, 11),
-            new Vector2(0, 12),
+            new Vector2(0, 12)
 
         };
 
@@ -238,9 +238,20 @@ public class Manager : MonoBehaviour
 
 
         PWBezierSurface3D pwbsurface = new PWBezierSurface3D(track, sections);
-        var sampledGrid = pwbsurface.Sample(10, 10);
+        var sampledGrid = pwbsurface.Sample(50, 50);
 
         var objs = Grid2Mesh.Convert(sampledGrid);
+
+        var movingCam = Camera.main.gameObject.AddComponent<MovingPWBSurface>();
+
+        movingCam.Init(pwbsurface, new Vector2(0.0f, 0.5f));
+
+        var ctrlPtGridRoot = new GameObject("CtrlPtGridRoot");
+        foreach(var bSurface in pwbsurface.GridBSurface)
+        {
+            Grid2Mesh.DrawGridLR(bSurface.GridCtrlPts, lrPrefab, ctrlPtGridRoot.transform);
+        }
+        
 
     }
 
