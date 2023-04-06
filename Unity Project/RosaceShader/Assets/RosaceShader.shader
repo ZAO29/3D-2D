@@ -132,13 +132,7 @@
 
 				half2 center;
 				half ratio;
-				if (_ScreenParams.x <= _ScreenParams.y)
-				{
-					ratio = _ScreenParams.x / _ScreenParams.y / 2.0;
-					center = half2(ratio, 0.5);
-				}
-				else
-				{
+
 					ratio = _ScreenParams.y / _ScreenParams.x / 2.0;
 					center = half2(0.5,ratio);
 				}

@@ -13,6 +13,8 @@ public class FractalCubeRenderer : MonoBehaviour
 
     public Material material;
 
+    public Material material2;
+
 
     Mesh mesh;
 
@@ -22,38 +24,42 @@ public class FractalCubeRenderer : MonoBehaviour
         renderTexture.Create();
         mesh = GetComponent<MeshFilter>().sharedMesh;
         material = GetComponent<MeshRenderer>().material;
+        material.mainTexture = initialTexture;
+        material2 = new Material(material);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        material.mainTexture = initialTexture;
+        
             // Bind the first render texture
             Graphics.SetRenderTarget(renderTexture);
+            
 
             GL.Clear(true, true, Color.black);
             GL.PushMatrix();
 
             material.SetPass(0);
-            Graphics.DrawMeshNow(mesh, Matrix4x4.identity);
+            Graphics.DrawMeshNow(mesh, this.transform.localToWorldMatrix);
 
             GL.PopMatrix();
 
 
 
             // Bind the current texture to use as input for the shader
-            material.mainTexture = renderTexture;
+            material2.mainTexture = renderTexture;
             Graphics.SetRenderTarget((RenderTexture)null);
             GL.Clear(true, true, Color.red);
             GL.PushMatrix();
 
             // Draw the cube with the material
             //material.SetPass(1);
-            Graphics.DrawMeshNow(mesh, Matrix4x4.identity);
+            Graphics.DrawMeshNow(mesh, this.transform.localToWorldMatrix);
 
             GL.PopMatrix();
 
         GL.Clear(true, true, Color.black);
 
+       
     }
 }
 

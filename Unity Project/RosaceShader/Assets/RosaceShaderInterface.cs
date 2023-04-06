@@ -7,6 +7,7 @@ public class RosaceShaderInterface : MonoBehaviour
 
     [SerializeField] Material _mat;
     float _multTime = 1;
+    [SerializeField]
     int _NbPoint = 4;
 
     //ShaderPropertyID
