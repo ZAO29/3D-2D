@@ -43,7 +43,7 @@ Shader "Custom/BWShader" {
                                  step(i.uv.y, _EdgeWidth) + 
                                  step(1 - i.uv.y, _EdgeWidth);
                                 
-                    return color * _Color * (step(edge,0.5)) + (1 - step(edge,0.5)) * float4(1,1,1,1);
+                    return color * _Color * (step(edge,0.5)) + (1 - step(edge,0.5)) * float4(1,0,0,1);
                 }
                 ENDCG
             }
