@@ -10,6 +10,7 @@ Shader "Custom/BWShader" {
             LOD 100
 
             Pass {
+                Cull Off
                 CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
