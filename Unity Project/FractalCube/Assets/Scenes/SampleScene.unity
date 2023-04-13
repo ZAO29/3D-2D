@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 565752529}
   - component: {fileID: 565752533}
   - component: {fileID: 565752534}
+  - component: {fileID: 565752535}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -293,6 +294,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+--- !u!114 &565752535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565752528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0faa9bc405e8d4d8eed1d0e524b803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: bea1740c3b98aeb488a1178b25083451, type: 2}
+  freq: 2
+  minVal: 0
+  maxVal: 0.13
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,7 +480,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1966540159}
@@ -524,8 +541,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
-  far clip plane: 5
+  near clip plane: 0.1
+  far clip plane: 2
   field of view: 60
   orthographic: 0
   orthographic size: 5
