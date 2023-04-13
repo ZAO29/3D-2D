@@ -13,8 +13,8 @@ public class YPRCam : MonoBehaviour
     [SerializeField]
     bool m_center = true;
 
-
-    float rollSpeed = 0.1f;
+    [SerializeField]
+    float rollSpeed;
 
     private void Start()
     {
@@ -62,7 +62,7 @@ public class YPRCam : MonoBehaviour
 
         if(Input.GetKey(KeyCode.R))
         {
-            deltaYPR.z = rollSpeed;
+            deltaYPR.z = rollSpeed * Time.deltaTime;
         }
 
 
