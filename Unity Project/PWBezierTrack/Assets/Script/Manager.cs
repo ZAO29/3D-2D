@@ -208,19 +208,19 @@ public class Manager : MonoBehaviour
 
         List<Vector2> trackCtrlPt = new List<Vector2>
         {
-            new Vector2(0, 0), 
+            new Vector2(0, 0.5f), 
             new Vector2(0, 1), 
             new Vector2(0, 2), 
-            new Vector2(0, 3), 
+            new Vector2(0, 3),// 1 
             new Vector2(0, 4), 
             new Vector2(0, 5), 
-            new Vector2(0, 6),
+            new Vector2(0, 6),// 2
             new Vector2(0, 7),
-            new Vector2(0, 8),
-            new Vector2(0, 9),
+            new Vector2(0, 8.5f),
+            new Vector2(0, 9),// 3
+            new Vector2(0, 9.5f),
             new Vector2(0, 10),
-            new Vector2(0, 11),
-            new Vector2(0, 12)
+            new Vector2(0, 10.5f)// 4
 
         };
 

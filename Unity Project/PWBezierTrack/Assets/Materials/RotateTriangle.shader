@@ -19,7 +19,7 @@ Shader "Custom/RotateTriangle"
 		SubShader
 	{
 		// No culling or depth
-		Cull Back ZWrite On ZTest Always
+		//Cull Off ZWrite On ZTest Always
 
 		Pass
 		{
@@ -101,7 +101,7 @@ Shader "Custom/RotateTriangle"
 			}
 
 
-			[maxvertexcount(7)]
+			[maxvertexcount(12)]
 			void geom(triangle v2g input[3], inout TriangleStream<g2f> triStream)
 			{
 				g2f o;
@@ -120,7 +120,7 @@ Shader "Custom/RotateTriangle"
 
 
 				float3 color1 = float3(1, 1, 1);
-				float3 color2 = float3(0, 1, 0);
+				float3 color2 = float3(0, 0, 0);
 				float3 color3 = float3(0, 0, 1);
 
 
@@ -143,29 +143,32 @@ Shader "Custom/RotateTriangle"
 				o.color = color1;
 				triStream.Append(o);
 
+				triStream.RestartStrip();
 
 				//triangle bas gauche
-				/*o.vertex = UnityObjectToClipPos(v1);
+				o.vertex = UnityObjectToClipPos(v1);
 				o.barycoord = float3(0, 0, 0);
 				o.barycoord[0] = 1;
 				o.color = color2;
 				triStream.Append(o);
 
+
 				o.vertex = UnityObjectToClipPos(v12);
 				o.barycoord = float3(0, 0, 0);
 				o.barycoord[1] = 1;
 				o.color = color2;
-				triStream.Append(o);*/
+				triStream.Append(o);
 
-				/*o.vertex = UnityObjectToClipPos(v23);
+				o.vertex = UnityObjectToClipPos(v31);
 				o.barycoord = float3(0, 0, 0);
 				o.barycoord[2] = 1;
-				o.color = color3;
-				triStream.Append(o);*/
+				o.color = color2;
+				triStream.Append(o);
 
+				triStream.RestartStrip();
 
 				//triangle bas droit
-				/*o.vertex = UnityObjectToClipPos(v31);
+				o.vertex = UnityObjectToClipPos(v31);
 				o.barycoord = float3(0, 0, 0);
 				o.barycoord[0] = 1;
 				o.color = color2;
@@ -181,11 +184,13 @@ Shader "Custom/RotateTriangle"
 				o.barycoord = float3(0, 0, 0);
 				o.barycoord[2] = 1;
 				o.color = color2;
-				triStream.Append(o);*/
+				triStream.Append(o);
+
+				triStream.RestartStrip();
 
 
 				//triangle haut
-				/*o.vertex = UnityObjectToClipPos(v12);
+				o.vertex = UnityObjectToClipPos(v12);
 				o.barycoord = float3(0, 0, 0);
 				o.barycoord[0] = 1;
 				o.color = color2;
@@ -201,7 +206,7 @@ Shader "Custom/RotateTriangle"
 				o.barycoord = float3(0, 0, 0);
 				o.barycoord[2] = 1;
 				o.color = color2;
-				triStream.Append(o);*/
+				triStream.Append(o);
 
 
 
