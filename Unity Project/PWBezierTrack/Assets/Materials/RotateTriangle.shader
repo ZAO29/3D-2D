@@ -70,6 +70,7 @@ Shader "Custom/RotateTriangle"
 			{
 				float4 vertex : SV_POSITION;
 				float3 barycoord : TEXCOORD2;
+				float3 color : TEXCOORD3;
 			};
 
 
@@ -98,26 +99,120 @@ Shader "Custom/RotateTriangle"
 			}
 
 
-			[maxvertexcount(3)]
+			[maxvertexcount(7)]
 			void geom(triangle v2g input[3], inout TriangleStream<g2f> triStream)
 			{
 				g2f o;
 
-				for (int i = 0; i < 3; i++)
-				{
-					o.vertex = UnityObjectToClipPos(input[i].localSpaceVert);
-					o.barycoord = float3(0, 0, 0);
-					o.barycoord[i] = 1;
-					triStream.Append(o);
-				}
+
+				float3 v1 = input[0].localSpaceVert;
+				float3 v2 = input[1].localSpaceVert;
+				float3 v3 = input[2].localSpaceVert;
+
+				float coeff = 0.5;
+
+				float3 v12 = lerp(v1, v2, coeff);
+				float3 v23 = lerp(v2, v3, coeff);
+				float3 v31 = lerp(v3, v1, coeff);
+
+
+				float3 color1 = float3(1, 1, 1);
+				float3 color2 = float3(0, 1, 0);
+				float3 color3 = float3(0, 0, 1);
+
+
+				//triangle central
+				o.vertex = UnityObjectToClipPos(v12);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[0] = 1;
+				o.color = color1;
+				triStream.Append(o);
+
+				o.vertex = UnityObjectToClipPos(v23);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[1] = 1;
+				o.color = color1;
+				triStream.Append(o);
+
+				o.vertex = UnityObjectToClipPos(v31);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[2] = 1;
+				o.color = color1;
+				triStream.Append(o);
+
+
+				//triangle bas gauche
+				/*o.vertex = UnityObjectToClipPos(v1);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[0] = 1;
+				o.color = color2;
+				triStream.Append(o);
+
+				o.vertex = UnityObjectToClipPos(v12);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[1] = 1;
+				o.color = color2;
+				triStream.Append(o);*/
+
+				/*o.vertex = UnityObjectToClipPos(v23);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[2] = 1;
+				o.color = color3;
+				triStream.Append(o);*/
+
+
+				//triangle bas droit
+				/*o.vertex = UnityObjectToClipPos(v31);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[0] = 1;
+				o.color = color2;
+				triStream.Append(o);
+
+				o.vertex = UnityObjectToClipPos(v23);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[1] = 1;
+				o.color = color2;
+				triStream.Append(o);
+
+				o.vertex = UnityObjectToClipPos(v3);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[2] = 1;
+				o.color = color2;
+				triStream.Append(o);*/
+
+
+				//triangle haut
+				/*o.vertex = UnityObjectToClipPos(v12);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[0] = 1;
+				o.color = color2;
+				triStream.Append(o);
+
+				o.vertex = UnityObjectToClipPos(v2);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[1] = 1;
+				o.color = color2;
+				triStream.Append(o);
+
+				o.vertex = UnityObjectToClipPos(v23);
+				o.barycoord = float3(0, 0, 0);
+				o.barycoord[2] = 1;
+				o.color = color2;
+				triStream.Append(o);*/
+
+
+
+
 			}
 
 
 			fixed4 frag(g2f f) : SV_Target{
 			
 				half minVal = min(f.barycoord.x, min(f.barycoord.y, f.barycoord.z));
-				half3 color = lerp(half3(1., 1., 1), half3(0., 0., 0.), minVal / 0.1);
-				fixed4 col = half4(color, 1.0);
+				//half3 color = lerp(half3(0., 0., 0.),f.color, minVal / 0.1);
+				
+			
+				fixed4 col = half4(f.color, 1.0);
 				return col;
 			}
 

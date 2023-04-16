@@ -11,7 +11,7 @@ public class Manager : MonoBehaviour
     Material mat;
 
 
-
+    public static bool debug = false;
 
 
 

@@ -80,20 +80,24 @@ public class PWBezierSurface3D : MonoBehaviour
 
                     bSurfaceIPt[2, ii] = bSurfaceIPt[3, ii] - der;
 
-                    var debugLR1 = Instantiate(lr);
-                    var debugLR2 = Instantiate(lr);
 
-                    debugLR1.name = "debug_LR1";
-                    debugLR2.name = "debug_LR2";
+                    if (Manager.debug)
+                    {
+                        var debugLR1 = Instantiate(lr);
+                        var debugLR2 = Instantiate(lr);
 
-                    debugLR1.positionCount = 2;
-                    debugLR2.positionCount = 2;
+                        debugLR1.name = "debug_LR1";
+                        debugLR2.name = "debug_LR2";
 
-                    debugLR1.SetPosition(0, bSurfaceI1Pt[0, ii]);
-                    debugLR1.SetPosition(1, bSurfaceI1Pt[0, ii] + der1);
+                        debugLR1.positionCount = 2;
+                        debugLR2.positionCount = 2;
 
-                    debugLR2.SetPosition(0, bSurfaceIPt[3, ii]);
-                    debugLR2.SetPosition(1, bSurfaceIPt[3, ii] - der0);
+                        debugLR1.SetPosition(0, bSurfaceI1Pt[0, ii]);
+                        debugLR1.SetPosition(1, bSurfaceI1Pt[0, ii] + der1);
+
+                        debugLR2.SetPosition(0, bSurfaceIPt[3, ii]);
+                        debugLR2.SetPosition(1, bSurfaceIPt[3, ii] - der0);
+                    }
 
 
 
