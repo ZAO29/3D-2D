@@ -14,6 +14,10 @@ public class Manager : MonoBehaviour
     public static bool debug = false;
 
 
+    [SerializeField]
+    float rotatingSpeed = 5;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +27,10 @@ public class Manager : MonoBehaviour
         PWBezierSurfaceTest();
     }
 
-
+    void Update()
+    {
+        mat.SetFloat("_Coeff", (Time.time * rotatingSpeed) % 1.0f);
+    }
 
     void BCurveTest()
     {
@@ -305,6 +312,10 @@ public class Manager : MonoBehaviour
             this.color = color;
 
         }
+
+
+
+
     }
 
 

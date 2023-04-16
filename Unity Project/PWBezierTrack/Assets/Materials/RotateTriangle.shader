@@ -14,6 +14,7 @@ Shader "Custom/RotateTriangle"
 		_FixedColor("FixedColor ", Color) = (1,0,0,1)
 		_LerpSkyDiffuse("Lerp between sky and diffuse", Float) = 0.5
 		_SkyTex3D("Cubemap   (HDR)", Cube) = "grey" {}
+		_Coeff("Coeff",Float) = 0
 	}
 		SubShader
 	{
@@ -46,6 +47,7 @@ Shader "Custom/RotateTriangle"
 			uniform float4 _FixedColor;
 			uniform float _LerpSkyDiffuse;
 			uniform samplerCUBE _SkyTex3D;
+			uniform float _Coeff;
 
 
 			half4 _Tex_HDR;
@@ -109,7 +111,8 @@ Shader "Custom/RotateTriangle"
 				float3 v2 = input[1].localSpaceVert;
 				float3 v3 = input[2].localSpaceVert;
 
-				float coeff = 0.5;
+				float coeff = _Coeff;
+				//float coeff = 0.5;
 
 				float3 v12 = lerp(v1, v2, coeff);
 				float3 v23 = lerp(v2, v3, coeff);
