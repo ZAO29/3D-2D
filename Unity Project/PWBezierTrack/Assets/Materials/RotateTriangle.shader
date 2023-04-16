@@ -64,6 +64,7 @@ Shader "Custom/RotateTriangle"
 			struct v2g
 			{
 				float3 localSpaceVert : INTERNALTESSPOS;
+				float2 uv : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -96,6 +97,7 @@ Shader "Custom/RotateTriangle"
 				//o.localSpaceVert = float3(i.vertex.x,i.vertex.y,i.vertex.z);
 
 				o.localSpaceVert = i.vertex.xyz;
+				o.uv = i.uv;
 
 				return o;
 			}
@@ -111,7 +113,8 @@ Shader "Custom/RotateTriangle"
 				float3 v2 = input[1].localSpaceVert;
 				float3 v3 = input[2].localSpaceVert;
 
-				float coeff = _Coeff;
+
+				float coeff = (_Coeff + input[0].uv.x) % 1.0;
 				//float coeff = 0.5;
 
 				float3 v12 = lerp(v1, v2, coeff);

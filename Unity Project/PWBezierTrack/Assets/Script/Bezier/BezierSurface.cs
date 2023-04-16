@@ -53,9 +53,9 @@ public class BezierSurface<Vec> where Vec : new()
 
 
 
-    public Vec[,] Sample(int nbPtU, int nbPtV)
+    public VerticeData<Vec>[,] Sample(int nbPtU, int nbPtV)
     {
-        Vec[,] sampled = new Vec[nbPtU, nbPtV];
+        VerticeData<Vec>[,] sampled = new VerticeData<Vec>[nbPtU, nbPtV];
 
         for (int iu = 0; iu < nbPtU; iu++)
         {
@@ -63,7 +63,9 @@ public class BezierSurface<Vec> where Vec : new()
             for (int iv = 0; iv < nbPtV; iv++)
             {
                 float v = ((float)iv) / ((float)nbPtV - 1.0f);
-                sampled[iu, iv] = this.Eval(u, v);
+                sampled[iu, iv] = new VerticeData<Vec>();
+                sampled[iu, iv].pos = this.Eval(u, v);
+                sampled[iu, iv].uv = new Vector2(u, v);
             }
         }
 

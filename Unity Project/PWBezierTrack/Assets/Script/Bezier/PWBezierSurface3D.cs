@@ -19,9 +19,9 @@ public class PWBezierSurface3D : MonoBehaviour
         this.GridBSurface = gridBSurface;
     }
 
-    public Vector3[,][,] Sample(int nbPtU, int nbPtV)
+    public VerticeData<Vector3>[,][,] Sample(int nbPtU, int nbPtV)
     {
-        Vector3[,][,] sampled = new Vector3[NbPieceU, NbPieceV][,];
+        VerticeData<Vector3>[,][,] sampled = new VerticeData<Vector3>[NbPieceU, NbPieceV][,];
 
         for (int iu = 0; iu < NbPieceU; iu++)
         {
