@@ -8,7 +8,7 @@ public class Manager : MonoBehaviour
     LineRenderer lrPrefab;
 
     [SerializeField]
-    Material mat;
+    public Material mat;
 
 
     public static bool debug = false;
@@ -246,7 +246,7 @@ public class Manager : MonoBehaviour
         PWBezierSurface3D pwbsurface = new PWBezierSurface3D(track, sections);
         pwbsurface.lr = this.lrPrefab;
         pwbsurface.Smoothing();
-        var sampledGrid = pwbsurface.Sample(20, 10);
+        var sampledGrid = pwbsurface.Sample(30, 15);
 
         var objs = Grid2Mesh.Convert(sampledGrid);
 
@@ -259,7 +259,7 @@ public class Manager : MonoBehaviour
         {
             Grid2Mesh.DrawGridLR(bSurface.GridCtrlPts, lrPrefab, ctrlPtGridRoot.transform);
         }*/
-        
+        mat.SetVector("_Offset", Vector4.zero);
         foreach (var m in objs)
         {
             m.GetComponent<MeshRenderer>().material = mat;
