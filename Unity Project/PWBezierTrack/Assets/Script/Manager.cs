@@ -7,6 +7,9 @@ public class Manager : MonoBehaviour
     [SerializeField]
     LineRenderer lrPrefab;
 
+    [SerializeField]
+    Material mat;
+
 
 
 
@@ -250,6 +253,10 @@ public class Manager : MonoBehaviour
             Grid2Mesh.DrawGridLR(bSurface.GridCtrlPts, lrPrefab, ctrlPtGridRoot.transform);
         }*/
         
+        foreach (var m in objs)
+        {
+            m.GetComponent<MeshRenderer>().material = mat;
+        }
 
     }
 
