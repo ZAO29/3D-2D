@@ -27,7 +27,7 @@ public class PWBezierSurface3D : MonoBehaviour
         {
             for (int iv = 0; iv < NbPieceV; iv++)
             {
-                sampled[iu, iv] = GridBSurface[iu, iv].Sample(nbPtU, nbPtV);
+                sampled[iu, iv] = GridBSurface[iu, iv].Sample(nbPtU, nbPtV,iu,iv);
             }
         }
 
