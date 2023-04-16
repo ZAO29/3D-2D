@@ -24,7 +24,7 @@ public class MovingPWBSurface : MonoBehaviour
     Vector2 RightUV { get => Vector2.one - ForwardUV; }
 
 
-    [SerializeField] float offset = 0.2f;
+    [SerializeField] float offset = 0.25f;
 
     public void Init(PWBezierSurface3D surf, Vector2 uv = default(Vector2))
     {

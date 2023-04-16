@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PWBezierSurface3D 
+public class PWBezierSurface3D : MonoBehaviour
 {
     BezierSurface<Vector3>[,] gridBSurface;
     public BezierSurface<Vector3>[,] GridBSurface { get => gridBSurface; private set => gridBSurface = value; }
 
     int NbPieceU { get => GridBSurface.GetLength(0); }
     int NbPieceV { get => GridBSurface.GetLength(1); }
-    
+
+
+    public LineRenderer lr;
 
     public PWBezierSurface3D(BezierSurface<Vector3>[,] gridBSurface)
     {
@@ -49,6 +51,63 @@ public class PWBezierSurface3D
 
         return new PWBezierSurface3D(opGridBSurface);
     }
+
+    public void Smoothing()
+    {
+        Debug.Log("NbPieceU" + NbPieceU);
+        Debug.Log("NbPieceV" + NbPieceV);
+
+        for (int i = 0; i < (NbPieceU-1); i++)
+        {
+            for(int j = 0; j < NbPieceV; j++)
+            {
+                //GridBSurface[i, j] =  GridBSurface[i, j].Transpose();
+                //GridBSurface[i, j] = GridBSurface[i + 1, j].Transpose();
+
+                var bSurfaceIPt = GridBSurface[i, j].GridCtrlPts;
+                var bSurfaceI1Pt = GridBSurface[i + 1, j].GridCtrlPts;
+
+                for (int ii = 0; ii < 4; ii++)
+                {
+
+                    var der1 = (bSurfaceI1Pt[1, ii] - bSurfaceI1Pt[0, ii]);
+
+                    var der0 = (bSurfaceIPt[3, ii] - bSurfaceIPt[2, ii]);
+
+                    var der = (der1 + der0) / 2.0f;
+
+                    bSurfaceI1Pt[1, ii] = bSurfaceI1Pt[0, ii] + der;
+
+                    bSurfaceIPt[2, ii] = bSurfaceIPt[3, ii] - der;
+
+                    var debugLR1 = Instantiate(lr);
+                    var debugLR2 = Instantiate(lr);
+
+                    debugLR1.name = "debug_LR1";
+                    debugLR2.name = "debug_LR2";
+
+                    debugLR1.positionCount = 2;
+                    debugLR2.positionCount = 2;
+
+                    debugLR1.SetPosition(0, bSurfaceI1Pt[0, ii]);
+                    debugLR1.SetPosition(1, bSurfaceI1Pt[0, ii] + der1);
+
+                    debugLR2.SetPosition(0, bSurfaceIPt[3, ii]);
+                    debugLR2.SetPosition(1, bSurfaceIPt[3, ii] - der0);
+
+
+
+                }
+
+                //GridBSurface[i, j] = GridBSurface[i, j].Transpose();
+                //GridBSurface[i, j] = GridBSurface[i + 1, j].Transpose();
+
+
+            }
+        }
+    }
+
+
 
     public Vector3 Eval(Vector2 uv)
     {
@@ -136,6 +195,8 @@ public class PWBezierSurface3D
                 this.GridBSurface[itrack, iSection] = new BezierSurface<Vector3>(ctrlPtGrid);
             }
         }
+
+        //Smoothing();
         
     }
 }

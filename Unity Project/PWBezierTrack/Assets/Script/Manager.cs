@@ -215,13 +215,9 @@ public class Manager : MonoBehaviour
         };
 
         var track = new PWBezierCurve2D(trackCtrlPt);
-        float d = 1.0f;
-        List<Vector2> sectionCtrlPt = new List<Vector2>
-        {
-            new Vector2(-d,-d),new Vector2(-d,0),new Vector2(-d,0),new Vector2(-d,d),
-            new Vector2(0, d / 2.0f),new Vector2(0, d / 2.0f),new Vector2(d, 0), 
-            new Vector2(0, -d / 2.0f),new Vector2(0, -d / 2.0f),new Vector2(-d, -d)
-        };
+        float d = 0.5f;
+        List<Vector2> sectionCtrlPt = GenerateSection();
+       
 
         var section = new PWBezierCurve2D(sectionCtrlPt);
 
@@ -238,7 +234,9 @@ public class Manager : MonoBehaviour
 
 
         PWBezierSurface3D pwbsurface = new PWBezierSurface3D(track, sections);
-        var sampledGrid = pwbsurface.Sample(50, 50);
+        pwbsurface.lr = this.lrPrefab;
+        pwbsurface.Smoothing();
+        var sampledGrid = pwbsurface.Sample(20, 10);
 
         var objs = Grid2Mesh.Convert(sampledGrid);
 
@@ -247,14 +245,40 @@ public class Manager : MonoBehaviour
         movingCam.Init(pwbsurface, new Vector2(0.0f, 0.5f));
 
         var ctrlPtGridRoot = new GameObject("CtrlPtGridRoot");
-        foreach(var bSurface in pwbsurface.GridBSurface)
+        /*foreach(var bSurface in pwbsurface.GridBSurface)
         {
             Grid2Mesh.DrawGridLR(bSurface.GridCtrlPts, lrPrefab, ctrlPtGridRoot.transform);
-        }
+        }*/
         
 
     }
 
+
+
+    List<Vector2> GenerateSection(int nbSide = 3)
+    {
+        float d = 0.5f;
+
+        List<Vector2> sectionCtrlPt = new List<Vector2>();
+
+        float theta = 2 * Mathf.PI / nbSide;
+
+        var ptInit = new Vector2(0, d);
+        sectionCtrlPt.Add(ptInit);
+        for (int i = 0; i < nbSide; i++)
+        {
+            var pt1 = d * new Vector2(Mathf.Sin(i * theta), Mathf.Cos(i * theta));
+            var pt2 = d * new Vector2(Mathf.Sin((i + 1) * theta), Mathf.Cos((i+1) * theta));
+
+            var pt12 = Vector2.Lerp(pt1, pt2, 0.5f);
+            
+            sectionCtrlPt.Add(pt12);
+            sectionCtrlPt.Add(pt12);
+            sectionCtrlPt.Add(pt2);
+        }
+
+        return sectionCtrlPt;
+    }
 
 
 
