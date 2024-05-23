@@ -518,6 +518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_center: 1
   rollSpeed: 10
+  zoomSpeed: 0.9999
 --- !u!20 &1966540158
 Camera:
   m_ObjectHideFlags: 0

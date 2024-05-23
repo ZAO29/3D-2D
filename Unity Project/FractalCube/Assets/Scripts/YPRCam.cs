@@ -16,6 +16,9 @@ public class YPRCam : MonoBehaviour
     [SerializeField]
     float rollSpeed;
 
+    [SerializeField]
+    float zoomSpeed = 0.99f;
+
     private void Start()
     {
         InitCamPos();
@@ -70,6 +73,24 @@ public class YPRCam : MonoBehaviour
         {
             deltaYPR.z -= rollSpeed;
         }
+
+
+        if (Input.GetKey(KeyCode.Z))
+        {
+
+            this.transform.position = zoomSpeed * new Vector3(this.transform.position.x,
+                                                           this.transform.position.y,
+                                                           this.transform.position.z);
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+
+            this.transform.position = 1.0f/zoomSpeed * new Vector3(this.transform.position.x,
+                                                           this.transform.position.y,
+                                                           this.transform.position.z);
+        }
+
 
         this.transform.eulerAngles += deltaYPR;
         this.transform.position = - this.transform.position.magnitude * this.transform.forward;
